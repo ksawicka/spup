@@ -50,8 +50,9 @@
 #' geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
 #' geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
 #' str(geul.pb)
-#'
-defnummarspatial <- function(uncertain = TRUE, object  = "Spatial", crm = NULL, mask = NULL, ...) {
+#' @export
+#' 
+defnummarspatial <- function(uncertain = TRUE, sp.obj, crm = NULL, mask = NULL, ...) {
                              # we need an argument here which specifies if this objcect is
                              # cross-correlated with any other input to the model.
 
