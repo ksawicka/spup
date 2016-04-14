@@ -17,7 +17,7 @@
 #' @examples
 #'
 #' data(geul)
-#' # Simulate pb:data(geul)
+#' # Simulate pb:
 #' geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
 #' geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
 #' geul.sim.pb <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "ugs", nmax = 20)
@@ -31,7 +31,8 @@
 #' summary(geul.propagate)
 #'
 #' @export
-spPropagate <- function(model, n, ...) {
+#' 
+spPropagate <- function(model, n, parallel = FALSE, clusters, ...) {
 
   require(foreach)
 
@@ -44,25 +45,22 @@ spPropagate <- function(model, n, ...) {
   # CHECK: n cannot be larger than the shortest list of simulations.
 
   # run model once to determine the type of output to impose type of data in propagate.output object below
+  # one_run <- model(...)
+  
+  
+  # dots <- list(...)
 
-  dots <- list(...)
-
-  # dots <- list(geul.sim.pb, geul.sim.sc)
-
+  # for geul
+  dots <- list(geul.sim.pb, geul.sim.sc)
   n_rows <- length(dots[[1]][[1]])
 
   if (!isTRUE(parallel)) {
-
-    propagate.output <- matrix(data = NA_real_, nrow = n_rows, ncol = n)
-
+    # dedicate space for the model output
+    propagate_output <- matrix(data = NA_real_, nrow = n_rows, ncol = n)
     foreach(i = 1:n) %do% {
-
-      # model(...) # here is the problem, how to pass one by one simulations?
-      # For Geul:
-      propagate.output[, i] <- model(...)
-
+      propagate_output[, i] <- model(...)
     }
-
+  }
 
     # }
     # else {
@@ -70,14 +68,24 @@ spPropagate <- function(model, n, ...) {
     #   cl <- makeCluster(clusters)
     #   registerDoParallel(cl)
     #
-    #   propagate.output <- numeric()
+    #   propagate_output <- numeric()
     #   foreach(i = 1:n, .export = Model) %dopar% {
-    #
-    #     # Model(...)
-    #
+    #     # propagate_output <- model(...)
     #   }
-
-  }
-    propagate.output
+  propagate_output
 }
 
+## Examples:
+data(geul)
+# Simulate pb:
+geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
+geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
+geul.sim.pb <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "ugs", nmax = 20)
+# Simulate sc:
+geul.sc <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(-2.958, 1.294))
+geul.sim.sc <- genSample(n = 5, uncert.object = geul.sc, samplemethod = "randomSampling")
+# Run propagation:
+geul.propagate <- spPropagate(pb = geul.sim.pb[[1]], sc = geul.sim.sc[1], model = geulModel, n = 5)
+head(geul.propagate)
+str(geul.propagate)
+summary(geul.propagate)
