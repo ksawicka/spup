@@ -1,0 +1,63 @@
+\name{defnummarspatial}
+\alias{defnummarspatial}
+\title{Creating an uncertainty model for single continuous input}
+
+% Description section
+\description{
+Function that allows user to define marginal continuous or discrete uncertainty distributions for inputs to a spatial environmental model and subsequent Monte Carlo analysis.
+}
+
+% Usage section
+\usage{
+defnummarspatial(uncertain = TRUE, sp.obj = NULL, crm = NULL, mask = NULL, ...)
+}
+
+% Arguments section
+\arguments{
+  \item{uncertain}{ "TRUE" or "FALSE", determines if specification of Uncertainty Model (UM) is needed. }
+  \item{sp.obj}{ A spatial object of a class "SpatialGridDataFrame". See Details. }
+  \item{crm}{ A correlogram model, object of a class "SpatialCorrelogramModel". }
+  \item{mask}{ SpatialGridDataFrame indicating areas for further Monte Carlo simulations via unconditional gaussian simulation. }
+  \item{...}{ Additional parameters of um that may want to be saved here.  }
+}
+
+% Details section
+\details{
+  \strong{uncertain}{ If "TRUE" the uncertainty model for the input has to be specified. If uncertain ="FALSE" the       function   requires a mean value of a distribution, e.g. a scalar, a vector, or a map. }
+
+The spatial object must contain a map of mean and standard deviation. If crm is provided and spatial correlation between the residuals is assumed only the normal distribution of residuals is allowed.
+
+If no spatial correlations between residuals is assumed, allowed distributions for marginal uncertainty models are listed in Table 1.
+
+Table 1 Parametric probability models allowed in defnummar.
+  \tabular{rlllll}{
+  \tab \strong{Numeric type} \tab \strong{Distribution} \tab \strong{Syntax} \tab \strong{Parameters} \tab \strong{Description} \cr
+  \tab Continuous \tab Beta \tab "beta" \tab c(\eqn{\alpha}, \eqn{\beta}) \tab Shape parameters \eqn{\alpha} > 0, \eqn{\beta} > 0 \cr
+  \tab Continuous \tab Cauchy \tab \tab \tab \cr
+  \tab Continuous \tab Chi-squared \tab \tab \tab \cr
+  \tab Continuous \tab Continuous uniform \tab \tab \tab \cr
+  \tab Continuous \tab Exponential \tab \tab \tab \cr
+  \tab Continuous \tab Gamma \tab \tab \tab \cr
+  \tab Continuous \tab \tab \tab \tab
+
+  }
+}
+
+% Value section
+\value{
+An object of a class "NumMarSpatial". This is a list with the items passed as arguments.
+}
+
+% Author(s) section
+\author{ Kasia Sawicka, Gerard Heuvelink}
+
+% References section
+\references{}
+
+% Examples section
+\examples{
+data(geul) % Must prep the data.
+geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
+geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
+str(geul.pb)
+}

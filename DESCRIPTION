@@ -1,0 +1,16 @@
+Package: spup
+Type: Package
+Title: Uncertainty propagation
+Version: 0.1
+Date: 2016-02-18
+Authors: Kasia Sawicka <kasia.sawicka@wur.nl>, Stefan van Dam <>, Damiano Luzzi
+    <>, Gerard Heuvelink <>
+Maintainer: Kasia Sawicka <kasia.sawicka@wur.nl>
+Description: Uncertainty propagation in spatial environmental modelling
+License: GPL-2
+Depends:
+    gstat,
+    foreach
+Suggests:
+    knitr
+RoxygenNote: 5.0.1
