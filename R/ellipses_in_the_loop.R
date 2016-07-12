@@ -1,7 +1,7 @@
-
-mymodel <- function(a, b) {
-  a*b
-}
+# 
+# mymodel <- function(a, b) {
+#   a*b
+# }
 
 run <- function(model = mymodel, n, ...) {
   
@@ -13,6 +13,6 @@ run <- function(model = mymodel, n, ...) {
   
 }
 
-a <- sample(1:10, 6, replace = TRUE)
-b <- 2
-c <- run(model = mymodel, n = 6, a = a , b = b)
+# a <- sample(1:10, 6, replace = TRUE)
+# b <- 2
+# c <- run(model = mymodel, n = 6, a = a , b = b)

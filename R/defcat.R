@@ -14,6 +14,6 @@
 #' myexamples()
 #'
 #' @export
-defcat <- function(sp.obj, ...){
+defcat <- function(object, ...){
   print("hello")
 }

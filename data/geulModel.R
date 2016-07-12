@@ -7,6 +7,10 @@
 #' @author Kasia Sawicka
 #'
 geulModel <- function(pb, sc) {
-  pb * sc
+  ingestion <- pb 
+  ingestion@data <- pb@data * sc
+  ingestion
 }
+
+
 

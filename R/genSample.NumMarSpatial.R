@@ -84,7 +84,7 @@ genSample.NumMarSpatial <- function(uncert.object, n, samplemethod, p = 0, ...) 
                    map.of.sd = map.of.sd,
                    sampling.method = samplemethod,
                    crm = uncert.object[[3]])
-    class(samples) <- "SpatialMCSample"
+    # class(samples) <- "SpatialMCSample"
   }
 
 

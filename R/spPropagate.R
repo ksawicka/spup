@@ -75,17 +75,17 @@ spPropagate <- function(model, n, parallel = FALSE, clusters, ...) {
   propagate_output
 }
 
-## Examples:
-data(geul)
-# Simulate pb:
-geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
-geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
-geul.sim.pb <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "ugs", nmax = 20)
-# Simulate sc:
-geul.sc <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(-2.958, 1.294))
-geul.sim.sc <- genSample(n = 5, uncert.object = geul.sc, samplemethod = "randomSampling")
-# Run propagation:
-geul.propagate <- spPropagate(pb = geul.sim.pb[[1]], sc = geul.sim.sc[1], model = geulModel, n = 5)
-head(geul.propagate)
-str(geul.propagate)
-summary(geul.propagate)
+# ## Examples:
+# data(geul)
+# # Simulate pb:
+# geul.cormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
+# geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, crm = geul.cormodel, mask = geul.mask)
+# geul.sim.pb <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "ugs", nmax = 20)
+# # Simulate sc:
+# geul.sc <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(-2.958, 1.294))
+# geul.sim.sc <- genSample(n = 5, uncert.object = geul.sc, samplemethod = "randomSampling")
+# # Run propagation:
+# geul.propagate <- spPropagate(pb = geul.sim.pb[[1]], sc = geul.sim.sc[1], model = geulModel, n = 5)
+# head(geul.propagate)
+# str(geul.propagate)
+# summary(geul.propagate)
