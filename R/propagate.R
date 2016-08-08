@@ -33,7 +33,11 @@
 #' @export
 #' 
 propagate <- function(model, n, ...) {
-
+a <-
+  n_realizations %>%
+    rerun(foo(x = x, b0 = rnorm(n = 100), b1 = runif(n = 1))) %>%
+    set_names(paste0("r", 1:n_realizations)) %>% 
+    as_data_frame 
  
 }
 
