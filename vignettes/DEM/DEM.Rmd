@@ -1,0 +1,112 @@
+---
+title: "What to do when errors are not stationary - kriging case"
+author: "Kasia Sawicka"
+date: "July 2016"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+```
+
+
+### Introduction
+
+In case of kriging made maps, we cannot use  geostatistical model:
+
+	Z(x)= μ(x)+ σ(x)∙ε(x)
+
+because the kriging variance is not stationary. Here we show how to do uncertainty propagation analysis in this case.
+
+
+### Example case - calculating C/N ratio
+
+The C/N ratio is a simple model that takes two imputs, carbon and nitrogen content in soil to calculate the output. It is important to know the spatial covarage of C/N as it is important indicator of soil quality and usability for crop growth. The C and N are measured at a point location and spatial covarage can be obtained with point interpolation using kriging.
+
+We use Africa Soil Profile Database from the 'GSIF' package. You can install it from CRAN.
+
+<br>
+
+### Code with explanations here
+
+Run some preliminaries.
+
+```{r, message = FALSE, warning = TRUE} 
+
+# Load packages
+library(sp)
+library(gstat)
+library(GSIF)
+library(magrittr)
+library(StatDA)
+library(rgdal)
+library(raster)
+
+```
+
+The model through which the uncertainties will be propagating needs to be defined as an R function.
+
+```{r, message = FALSE, warning = TRUE}
+
+# Define the model
+CNratio <- function(carbon, nitrogen) {
+  carbon/nitrogen
+}
+
+# Load the data
+data(afsp)
+
+# get coordinates from _sites to _horizons
+afsp_sites <- afsp[[1]]
+afsp_horizons <- afsp[[2]]
+afsp_horizons <- merge(afsp_horizons, afsp_sites)
+
+# coerce to spatial object
+coordinates(afsp_horizons) <- ~LONWGS84+LATWGS84
+spplot(afsp_horizons["ORCDRC"])
+spplot(afsp_horizons["NTO"])
+
+```
+
+To make this analysis example faster we will not be using the entire dataset, we will crop the area and select one soil horizon. E.g. Kenya.
+
+```{r, message = FALSE, warning = TRUE}
+
+kenya <- readOGR(dsn = "d:\\GD\\Wageningen\\QUICS\\RPackage\\spup\\vignettes\\C_N",
+                 layer = "Kenya_admin_2014_WGS84")
+spplot(kenya["Shape_Leng"])
+
+kenya_afsp <- crop(afsp_horizons, extent(kenya))
+spplot(kenya_afsp[c("ORCDRC", "NTO")])
+
+
+```
+
+
+
+
+
+
+
+
+
+### Bla bla
+
+Bla bla
+
+<br>
