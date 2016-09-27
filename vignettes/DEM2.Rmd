@@ -1,6 +1,6 @@
 ---
 title: "Spatial uncertainty propagation analysis"
-subtitle: "Dummy case with two uncertain inputs"
+subtitle: "Dummy cases with more than one uncertain model inputs"
 author: "Kasia Sawicka"
 date: "September 2016"
 output:
@@ -24,25 +24,26 @@ knitr::opts_chunk$set(
 )
 ```
 
+<br>
 
+#### Prepare the dummy models and input data samples (uses monstrous sampling functions from 'spup' - to be restructured).
 
-```{r, message = FALSE, warning = TRUE} 
+```{r, message = FALSE, warning = TRUE, eval = FALSE} 
 
-rm(list = ls())
 library(spup)
 data(DEM)
 str(dem30m)
 str(dem30m_sd)
 summary(dem30m_sd)
 
-# Define model - example with SpatialGridDataFrame(var1) and skalar (k)
+# Define model1 - two inputs, one SpatialGridDataFrame (var1) and one skalar (k)
 model1 <- function(var1, k) {
   var1k <- var1
   var1k@data <- var1@data * k
   var1k
 }
 
-# Define model - example with two SpatialGridDataFrames
+# Define model2 - two inputs, both SpatialGridDataFrame (var1, var2)
 model2 <- function(var1, var2) {
   var1var2 <- var1
   var1var2@data <- var1@data / var2@data
@@ -57,21 +58,37 @@ sp_dem@data$dem_sp <- dem30m_sd@data$Elevation_sd
 dem_mask <- dem30m # KS: This need to be moved to inside function.
 uncert_dem <- defnummarspatial(uncertain = TRUE, sp.obj = sp_dem, 
                       crm = dem_crm, mask = dem_mask) # KS: Need to be able to replace it with above defineUM
-dem_sample <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
+dem_sample1 <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
 dem_sample2 <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
 k <- rnorm(30)
 
+dem_sample1 <- dem_sample1[[1]] # KS: Temporary line until I sort the output of genSample().
+dem_sample2 <- dem_sample2[[1]] #
 
-# Run propagation
-dem_sample <- dem_sample[[1]] # KS: Temporary line until I sort the output of genSample out.
-dem_sample2 <- dem_sample2[[1]]
+```
+
+<br>
+
+#### Run propagation.
+
+We need to be able to run:
+
+1) The model with one input like in the first vigniette (DEM.Rmd).
+2) The model with more than one input, all inputs uncertain.
+3) The model with more than one input, selected inputs uncertain.
+
+At the moment the function propagate1() only works with single model input (case 1 above, vigniette DEM.Rmd). We need to find solution to be able to run propagation for cases 2) and 3) above. For example:
+
+```{r, message = FALSE, warning = TRUE, eval = FALSE}
 
 # model1
-output1 <- propagate1(c(dem_sample, k), model = model1, n = 30) # both uncertain
-output1 <- propagate1(c(dem_sample, 3), model = model1, n = 30) # only dem uncertain
+
+output1 <- propagate1(c(dem_sample1, k), model = model1, n = 30) # both uncertain
+output1 <- propagate1(c(dem_sample1, 3), model = model1, n = 30) # only dem uncertain
+
 # model2
-output2 <- propagate1(c(dem_sample, dem_sample2), model = model2, n = 30) # both uncertain
-output2 <- propagate1(c(dem_sample, dem30m), model = model2, n = 30) # only first var uncertain
+output2 <- propagate1(c(dem_sample1, dem_sample2), model = model2, n = 30) # both uncertain
+output2 <- propagate1(c(dem_sample1, dem30m), model = model2, n = 30) # only first var uncertain
 
 ```
 
