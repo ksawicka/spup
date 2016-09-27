@@ -1,0 +1,190 @@
+---
+title: "Spatial uncertainty propagation analysis"
+subtitle: "Case study with spatially variable standard deviation - slope calculations with the digital elevation model (DEM)"
+author: "Kasia Sawicka"
+date: "September 2016"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+```
+
+
+### Introduction to the spatial uncertainty analysis with spatially variable sd
+
+The adapted uncertainty propagation analysis approach is based on the Monte Carlo method that computes the output of the model repeatedly, with input values that are randomly sampled from their marginal or joint pdf. The set of model outputs forms a random sample from the output pdf, so that the parameters of the distribution, such as the mean, variance and quantiles, can be estimated from the sample. The method thus consists of the following steps:
+
+1.	Characterise uncertain model inputs with pdfs.
+1.	Repeatedly sample from (spatial) pdfs of uncertain inputs.
+1.	Run model with sampled inputs and store model outputs.
+1. 	Compute summary statistics of model outputs.
+
+Note that the above ignores uncertainty in model parameters and model structure, but these can easily be included if available as pdfs. A random sample from the model inputs can be obtained using an appropriate pseudo-random number generator. Note that a conditioning step will have to be included when the model inputs are correlated. 
+
+Application of the MC method to uncertainty propagation with operations that involve spatial interactions requires the simultaneous generation of realisations from the spatially distributed inputs implying that spatial correlation will have to be accounted for. For uncertain spatially distributed continuous variables, such as elevation, rainfall and soil organic carbon content, we assume the following geostatistical model:
+
+	Z(x)= μ(x)+ σ(x)∙ε(x)
+
+where μ is the (deterministic)  mean of Z, σ is a spatially variable standard deviation of the prediction of μ (spatial variability of σ reflects that in some parts of study area the uncertainty is greater than in other parts), and ε is a standardized, zero-mean, spatially auto-correlated residual modelled with a semivariogram or a correlogram. __The random sample is drawn from the pdf of ε to further calculate the realizations of Z.__ 
+
+<br>
+
+### Study case description - computing slope from DEM
+
+In many geographical studies DEM is a critical parameter, because the DEM-derived parameters such as slope, elevation, and aspect are of great importance in geometric correction. Insight in DEM error, uncertainty, and its propagation through the calculations of, for example, slope, is therefore crucial.
+
+Example data for slope calculations are 30m resolution mean DEM and standard deviation from the Zlatibor region in Serbia.
+I think here we should say those maps been derived?
+
+<br>
+
+### DEM uncertainty propagation analysis with 'spup'
+
+<br>
+
+#### Preliminaries - load and view the data
+
+'DEM' dataset contain two spatial objects: a mean DEM of the area and the standard deviation. It also contains a function that calculates slope from DEM that will be used later.
+
+
+```{r, message = FALSE, warning = TRUE} 
+
+rm(list = ls())
+library(spup)
+data(DEM)
+str(dem30m)
+str(dem30m_sd)
+spplot(dem30m)
+summary(dem30m_sd)
+
+```
+
+<br>
+
+#### Define uncertainty model (UM) for DEM
+
+First step in uncertainty propagation analysis is to define uncertainty model for the uncertain variable, here DEM, that will be used in further Monte Carlo sampling. 
+
+In case of DEM, the ε(x) are spatially correlated and in order to include this in the analysis, this needs to be described by the spatial correlogram parameters. The simple makecrm() function collates all necessary information into a list.
+
+
+```{r, message = FALSE, warning = FALSE} 
+
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+
+```
+
+In order to complete description of the uncertain variable use defineUM() function that collates all information about uncertainty in DEM. The minimum information require:
+
+* the logical value of if the object is uncertain (this allows an easy switch for possible analysis of contributions, see Vigniette...XXX).
+* the type of the distribution to sample from. In case of variables with spatially correlated errors only normal distribution is supported.
+* the list of distribution parameters, for example a mean and a standad deviation (sd) for the normal distribution. In presented case this is a map of mean DEM and a map of DEM sd. For details on supported distributions and required paramters see ?defineUM .
+* correlogram model
+
+
+```{r, message = FALSE, warning = FALSE} 
+
+# uncert_dem <- defineUM(uncertain = TRUE, distribution = "norm", 
+#                        distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+
+```
+
+<br>
+
+#### Generate possible realities of DEM
+
+Generating possible realities of the DEM can be completed by using the genSample() function. The required information to pass to the function include:
+
+* defined uncertain object (as above).
+* number of possible realizations to return
+* sample method. In case of spatially correlated variable, the method "ugs" is reccomended, otherwise spatial correlation will not be taken into account. See ?genSample for more details.
+
+Additional parameters may be also specified, for example, sampling of spatially correlated variable is based on the 'gstat' package that allows for limiting the number of nearest observations that should be used for a  simulation.
+
+
+```{r, message = FALSE, warning = FALSE} 
+
+sp_dem <- dem30m #
+sp_dem@data$dem_sp <- dem30m_sd@data$Elevation_sd
+dem_mask <- dem30m # KS: This need to be moved to inside function.
+uncert_dem <- defnummarspatial(uncertain = TRUE, sp.obj = sp_dem, 
+                      crm = dem_crm, mask = dem_mask) # KS: Need to be able to replace it with above defineUM
+dem_sample <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
+# Change this so it returns type of object as the mean
+
+```
+
+Here - visualization of the DEM sample... need to adjust Damiano's functions.
+
+<br>
+
+#### Uncertainty propagation through the model that calculates slope using DEM as input
+
+In order to perform uncertainty propagation analysis using 'spup', the model the uncertainty propagates through need to be defined as an R function.  The 'DEM' dataset includes an example of a pre-defined model that calculates slope using DEM as input. In this case the funcion is based on another existing R function for slope calculation. The 'spup' package also facilitates analysis with external models as long as they are callable from R (see Vigniette XXX2 for an example).
+
+```{r, message = FALSE, warning = TRUE} 
+
+Slope
+
+```
+
+The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with possible realizations of uncertain variable results with a sample of possible model output that can be further analysed. To run the Slope model with the probable realizations of DEM use propagate() function. The propagate() function takes as arguments:
+
+* an output of genSample or a list of several outputs(???).
+* the model as a function in R
+* the number of model runs. This can be equal or smaller than number of possible realizations of uncertain input variable.
+
+```{r, message = FALSE, warning = TRUE} 
+
+dem_sample <- dem_sample[[1]] # KS: Temporary line until I sort the output of genSample out.
+slope <- propagate1(dem_sample, model = Slope, n = 30)
+
+```
+
+<br>
+
+Here post-processing. Plots, etc.
+
+<br>
+
+
+### Acknoledgements
+
+The Zlatibor dataset was kindly provided by prof. Branislav Bajat from the University of Belgrade, Serbia. 
+
+This project has received funding from the European Union’s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 607000.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

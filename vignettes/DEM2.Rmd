@@ -1,0 +1,78 @@
+---
+title: "Spatial uncertainty propagation analysis"
+subtitle: "Dummy case with two uncertain inputs"
+author: "Kasia Sawicka"
+date: "September 2016"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+---
+
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+```
+
+
+
+```{r, message = FALSE, warning = TRUE} 
+
+rm(list = ls())
+library(spup)
+data(DEM)
+str(dem30m)
+str(dem30m_sd)
+summary(dem30m_sd)
+
+# Define model - example with SpatialGridDataFrame(var1) and skalar (k)
+model1 <- function(var1, k) {
+  var1k <- var1
+  var1k@data <- var1@data * k
+  var1k
+}
+
+# Define model - example with two SpatialGridDataFrames
+model2 <- function(var1, var2) {
+  var1var2 <- var1
+  var1var2@data <- var1@data / var2@data
+  var1var2
+}
+
+
+# Do sampling
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+sp_dem <- dem30m
+sp_dem@data$dem_sp <- dem30m_sd@data$Elevation_sd
+dem_mask <- dem30m # KS: This need to be moved to inside function.
+uncert_dem <- defnummarspatial(uncertain = TRUE, sp.obj = sp_dem, 
+                      crm = dem_crm, mask = dem_mask) # KS: Need to be able to replace it with above defineUM
+dem_sample <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
+dem_sample2 <- genSample(uncert_dem, n = 30, samplemethod = "ugs", nmax = 24)
+k <- rnorm(30)
+
+
+# Run propagation
+dem_sample <- dem_sample[[1]] # KS: Temporary line until I sort the output of genSample out.
+dem_sample2 <- dem_sample2[[1]]
+
+# model1
+output1 <- propagate1(c(dem_sample, k), model = model1, n = 30) # both uncertain
+output1 <- propagate1(c(dem_sample, 3), model = model1, n = 30) # only dem uncertain
+# model2
+output2 <- propagate1(c(dem_sample, dem_sample2), model = model2, n = 30) # both uncertain
+output2 <- propagate1(c(dem_sample, dem30m), model = model2, n = 30) # only first var uncertain
+
+```
+
+<br>

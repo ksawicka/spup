@@ -1,0 +1,94 @@
+---
+title: "Allier dataset and model"
+author: "Kasia Sawicka"
+date: "May 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Quick tutorial for Allier data
+
+### Introduction
+
+The moisture content at wilting point is an important input data for the crop WOFOST model. Becasue the moisture content varies considerably over study area in a way that is not linked directly with soil type, it was necessary to map its variation separately to see how moisture limitations affect the calculated crop yield.
+
+Unfortunately, becasue moisture content must be measured on samples in the laboratory, it is expensive and time consuming to determine it for a sufficiently large number of data points for creating the prediction maps by kriging. An alternative and cheaper way is to calculate it from other indicators. Because the moisture content at wilting point is often strongly correlated with moisture content at field capacity and the soil porosity. both of which can be measured more easily, it was decided to investigate how errors in measuring and mapping these would work through to a map of calculated moisture content. Calculation of the moisture content can be done using a pedo-transfer function, which in this case takes the form of multiple linear regression (see model function).
+
+
+### Data and model preparation
+
+
+1. Define environmental model as a function in R. For example, model for the moisture content at wilting point $\Theta_{wp}$:
+
+$$\Theta^{'}_{wp}=\beta_0+\beta_1*\Theta_{fc}+\beta_2*\Phi+\epsilon+\delta$$
+
+where:
+$\Theta^{'}_{wp}$ denotes measured moisture content at wilting point, 
+$\beta_0$, $\beta_1$ and $\beta_2$ are the model parameters,
+$\delta$ is residuals resulting from measurment error lack of model fit.
+
+```{r Allier model} 
+allierModel <- function(field.capasity, soil.porosity, beta0, beta1, beta2, delta) {
+
+  soil.moisture <- beta0 + beta1 * field.capasity + beta2 * soil.porosity + delta
+  soil.moisture
+
+}
+```
+
+
+2. Create spatial simulations of a gstat object.
+
+```{r simulate spatial data}
+library(sp)
+library(rgdal)
+library(gstat)
+
+Allier <-  read.csv("Allier.csv", header=TRUE)
+coordinates(Allier) = ~x+y
+
+# prediction grid Allier in local co-ordinate system 
+Allier_grd <- readGDAL("AllierMask.asc")
+
+# gstat object for cokriging
+g <- gstat(id=c("fc"), formula = fc~1, data = Allier,
+           model = vgm(0.0027, "Sph", 480, 0.0013), nmax = 24)
+g <- gstat(g, id = "por", formula = por~1, data = Allier,
+           model = vgm(0.0029, "Sph", 480, 0.0008), nmax = 24)
+g <- gstat(g, id = c("fc", "por"),
+           model = vgm(0.0013, "Sph", 480, -0.0008))
+g <- fit.lmc(variogram(g), g)
+
+# Co-kriging
+nsim = 20
+set.seed(1234567)
+Allier_krig <- predict(g, Allier_grd, nsim = nsim, debug.level = -1)
+str(Allier_krig)
+```
+
+
+3. Create simulations of model parameters.
+
+```{r simulate the model parameters}
+# for simplicity assume all normally distributed
+b0 <- rnorm(n = nsim, mean = -0.26, sd = 0.1)
+b1 <- rnorm(n = nsim, mean = 0.41, sd = 0.2)
+b2 <- rnorm(n = nsim, mean = 0.49, sd = 0.25)
+delta <- rnorm(n = nsim, mean = 1E-4, sd = 1E-5)
+```
+
+Then use these realizations for error propagation with propagate() from 'spup'.
+
+
+
+
+
+
+
+
+
+
+
