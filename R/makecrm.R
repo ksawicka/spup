@@ -33,15 +33,14 @@ makecrm <- function(acf0 = 1, range, model, ...) {
   # CHECK: acf0 must be from a range of 0 to 1
   # if (acf0 < 0 | acf0 > 1)
     # stop("acf0 must be within a range of 0 and 1")
-  stopifnot
+  # stopifnot
 
-  crm <- list(acf0 = acf0,
-              range = range,
-              model = model,
-              ...)
-
+  crm <- c(acf0 = acf0,
+           range = range,
+           model = model,
+           ...)
   class(crm) <- "SpatialCorrelogramModel"
-  return(crm)
+  crm
 
 }
 
