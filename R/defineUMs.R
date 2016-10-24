@@ -35,13 +35,13 @@
 #' Uncertainty Model (UM) is needed.
 #' @param distribution A string specified which distribution to sample from.
 #' See Details for a list of supported distributions.
-#' @param distr_param A vector with distribution parameters. For example, for 
+#' @param distr_param A vector or a list with distribution parameters. For example, for 
 #' normal distribution in spatial variable this must be a map of means and a map
 #' of syandard deviations.
 #' @param cat_prob A list of probabilities for categorical variables. In case of spatial inputs,
 #' these must be maps. In case of non-spatial inputs it is a data.frame.
 #' @param crm A correlogram model, object of a class "SpatialCorrelogramModel",
-#' output of makecormodel().
+#' output of makecormodel(). Can only be specified for numerical variables.
 #' @param ...  Additional parameters of um that may want to be saved here.
 #'
 #' @return A list of all necessary information for creating realizations of
@@ -54,54 +54,55 @@
 #' @export
 #' 
 defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob, crm = NULL, ...) {
-                             # we need an argument here which specifies if this objcect is
-                             # cross-correlated with any other input to the model.
-
+                             
   if (class(uncertain) != "logical")
     stop("uncertain must be logical")
+  
   if (is.null(distr_param & cat_prob))
     stop("One of 'dist_param' or 'cat_prob' must be provided.")
-  
+  if (!is.null(distr_param | cat_prob))
+    stop("Only one of 'dist_param' or 'cat_prob' can be provided.")
   
   # recognise if it is a continuous or categorical variable
-  
-  
-  # if distribution is not null, a string, and belongs to the list of supported distributions
+  # if it is continuous:
+  if(!is.null(distr_param)) {
+    # if dist_param are the same class
+    if (class(distr_param[[1]] != class(distr_param[[2]])))
+      stop("Distribution parameters must be objects of the same class.")
+    # if distribution is not null, a string, and belongs to the list of supported distributions
+    if (!is.null(distribution))
+      stop("Distribution type is missing.")
+    if (class(distribution) != "character")
+      stop("Distribution type must be 'string'.")
+# here some chack if crm is provided and if it is correct
+        um <- list(uncertain = uncertain,
+                   distribution = distribution,
+                   distr_param = distr_param,
+                   crm = crm,
+                   ...)  
+  }  
+  if (check_if_Spatial(distr_param[[1]])) 
+    class(um) <- "NumMarSpatial" 
+  else if (class(distr_param[[1]]) == "numeric") 
+    class(um) <- "NumMarSkalar"
+  else 
+    stop("Class of distribution parameters is not supported.")
+  # Add time series.
 
-  # if dist_param are provided, what class they are
-  
-# 1. Marginal spatial continuous or discrite (numerical) correlated or no correlated
-  
-
-  
-  if (!is.null(sp.obj)) { # CHECK: if sp. obj is provided
-    allSpatialObjects <- c("SpatialGridDataFrame") # look up vgm() for how to access list existing elsewhere.
-    if (class(sp.obj) %in% allSpatialObjects) { # CHECK: if sp.obj is ov required type
-      if (is.null(sp.obj@data)) {   # CHECK: if sp.object contains data - then warning if not instead of break
-        stop("SpatialObject has to contain data")
-      }
-    } else {
-      stop("sp.obj has to be of class SpatialGridDataFrame")
-    }
-  } else {
-    stop("sp.obj is missing")
+  # if it is categorical:
+  if (!is.null(cat_prob)) {
+    # here some checks on the categorical objects?
+    um <- list(uncertain = uncertain,
+               cat_prob <- cat_prob,
+               ...)
   }
+  if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
+    class(um) <- "CatSpatial"  
+  else
+    class(um) <- "CatDf" # check if all the brackets are correact, maybe order of ifs need to change.
+                          # check where should be stop saying Class not allowed, like in line 90.
+                          # maybe we need this only in one place?
   
-  um <- list(uncertain = uncertain,
-             distribution = distribution,
-             distr_param = distr_param,
-             crm = crm,
-             ...)
-  
-  class(um) <- "NumMarSpatial"
   um
-  
-# 2. Marginal spatial categorical (correlated or nor correlated?)
-  
-# 3. Marginal time series correlated or not correlated
-  
-# 4. Marginal skalar
-  
-
 } 
 
