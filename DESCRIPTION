@@ -8,6 +8,7 @@ Authors: Kasia Sawicka <kasia.sawicka@wur.nl>, Stefan van Dam <>, Damiano Luzzi
 Maintainer: Kasia Sawicka <kasia.sawicka@wur.nl>
 Description: Uncertainty propagation analysis in spatial environmental modelling
 License: GPL-2
+VignetteBuilder: knitr
 Depends:
     gstat,
     foreach,
