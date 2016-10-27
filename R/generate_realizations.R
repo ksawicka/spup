@@ -1,8 +1,8 @@
-source("R/randomSamp.R")
-source("R/stratsamp.R")
-source("R/crm2vgm.R")
-source("R/matrixReshuffle.R")
-source("R/lhs.R")
+# source("R/randomSamp.R")
+# source("R/stratsamp.R")
+# source("R/crm2vgm.R")
+# source("R/matrixReshuffle.R")
+# source("R/lhs.R")
 
 #' Generating Monte Carlo sample from an uncertain object
 #'
@@ -84,9 +84,9 @@ source("R/lhs.R")
 #'
 #' @export
 
-library(foreach)
-library(gstat)
-library(magrittr)
+# library(foreach)
+# library(gstat)
+# library(magrittr)
 
 
 generate_realizations <- function(uncert_object, n, samplemethod, p = 0, ...) {
