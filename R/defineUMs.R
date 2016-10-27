@@ -74,12 +74,11 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob, crm
       stop("Distribution type is missing.")
     if (class(distribution) != "character")
       stop("Distribution type must be 'string'.")
-# here some chack if crm is provided and if it is correct
-        um <- list(uncertain = uncertain,
-                   distribution = distribution,
-                   distr_param = distr_param,
-                   crm = crm,
-                   ...)  
+    um <- list(uncertain = uncertain,
+               distribution = distribution,
+               distr_param = distr_param,
+               crm = crm,
+               ...)  
   }  
   if (check_if_Spatial(distr_param[[1]])) 
     class(um) <- "NumMarSpatial" 
