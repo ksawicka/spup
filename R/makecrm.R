@@ -2,7 +2,7 @@
 #'
 #' Function that generates a spatial correlogram model.
 #'
-#' Allowed spatial autocorrelation functions are listed in Table 4.1 of the
+#' For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
 #' gstat manual (\url{http://www.gstat.org/gstat.pdf}). Spatial correlation
 #' assumes stationarity, i.e. correlation depends only on points separation
 #' distance. Anisotropy is allowed (http://www.gstat.org/gstat.pdf). No nested
@@ -27,19 +27,19 @@
 #' @export
 makecrm <- function(acf0 = 1, range, model, ...) {
 
-  # Various checks on if acf0 is between 0 and 1,
+  # if acf0 is between 0 and 1
+  if (acf0 < 0 | acf0 > 1)
+    warning("For standardized residuals acf0 argument should be between 0 and 1.")
   # if model is a string from allowed list (see vgm code for example), etc.
-
-  # CHECK: acf0 must be from a range of 0 to 1
-  # if (acf0 < 0 | acf0 > 1)
-    # stop("acf0 must be within a range of 0 and 1")
-  # stopifnot
-
+  models <- vgm()$short
+  if (model %in% models == FALSE)
+    stop("Only models accepted by gstat::vgm are allowed.")
+  
   crm <- c(acf0 = acf0,
-           range = range,
-           model = model,
-           ...)
-  class(crm) <- "SpatialCorrelogramModel"
+        range = range,
+        model = model,
+        ...)
+  # class(crm) <- "correlogramModel"
   crm
 
 }
