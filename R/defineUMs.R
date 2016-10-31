@@ -51,32 +51,37 @@
 #' 
 #' @examples
 #' 
+#' data(DEM)
+#' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+#' demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+#'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+#' 
 #' @export
 #' 
-defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob, crm = NULL, ...) {
-                             
+defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NULL, crm = NULL, ...) {
+  
   if (class(uncertain) != "logical")
     stop("uncertain must be logical")
   
-  if (is.null(distr_param & cat_prob))
+  if (is.null(distr_param) & is.null(cat_prob))
     stop("One of 'dist_param' or 'cat_prob' must be provided.")
-  if (!is.null(distr_param | cat_prob))
+  if (!is.null(distr_param) & !is.null(cat_prob))
     stop("Only one of 'dist_param' or 'cat_prob' can be provided.")
   
   # recognise if it is a continuous or categorical variable
   # if it is continuous:
   if(!is.null(distr_param)) {
     # if dist_param are the same class
-    if (class(distr_param[[1]] != class(distr_param[[2]])))
+    if (class(distr_param[[1]]) != class(distr_param[[2]]))
       stop("Distribution parameters must be objects of the same class.")
     # if distribution is not null, a string, and belongs to the list of supported distributions
-    if (!is.null(distribution))
+    if (is.null(distribution))
       stop("Distribution type is missing.")
     if (class(distribution) != "character")
       stop("Distribution type must be 'string'.")
     um <- list(uncertain = uncertain,
                distribution = distribution,
-               distr_param = distr_param,
+               distr_param = distr_param, 
                crm = crm,
                ...)  
   }  
@@ -87,7 +92,7 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob, crm
   else 
     stop("Class of distribution parameters is not supported.")
   # Add time series.
-
+  
   # if it is categorical:
   if (!is.null(cat_prob)) {
     # here some checks on the categorical objects?
@@ -99,8 +104,8 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob, crm
     class(um) <- "CatSpatial"  
   else
     class(um) <- "CatDf" # check if all the brackets are correact, maybe order of ifs need to change.
-                          # check where should be stop saying Class not allowed, like in line 90.
-                          # maybe we need this only in one place?
+  # check where should be stop saying Class not allowed, like in line 90.
+  # maybe we need this only in one place?
   
   um
 } 
