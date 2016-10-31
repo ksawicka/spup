@@ -7,21 +7,11 @@
 #'
 check_if_Spatial <- function(object) {
   
-  Spatial_classes <- c("SpatialPoints",
-                       "SpatialPointsDataFrame",
-                       "SpatialMultiPoints",
+  Spatial_classes <- c("SpatialPointsDataFrame",
                        "SpatialMultiPointsDataFrame",
-                       "SpatialPixels",
                        "SpatialPixelsDataFrame",
-                       "SpatialGrid",
                        "SpatialGridDataFrame",
-                       "Line",
-                       "Lines",
-                       "SpatialLines",
                        "SpatialLinesDataFrame",
-                       "Polygon",
-                       "Polygons",
-                       "SpatialPolygons",
                        "SpatialPolygonsDataFrame",
                        "RasterLayer")
   
