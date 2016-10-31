@@ -62,6 +62,11 @@ Continuous \tab Exponential \tab \tab \tab \cr \tab Continuous \tab Gamma
 }
 \examples{
 
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+                   distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+
 }
 \author{
 Kasia Sawicka, Gerard Heuvelink
