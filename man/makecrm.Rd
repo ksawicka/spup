@@ -26,7 +26,7 @@ collating provided arguments.
 Function that generates a spatial correlogram model.
 }
 \details{
-Allowed spatial autocorrelation functions are listed in Table 4.1 of the
+For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
 gstat manual (\url{http://www.gstat.org/gstat.pdf}). Spatial correlation
 assumes stationarity, i.e. correlation depends only on points separation
 distance. Anisotropy is allowed (http://www.gstat.org/gstat.pdf). No nested
