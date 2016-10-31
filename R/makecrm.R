@@ -25,8 +25,10 @@
 #' mycormodel
 #'
 #' @export
-makecrm <- function(acf0 = 1, range, model, ...) {
+makecrm <- function(acf0, range, model, ...) {
 
+  stopifnot(class(acf0) == "numeric")
+  stopifnot(class(range) == "numeric")
   # if acf0 is between 0 and 1
   if (acf0 < 0 | acf0 > 1)
     warning("For standardized residuals acf0 argument should be between 0 and 1.")
@@ -36,9 +38,9 @@ makecrm <- function(acf0 = 1, range, model, ...) {
     stop("Only models accepted by gstat::vgm are allowed.")
   
   crm <- c(acf0 = acf0,
-        range = range,
-        model = model,
-        ...)
+           range = range,
+           model = model,
+           ...)
   # class(crm) <- "correlogramModel"
   crm
 
