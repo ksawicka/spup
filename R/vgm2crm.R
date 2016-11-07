@@ -1,25 +1,18 @@
-# Convert semivariogram model (vgm) to correlogram model and assign same class makecrm() would.
-
-# vgm - if provided variogram model created by vgm, no other parameters needed and all are taken
-# from vgm object. If provided they will be ignored.
-
-# all other parameters as in vgm().
-
-
-
-
-#' Title
+#' Convert vgm to crm
 #'
-#' @param vgm
-#' @param psill
-#' @param nugget
-#' @param range
-#' @param model
+#' @param vgm See ?vgm
+#' @param psill See ?vgm
+#' @param nugget See ?vgm
+#' @param range See ?vgm
+#' @param model See ?vgm
 #'
-#' @return
-#' @export
+#' @return Standardised parameters of spatial correlogram model
 #'
 #' @examples
+#' 
+#' # Examples here
+#' 
+#' @export
 vgm2crm <- function(vgm, psill, nugget, range, model) {
 
   stopifnot(lenght(psill) == 1) # Copied from vgm
@@ -28,13 +21,9 @@ vgm2crm <- function(vgm, psill, nugget, range, model) {
   # then extract elements from appropraite slots.
 
   acf0 <- psill/(psill + nugget)
-
   crm <- list(acf0 = acf0,
              range = range,
              model = model)
-
-  class(crm) = "SpatialCorrelogramModel"
   crm
-
 }
 
