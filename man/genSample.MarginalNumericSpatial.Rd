@@ -64,9 +64,9 @@ dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling"
 str(dem_sample)
 
 # "startifiedSampling" method example
-data(geul)
-geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, mask = geul.mask)
-geul.sim <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "stratifiedSampling", p = 0:5/5)
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+str(dem_sample)
 
 }
 \author{
