@@ -6,7 +6,6 @@
 #' @return TRUE or FALSE.
 #'
 check_if_Spatial <- function(object) {
-  
   Spatial_classes <- c("SpatialPointsDataFrame",
                        "SpatialMultiPointsDataFrame",
                        "SpatialPixelsDataFrame",
@@ -14,9 +13,7 @@ check_if_Spatial <- function(object) {
                        "SpatialLinesDataFrame",
                        "SpatialPolygonsDataFrame",
                        "RasterLayer")
-  
   class(object) %in% Spatial_classes
-  
 }
 
 
