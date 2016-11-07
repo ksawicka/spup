@@ -5,7 +5,7 @@
 #' @param uncert.objects Objects created by defnumarspatial
 #' @param ...
 #'
-#' @usage
+#' @usage defjointspatial(uncert.objects, ...)
 #' @return Joint uncertainty model of cross-correlated spatial objects
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' @examples
