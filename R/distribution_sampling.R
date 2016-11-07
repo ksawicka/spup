@@ -9,51 +9,52 @@
 #' @return sample of random deviates
 #'
 distribution_sampling <- function(n, distribution, parameters) {
-  if (distribution == "beta")
+  if (distribution == "beta") {
     samples <- do.call("rbeta", args = list(n, shape1 = parameters[[1]],
                         shape2 = parameters[[2]], ncp = parameters[[3]]))
-  if (distribution == "binorm")
+  } else if (distribution == "binorm") {
     samples <- do.call("rbinorm", args = list(n, size = parameters[[1]],
                         prob = parameters[[2]]))
-  if (distribution == "cauchy")
+  } else if (distribution == "cauchy") {
     samples <- do.call("rcauchy", args = list(n, location = parameters[[1]],
                         scale = parameters[[2]]))
-  if (distribution == "chisq")
+  } else if (distribution == "chisq") {
     samples <- do.call("rchisq", args = list(n, df = parameters[[1]],
                         ncp = parameters[[2]]))
-  if (distribution == "exp")
+  } else if (distribution == "exp") {
     samples <- do.call("rexp", args = list(n, rate = parameters[[1]]))
-  if (distribution == "gamma")
+  } else if (distribution == "gamma") {
     samples <- do.call("rgamma", args = list(n, df1 = parameters[[1]],
                         df2 = parameters[[2]], ncp = parameters[[3]]))
-  if (distribution == "geom")
+  } else if (distribution == "geom") {
     samples <- do.call("rgeom", args = list(n, prob = parameters[[1]]))
-  if (distribution == "hyper")
+  } else if (distribution == "hyper") {
     samples <- do.call("rhyper", args = list(nn = n, m = parameters[[1]],
                         n = parameters[[2]], k = parameters[[3]]))  
-  if (distribution == "lnorm")
+  } else if (distribution == "lnorm") {
     samples <- do.call("rlnorm", args = list(n, meanlog = parameters[[1]],
                         sdlog = parameters[[2]]))
-  if (distribution == "logis")
+  } else if (distribution == "logis") {
     samples <- do.call("rlogis", args = list(n, location = parameters[[1]],
                         scale = parameters[[2]]))
-  if (distribution == "nbinom")
+  } else if (distribution == "nbinom") {
     samples <- do.call("rnbinom", args = list(n, size = parameters[[1]],
                         prob = parameters[[2]], mu = parameters[[3]]))  
-  if (distribution == "norm")
+  } else if (distribution == "norm") {
     samples <- do.call("rnorm", args = list(n, mean = parameters[[1]],
                         sd = parameters[[2]]))
-  if (distribution == "pois")
+  } else if (distribution == "pois") {
     samples <- do.call("rpois", args = list(n, lambda = parameters[[1]]))
-  if (distribution == "t")
+  } else if (distribution == "t") {
     samples <- do.call("rt", args = list(n, df = parameters[[1]],
                         ncp = parameters[[2]]))
-  if (distribution == "unif")
+  } else if (distribution == "unif") {
     samples <- do.call("runif", args = list(n, min = parameters[[1]],
                         max = parameters[[2]]))
-  if (distribution == "weibull")
+  } else if (distribution == "weibull") {
     samples <- do.call("rweibull", args = list(n, shape = parameters[[1]],
                         scale = parameters[[2]]))
+  }
   samples 
 }
 
