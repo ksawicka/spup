@@ -48,7 +48,7 @@ distributions for marginal uncertainty models are listed in Table 1.
 
 
 
-Table 1 Parametric probability models allowed in defineUM.
+Table 1 Parametric probability models allowed in defineUMs().
 \tabular{rlllll}{ \tab \strong{Numeric type} \tab \strong{Distribution} \tab
 \strong{Syntax} \tab \strong{Parameters} \tab \strong{Description} \cr \tab
 Continuous \tab Beta \tab "beta" \tab c(\eqn{\alpha}, \eqn{\beta}) \tab
