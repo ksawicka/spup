@@ -34,7 +34,7 @@ models are allowed in the current version.
 }
 \examples{
 
-mycormodel = makecrm(acf0 = 0.35, range = 20, model = "Exp")
+mycormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
 mycormodel
 
 }

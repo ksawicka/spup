@@ -2,14 +2,30 @@
 % Please edit documentation in R/vgm2crm.R
 \name{vgm2crm}
 \alias{vgm2crm}
-\title{Title}
+\title{Convert vgm to crm}
 \usage{
 vgm2crm(vgm, psill, nugget, range, model)
 }
 \arguments{
-\item{model}{}
+\item{vgm}{See ?vgm}
+
+\item{psill}{See ?vgm}
+
+\item{nugget}{See ?vgm}
+
+\item{range}{See ?vgm}
+
+\item{model}{See ?vgm}
+}
+\value{
+Standardised parameters of spatial correlogram model
 }
 \description{
-Title
+Convert vgm to crm
+}
+\examples{
+
+# Examples here
+
 }
 
