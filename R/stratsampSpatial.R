@@ -1,16 +1,12 @@
 #' Stratified sampling for spatial variables
 #'
-#' @param mu 
-#' @param sigma 
-#' @param n 
-#' @param p 
+#' @param mu mean of normal distribution to be sampled
+#' @param sigma sd of normal distribution to be sampled
+#' @param n sample size per stratum
+#' @param p vector of probs
 #'
-#' @return Sample of spatial variable
+#' @return Sample of spatial variable. Matrix with n rows and length(p)-1 columns.
 stratsampSpatial <- function(mu, sigma, n, p) {
-  # Note that here p is a vector of probs
-  # n is sample size per stratum
-  # mu and sigma are parameters of normal distribution to be sampled
-  # function returns matrix with n rows and length(p)-1 columns
   if (is.na(mu) || (is.na(sigma))) {
     outmat <- matrix(NA, nrow = n, ncol = length(p)-1)
   } else {
