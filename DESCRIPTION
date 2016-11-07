@@ -10,11 +10,12 @@ Description: Uncertainty propagation analysis in spatial environmental modelling
 License: GPL-2
 VignetteBuilder: knitr
 Depends:
-    gstat,
     foreach,
-    raster,
     magrittr,
     purrr
+Imports:
+    gstat,
+    raster,
 Suggests:
     knitr
 RoxygenNote: 5.0.1
