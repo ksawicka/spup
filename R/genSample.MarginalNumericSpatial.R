@@ -52,11 +52,15 @@
 #' demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 #' str(dem_sample)
+#' 
+#' demUM <- defineUMs(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
+#' str(dem_sample)
 #'
 #' # "startifiedSampling" method example
-#' data(geul)
-#' geul.pb <- defnummarspatial(uncertain = TRUE, sp.obj = geul.krig, mask = geul.mask)
-#' geul.sim <- genSample(n = 5, uncert.object = geul.pb, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' str(dem_sample)
 #'
 #' @export
 genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, ...) {
@@ -112,31 +116,27 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, .
   
   ### STRATIFIED SAMP ------------------------------------------------------------------
   if (samplemethod == "stratifiedSampling") {
-    if (distribution != "norm") {
+    if (distribution != "norm")
       stop("stratified sampling in current version is supported only for normal distribution")
-    }
-    if (n %% (length(p)-1) != 0) {
+    if (n %% (length(p)-1) != 0)
       stop("n should be divisable by the number of strata")
+    if (class(distr_param[[1]]) != "RasterLayer") {
+      in1df <- do.call("cbind", distr_param)
+      in1mtx <- as.matrix(in1df@data)  
+      stsS <- function(x) {
+        parameters <- x
+        mu <- parameters[1]
+        sigma <- parameters[2]
+        as.numeric(stratsampSpatial(mu, sigma, n/(length(p)-1), p))
+      }
+      temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
+      X_sample <- distr_param[[1]]
+      X_sample@data <- as.data.frame(temp_samples)
+      names(X_sample@data) <- paste("sim", c(1:n), sep = "")
     } else {
-      if (class(distr_param[[1]]) != "RasterLayer") {
-          
-      }  
-  #     temp_samples <- foreach(a = UMobject[[2]][[1]], b = sqrt(UMobject[[2]][[2]]), .combine = rbind) %do% {
-  #       as.numeric(stratsampSpatial(a, b, n/(length(p)-1), p))
-  #     }
-  #     temp_samples <- temp_samples[,sample(ncol(temp_samples))]
-  #     X_sample <- UMobject[[4]]
-  #     X_sample@data <- as.data.frame(temp_samples)
-  #     map.of.sd <- UMobject[[4]]
-  #     sd.samples <- apply(temp_samples, MARGIN = 1, sd)
-  #     map.of.sd@data <- as.data.frame(sd.samples)
-  #     samples <- list(X = X_sample, map.of.sd = map.of.sd, sampling.method = samplemethod)
-  #     class(samples) <- "SpatialMCSample"
-  #   }
-  # } # END
-  
-
+      print("what with Raster?")
+    }  
+  }
   X_sample
-  
 } 
 
