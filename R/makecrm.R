@@ -21,7 +21,7 @@
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' @examples
 #'
-#' mycormodel = makecrm(acf0 = 0.35, range = 20, model = "Exp")
+#' mycormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
 #' mycormodel
 #'
 #' @export
@@ -33,7 +33,7 @@ makecrm <- function(acf0, range, model, ...) {
   if (acf0 < 0 | acf0 > 1)
     warning("For standardized residuals acf0 argument should be between 0 and 1.")
   # if model is a string from allowed list (see vgm code for example), etc.
-  models <- vgm()$short
+  models <- gstat::vgm()$short
   if (model %in% models == FALSE)
     stop("Only models accepted by gstat::vgm are allowed.")
   
