@@ -16,7 +16,7 @@
 #'
 #'
 #'
-#' Table 1 Parametric probability models allowed in defineUM.
+#' Table 1 Parametric probability models allowed in defineUMs().
 #' \tabular{rlllll}{ \tab \strong{Numeric type} \tab \strong{Distribution} \tab
 #' \strong{Syntax} \tab \strong{Parameters} \tab \strong{Description} \cr \tab
 #' Continuous \tab Beta \tab "beta" \tab c(\eqn{\alpha}, \eqn{\beta}) \tab
@@ -71,8 +71,12 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NU
   # recognise if it is a continuous or categorical variable
   # if it is continuous:
   if(!is.null(distr_param)) {
-    # if dist_param are the same class
-    if (class(distr_param[[1]]) != class(distr_param[[2]]))
+    a <- class(distr_param[[1]])
+    for (i in 1:(length(distr_param)-1)) {
+      a <- c(a, class(distr_param[[i+1]]))
+    }
+    # if dist_param are all the same class
+    if (!isTRUE(all(a == a[1])))
       stop("Distribution parameters must be objects of the same class.")
     # if distribution is not null, a string, and belongs to the list of supported distributions
     if (is.null(distribution))
@@ -84,29 +88,25 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NU
                distr_param = distr_param, 
                crm = crm,
                ...)  
-  }  
-  if (check_if_Spatial(distr_param[[1]])) 
-    class(um) <- "NumMarSpatial" 
-  else if (class(distr_param[[1]]) == "numeric") 
-    class(um) <- "NumMarSkalar"
-  else 
-    stop("Class of distribution parameters is not supported.")
-  # Add time series.
-  
-  # if it is categorical:
-  if (!is.null(cat_prob)) {
+    if (check_if_Spatial(distr_param[[1]])) 
+      class(um) <- "MarginalNumericSpatial" 
+    else if (class(distr_param[[1]]) == "numeric") 
+      class(um) <- "MarginalScalar"
+    else 
+      stop("Class of distribution parameters is not supported.")
+    # Add time series.
+  } else {
     # here some checks on the categorical objects?
     um <- list(uncertain = uncertain,
                cat_prob <- cat_prob,
                ...)
-  }
-  if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
-    class(um) <- "CatSpatial"  
-  else
-    class(um) <- "CatDf" # check if all the brackets are correact, maybe order of ifs need to change.
-  # check where should be stop saying Class not allowed, like in line 90.
-  # maybe we need this only in one place?
-  
+    if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
+      class(um) <- "MarginalCategoricalSpatial"
+    else
+      class(um) <- "MarginalCategoricalDataFrame" # check if all the brackets are correact, maybe order of ifs need to change.
+    # check where should be stop saying Class not allowed, like in line 90.
+    # maybe we need this only in one place?
+  }  
   um
 } 
 
