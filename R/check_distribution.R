@@ -7,7 +7,6 @@
 #' @return TRUE or FALSE.
 #'
 check_distribution <- function(object) {
-  
   Supported_ditributions <- c("beta",        
                               "cauchy",      
                               "chisq",
@@ -24,9 +23,7 @@ check_distribution <- function(object) {
                               "discruni",
                               "geom",
                               "poiss")
-  
   object %in% Supported_distributions
-  
 }
 
 
