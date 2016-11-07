@@ -22,13 +22,6 @@ simulation.
 To assure equalfinality the sill parameter for spatially correlated random
 residuals is fixed and standardized to 1.
 }
-\examples{
-
-mycormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
-myvgm <- crm2vgm(mycormodel)
-myvgm
-
-}
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
