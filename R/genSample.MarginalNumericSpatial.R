@@ -1,5 +1,5 @@
 #' Generating Monte Carlo sample from an uncertain object of a class 
-#' 'NumMarSpatial'
+#' 'MarginalNumericSpatial'
 #'
 #' Function that runs Monte Carlo simulations depending on the type of
 #' uncertain object. Facilitates unconditional gausian simulation of errors for
@@ -61,6 +61,10 @@
 #' demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
+#' 
+#' demUM <- defineUMs(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m), lower.tail = FALSE)
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' str(dem_sample)
 #'
 #' @export
 genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, ...) {
@@ -116,18 +120,14 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, .
   
   ### STRATIFIED SAMP ------------------------------------------------------------------
   if (samplemethod == "stratifiedSampling") {
-    if (distribution != "norm")
-      stop("stratified sampling in current version is supported only for normal distribution")
     if (n %% (length(p)-1) != 0)
       stop("n should be divisable by the number of strata")
     if (class(distr_param[[1]]) != "RasterLayer") {
       in1df <- do.call("cbind", distr_param)
       in1mtx <- as.matrix(in1df@data)  
-      stsS <- function(x) {
+      stsS <- function(x, ...) {
         parameters <- x
-        mu <- parameters[1]
-        sigma <- parameters[2]
-        as.numeric(stratsampSpatial(mu, sigma, n/(length(p)-1), p))
+        as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
       }
       temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
       X_sample <- distr_param[[1]]
