@@ -1,0 +1,512 @@
+sd_realizations <- apply(as.matrix(realizations@data), MARGIN = 1, sd)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+str(std)
+summary(std)
+?sd
+?mean
+?as.double
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(realizations@data), MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(double(sd_realizations))
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(double(realizations@data)), MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(double(realizations@data)), MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd
+sd_realizations <- apply(as.matrix(as.double(realizations@data)), MARGIN = 1, sd, ...)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(as.double(realizations@data)), MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.double(as.matrix(realizations@data)), MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(realizations@data), MARGIN = 1, function(x) sd(x, ...))
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd_realizations <- apply(as.matrix(realizations@data), MARGIN = 1, function(x) sd(x, na.rm=TRUE)
+)
+summary(sd_realizations)
+?var
+var.SpatialGridDataFrame <- function(realizations, ...) {
+sd_realizations <- apply(as.matrix(realizations@data), MARGIN = 1, var, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- var(slope_sample, na.rm = TRUE)
+X <- as.matrix(realizations@data)
+is.atomic(X)
+sd_realizations <- apply(X, MARGIN = 1, var,na.rm=TRUE
+)
+summary(sd_realizations)
+sd_realizations <- apply(X, MARGIN = 2, var,na.rm=TRUE
+)
+summary(sd_realizations)
+?apply
+var.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+sd_realizations <- apply(X, MARGIN = 1, var, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- var(slope_sample, na.rm = TRUE)
+slope_sd <- var.SpatialGridDataFrame(slope_sample, na.rm = TRUE)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+sd_realizations <- apply(X, MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd.SpatialGridDataFrame(slope_sample, na.rm = TRUE)
+summary(slope_sd)
+head(slope_sample)
+X <- as.matrix(realizations@data)
+dim(X)
+head(X)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+sd_realizations <- apply(X, MARGIN = 2, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd.SpatialGridDataFrame(slope_sample, na.rm = TRUE)
+summary(slope_sd)
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+sd_realizations <- apply(X, MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd.SpatialGridDataFrame(slope_sample, na.rm = TRUE)
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+class(sd)
+rm(list=ls())
+class(sd)
+class(mean)
+sd
+quantile
+var
+library(spup)
+sd
+library(spup)
+sd
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd <- function(realizations, ...) {
+UseMethod("sd")
+}
+sd.default <- stats::sd
+formals(sd.default) <- c(formals(sd.default), alist(... = ))
+sd
+genSample
+sd.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+sd_realizations <- apply(X, MARGIN = 1, sd, ...)
+std <- realizations
+std@data <- as.data.frame(sd_realizations)
+std
+# here implement that the names of "realizations" correspond
+# with names of argument 'realizations'
+# e.g. if it is slope, have mean_slope, sd_slope, etc.
+}
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+str(slope_sd)
+summary(slope_sd)
+library(spup)
+library(spup)
+rm(list=ls())
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+library(spup)
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+sd
+library(spup)
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sd <- sd(slope_sample, na.rm = TRUE)
+str(slope_sd)
+summary(slope_sd)
+head(slope_sample)
+slope_sample@data
+write.csv(slope_sample,"slope_sample.csv")
+slope_mean <- mean(slope_sample)
+spplot(slope_mean)
+slope_sd <- sd(slope_sd)
+slope_stats <- cbind(slope_mean, slope_sd)
+spplot(slope_stats)
+class(slope_sd)
+a=sd(dem_sample)
+spplot(a)
+a=mean(dem_sample)
+spplot(a)
+a=sd(dem_sample)
+spplot(a)
+library(spup)
+library(spup)
+?var
+library(spup)
+?var
+?sd
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_var <- var(slope_sample, na.rm = TRUE)
+summary(slope_var)
+slope_mean <- var(slope_mean, na.rm = TRUE)
+slope_mean <- var(slope_sample, na.rm = TRUE)
+summary(slope_mean)
+slope_mean <- mean(slope_sample, na.rm = TRUE)
+summary(slope_mean)
+slope_mean <- mean(slope_sample)
+slope_var <- var(slope_sample)
+slope_stats <- cbind(slope_mean, slope_sd)
+spplot(slope_stats)
+slope_stats <- cbind(slope_mean, slope_var)
+spplot(slope_stats)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+quant_samples <- apply(as.matrix(quant@data), MARGIN = 1, FUN = quantile, ...)
+# quant_samples <- t(quant.samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+X <- as.matrix(realizations@data)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+# quant_samples <- t(quant.samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q)
+# quant_samples <- t(quant.samples)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q)
+spplot(slope_q)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q)
+spplot(slope_q)
+slope_mean <- mean(slope_sample)
+slope_var <- var(slope_sample)
+slope_stats <- cbind(slope_mean, slope_var)
+spplot(slope_stats)
+str(slope_stats)
+str(slope_q)
+summary(slope_q)
+spplot(slope_stats)
+str(slope_q)
+spplot(slope_q)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+spplot(slope_q)
+plot(slope_q)
+str(slope_q)
+spplot(slope_stats)
+spplot(slope_q[c(1:4)])
+spplot(slope_q[,rc(1:4)])
+spplot(slope_q[,c(1:4)])
+realizations=slope_sample
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile,probs=c(0.1,0.9),na.rm=T)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+str(quant)
+spplot(quant)
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile,probs=c(0.1,0.9),na.rm=T)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+spplot(quant[,c(1:4)])
+spplot(quant[c(1:4)])
+spplot(quant)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+spplot(quant)
+rm(list=ls())
+library(spup)
+?var
+?var.SpatialGridDataFrame
+library(gstat)
+# load and view the data
+data(DEM)
+str(dem30m)
+str(dem30m_sd)
+spplot(dem30m)
+summary(dem30m_sd)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
+distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 6, samplemethod = "ugs", nmax = 6)
+# view the sample
+str(dem_sample)
+spplot(dem_sample)
+dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(dem_sample, model = Slope, n = 100)
+spplot(slope_sample[c(1:6)])
+slope_mean <- mean(slope_sample)
+slope_var <- var(slope_sample)
+slope_stats <- cbind(slope_mean, slope_var)
+spplot(slope_stats)
+# or quantiles
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+spplot(slope_q[,c(1:4)])
+spplot(slope_q)
+str(slope_q)
+spplot(slope_q["10%"])
+head(slope_q)
+names(slope_q)
+?spplot
+spplot(slope_q, c["10%"])
+spplot(slope_q, c("10%"))
+plot(slope_q)
+plot(slope_q[[1]])
+plot(slope_q[[2]])
+names(slope_q) <- c("a","b","c","d")
+str(slope_q)
+spplot(slope_q)
+names(slope_q) <- c("a%","b","c","d")
+spplot(slope_q)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+slope_q <- quantile(slope_sample, na.rm = TRUE)
+str(slope_q)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(id = probs, values = quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- data.frame(id = probs, values = quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+names(slope_q)
+?gsub
+a=names(quant)
+a
+quant=slope_q
+names(quant) <- gsub("%", replacement = "perc.", names(quant))
+names(quant)
+?make.names
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+names(quant) <- gsub("%", replacement = "perc.", names(quant))
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q)
+spplot(slope_q)
+names(quant) <- paste0("prob", names(quant))
+names(quant)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+names(quant) <- paste0("prob", names(quant))
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q)
+spplot(slope_q)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+# nq <- names(quant)
+#
+# names(quant) <- paste0("prob", names(quant))
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+str(slope_q
+)
+nq <- names(quant)
+nq
+nq <- names(slope_q)
+nq
+nq_new <- paste0("prob", nq)
+nq_new
+nq <- names(slope_q)
+nq <- paste0("prob", nq)
+nq <- gsub("%", "perc", nq)
+quantile.SpatialGridDataFrame <- function(realizations, ...) {
+X <- as.matrix(realizations@data)
+quant_samples <- apply(X, MARGIN = 1, FUN = quantile, ...)
+quant_samples <- t(quant_samples)
+quant <- realizations
+quant@data <- as.data.frame(quant_samples)
+nq <- names(quant)
+nq <- paste0("prob", nq)
+nq <- gsub("%", "perc", nq)
+names(quant) <- nq
+quant
+}
+slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
+names(slope_q)
+spplot(slope_q)
+library(spup)
+library(spup)
+vigniette(DEM)
+vigniette(package="spup")
+vignette(package="spup")
+vignette(package="spup)
+vignette("DEM")
+library(gstat)
+library(spup)
+library(spup)
+library(gstat)
+spplot(dem30m)
+?spplot
+library(spup)
+library(spup)
+devtools::build()
+library(gstat)
+?spplo
+(dem_sample, c(1:6))
+spplot(dem_sample, c(1:6))
+library(gstat)
+spplot(dem_sample, c(1:6))
+spplot(dem_sample, c(1:6)
+spplot(dem_sample)
+str(dem_sample)
+spplot(dem_sample)
+library(gstat)
+loaded(gstat)
+is.loaded(gstat)
+is.loaded("gstat")
+library(gstat)
+?spplot
+spplot(dem_sample, c(1:2))
+spplot(dem_sample)
+library(spup)
+vignettes(package="spup")
+devtools::build()
+library(spup)
+dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20)
+library(spup)
+dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20)
+spplot(dem_sample, c(1:6))
+library(sp)
+spplot(dem_sample, c(1:6))
