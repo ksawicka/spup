@@ -21,7 +21,7 @@
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' @examples
 #'
-#' mycormodel <- makecrm(acf0 = 0.35, range = 20, model = "Exp")
+#' mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
 #' mycormodel
 #'
 #' @export
@@ -41,7 +41,7 @@ makecrm <- function(acf0, range, model, ...) {
            range = range,
            model = model,
            ...)
-  # class(crm) <- "correlogramModel"
+  class(crm) <- c("crm")
   crm
 
 }
