@@ -30,7 +30,12 @@ an argument.
 }
 \examples{
 
-
+data(DEM)
+dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+demUM <- defineUMs(uncertain = TRUE, distribution = "norm", 
+                   distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
+slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
 
 }
 \author{
