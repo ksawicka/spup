@@ -3,7 +3,7 @@
 \name{genSample.MarginalNumericSpatial}
 \alias{genSample.MarginalNumericSpatial}
 \title{Generating Monte Carlo sample from an uncertain object of a class 
-'NumMarSpatial'}
+'MarginalNumericSpatial'}
 \usage{
 genSample(UMobject, n, samplemethod, p = 0, ...)
 }
@@ -63,8 +63,16 @@ demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem3
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 str(dem_sample)
 
+demUM <- defineUMs(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
+str(dem_sample)
+
 # "startifiedSampling" method example
 demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+str(dem_sample)
+
+demUM <- defineUMs(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m), lower.tail = FALSE)
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
 
