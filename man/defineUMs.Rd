@@ -4,8 +4,8 @@
 \alias{defineUMs}
 \title{Creating an uncertainty model for a single input.}
 \usage{
-defnummarspatial(uncertain = TRUE, sp.obj = NULL, crm = NULL, mask =
-NULL, ...)
+defineUMs(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
+                 categories = NULL, cat_prob = NULL, crm = NULL, ...)
 }
 \arguments{
 \item{uncertain}{"TRUE" or "FALSE", determines if specification of
@@ -16,15 +16,17 @@ See Details for a list of supported distributions.}
 
 \item{distr_param}{A vector or a list with distribution parameters. For example, for 
 normal distribution in spatial variable this must be a map of means and a map
-of syandard deviations.}
-
-\item{cat_prob}{A list of probabilities for categorical variables. In case of spatial inputs,
-these must be maps. In case of non-spatial inputs it is a data.frame.}
+of standard deviations.}
 
 \item{crm}{A correlogram model, object of a class "SpatialCorrelogramModel",
 output of makecormodel(). Can only be specified for numerical variables.}
 
-\item{...}{Additional parameters of um that may want to be saved here.}
+\item{categories}{a vector of categories}
+
+\item{cat_prob}{data frame or spatial data frame; A list of probabilities for the vector of categories. 
+Number of columns in the data frame cannot be smaller than number of categories.}
+
+\item{...}{additional parameters}
 }
 \value{
 A list of all necessary information for creating realizations of
@@ -62,10 +64,16 @@ Continuous \tab Exponential \tab \tab \tab \cr \tab Continuous \tab Gamma
 }
 \examples{
 
+# define uncertainty model for spatial numerical variable
 data(DEM)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+                   
+# define uncertainty model for spatial categorical variable
+data(house)
+houseUM <- defineUMs(uncertain = TRUE, categories = c(0.19, 0), cat_prob = houses_DF)
+
 
 }
 \author{
