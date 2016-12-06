@@ -10,7 +10,6 @@ Description: Uncertainty propagation analysis in spatial environmental modelling
 License: GPL-2
 VignetteBuilder: knitr
 Depends:
-    foreach,
     magrittr,
     purrr
 Imports:
