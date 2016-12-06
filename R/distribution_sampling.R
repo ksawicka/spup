@@ -12,8 +12,8 @@ distribution_sampling <- function(n, distribution, parameters) {
   if (distribution == "beta") {
     samples <- do.call("rbeta", args = list(n, shape1 = parameters[[1]],
                         shape2 = parameters[[2]], ncp = parameters[[3]]))
-  } else if (distribution == "binorm") {
-    samples <- do.call("rbinorm", args = list(n, size = parameters[[1]],
+  } else if (distribution == "binom") {
+    samples <- do.call("rbinom", args = list(n, size = parameters[[1]],
                         prob = parameters[[2]]))
   } else if (distribution == "cauchy") {
     samples <- do.call("rcauchy", args = list(n, location = parameters[[1]],
@@ -24,8 +24,8 @@ distribution_sampling <- function(n, distribution, parameters) {
   } else if (distribution == "exp") {
     samples <- do.call("rexp", args = list(n, rate = parameters[[1]]))
   } else if (distribution == "gamma") {
-    samples <- do.call("rgamma", args = list(n, df1 = parameters[[1]],
-                        df2 = parameters[[2]], ncp = parameters[[3]]))
+    samples <- do.call("rgamma", args = list(n, shape = parameters[[1]],
+                        rate = parameters[[2]]))
   } else if (distribution == "geom") {
     samples <- do.call("rgeom", args = list(n, prob = parameters[[1]]))
   } else if (distribution == "hyper") {
