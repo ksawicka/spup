@@ -28,8 +28,8 @@
 #'
 #' }
 #'
-#' @usage defnummarspatial(uncertain = TRUE, sp.obj = NULL, crm = NULL, mask =
-#' NULL, ...)
+#' @usage defineUMs(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
+#'                  categories = NULL, cat_prob = NULL, crm = NULL, ...)
 #'
 #' @param uncertain "TRUE" or "FALSE", determines if specification of
 #' Uncertainty Model (UM) is needed.
@@ -37,12 +37,13 @@
 #' See Details for a list of supported distributions.
 #' @param distr_param A vector or a list with distribution parameters. For example, for 
 #' normal distribution in spatial variable this must be a map of means and a map
-#' of syandard deviations.
-#' @param cat_prob A list of probabilities for categorical variables. In case of spatial inputs,
-#' these must be maps. In case of non-spatial inputs it is a data.frame.
+#' of standard deviations.
 #' @param crm A correlogram model, object of a class "SpatialCorrelogramModel",
 #' output of makecormodel(). Can only be specified for numerical variables.
-#' @param ...  Additional parameters of um that may want to be saved here.
+#' @param categories a vector of categories
+#' @param cat_prob data frame or spatial data frame; A list of probabilities for the vector of categories. 
+#' Number of columns in the data frame cannot be smaller than number of categories.
+#' @param ... additional parameters
 #'
 #' @return A list of all necessary information for creating realizations of
 #' the uncertain variable.
@@ -51,20 +52,25 @@
 #' 
 #' @examples
 #' 
+#' # define uncertainty model for spatial numerical variable
 #' data(DEM)
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUMs(uncertain = TRUE, distribution = "norm",
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+#'                    
+#' # define uncertainty model for spatial categorical variable
+#' data(house)
+#' houseUM <- defineUMs(uncertain = TRUE, categories = c(0.19, 0), cat_prob = houses_DF)
+#' 
 #' 
 #' @export
 #' 
-defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NULL, crm = NULL, ...) {
+defineUMs <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL, crm = NULL, 
+                      categories = NULL, cat_prob = NULL, ...) {
   
   if (class(uncertain) != "logical")
     stop("uncertain must be logical")
   
-  if (is.null(distr_param) & is.null(cat_prob))
-    stop("One of 'dist_param' or 'cat_prob' must be provided.")
   if (!is.null(distr_param) & !is.null(cat_prob))
     stop("Only one of 'dist_param' or 'cat_prob' can be provided.")
   
@@ -72,8 +78,10 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NU
   # if it is continuous:
   if(!is.null(distr_param)) {
     a <- class(distr_param[[1]])
-    for (i in 1:(length(distr_param)-1)) {
-      a <- c(a, class(distr_param[[i+1]]))
+    if (length(distr_param) > 1) {
+      for (i in 1:(length(distr_param)-1)) {
+        a <- c(a, class(distr_param[[i+1]]))
+      }
     }
     # if dist_param are all the same class
     if (!isTRUE(all(a == a[1])))
@@ -95,17 +103,17 @@ defineUMs <- function(uncertain = TRUE, distribution, distr_param, cat_prob = NU
     else 
       stop("Class of distribution parameters is not supported.")
     # Add time series.
-  } else {
-    # here some checks on the categorical objects?
+  } else if (is.null(distr_param)) {
+    if (is.null(categories))
+      stop("Categories argument is missing.")
     um <- list(uncertain = uncertain,
-               cat_prob <- cat_prob,
+               categories = categories,
+               cat_prob = cat_prob,
                ...)
     if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
       class(um) <- "MarginalCategoricalSpatial"
     else
-      class(um) <- "MarginalCategoricalDataFrame" # check if all the brackets are correact, maybe order of ifs need to change.
-    # check where should be stop saying Class not allowed, like in line 90.
-    # maybe we need this only in one place?
+      class(um) <- "MarginalCategoricalDataFrame" 
   }  
   um
 } 
