@@ -4,7 +4,8 @@
 \alias{genSample}
 \title{Generic function for sampling.}
 \usage{
-genSample(UMobject, n, samplemethod, p = 0, ...)
+genSample(UMobject, varcov, cross_crm, n, samplemethod, p = 0,
+  asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{}

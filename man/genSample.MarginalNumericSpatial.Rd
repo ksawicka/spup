@@ -8,7 +8,7 @@
 genSample(UMobject, n, samplemethod, p = 0, ...)
 }
 \arguments{
-\item{UMobject}{uncertain object defined using defineUMs().}
+\item{UMobject}{uncertain object defined using defineUM().}
 
 \item{n}{Integer. Number of Monte Carlo realizations.}
 
@@ -53,28 +53,44 @@ data(DEM)
 
 # "ugs" method example
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
-demUM <- defineUMs(uncertain = TRUE, distribution = "norm", 
+demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
 str(dem_sample)
 
 # "randomSampling" method example
-demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 str(dem_sample)
 
-demUM <- defineUMs(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
+demUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 str(dem_sample)
 
 # "startifiedSampling" method example
-demUM <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
 
-demUM <- defineUMs(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m), lower.tail = FALSE)
+demUM <- defineUM(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m), lower.tail = FALSE)
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
+
+# load data
+data(dummyraster)
+rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
+rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling")
+str(rast_sample)
+class(rast_sample)
+
+# raster with auto-correlation
+rast_crm <- makecrm(acf0 = 0.6, range = 6, model = "Sph")
+rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd),
+crm = rast_crm)
+rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs", asList = F)
+str(rast_sample)
+class(rast_sample)
+
 
 }
 \author{

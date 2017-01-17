@@ -8,7 +8,7 @@
 genSample(UMobject, n, ...)
 }
 \arguments{
-\item{UMobject}{uncertain object defined using defineUMs().}
+\item{UMobject}{uncertain object defined using defineUM().}
 
 \item{n}{Integer. Number of Monte Carlo realizations.}
 
@@ -25,11 +25,11 @@ Generating Monte Carlo sample from an uncertain object of a class
 
 # load data
 data(house)
-houseUM <- defineUMs(uncertain = TRUE, categories = c(100,200), cat_prob = houses_DF)
+houseUM <- defineUM(uncertain = TRUE, categories = c(100,200), cat_prob = houses_DF)
 h_sample <- genSample(houseUM, n = 10)
 str(h_sample)
 
-houseUM <- defineUMs(uncertain = TRUE, categories = c("yes", 1), cat_prob = houses_DF)
+houseUM <- defineUM(uncertain = TRUE, categories = c("yes", 1), cat_prob = houses_DF)
 
 }
 \author{

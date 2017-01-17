@@ -8,7 +8,7 @@
 genSample(UMobject, n, samplemethod, p = 0, ...)
 }
 \arguments{
-\item{UMobject}{uncertain object defined using defineUMs().}
+\item{UMobject}{uncertain object defined using defineUM().}
 
 \item{n}{Integer. Number of Monte Carlo realizations.}
 
@@ -33,12 +33,12 @@ number of quantiles to assure each quantile is evenly represented.
 \examples{
 
 # Example 1
-uncertain_scalar <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
-scalar_sample <- genSample(uncertain_scalar, n = 10, samplemethod = "randomSampling")
+scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
+scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "randomSampling")
 
 # Example 2
-uncertain_scalar <- defineUMs(uncertain = TRUE, distribution = "beta", distr_param = c(10, 1, 2))
-scalar_sample <- genSample(uncertain_scalar, n = 10, samplemethod = "stratifiedSampling", p = 0:5/5)
+scalarUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(10, 1, 2))
+scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "stratifiedSampling", p = 0:5/5)
 
 }
 \author{
