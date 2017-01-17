@@ -1,0 +1,76 @@
+## ---- echo = FALSE-------------------------------------------------------
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+
+## ---- echo = FALSE-------------------------------------------------------
+knitr::opts_knit$set(global.par = TRUE)
+
+## ---- echo = FALSE-------------------------------------------------------
+par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2, cex.axis = 0.8,
+    cex.lab = 0.8)
+
+## ---- fig.width = 5, fig.height = 3--------------------------------------
+
+# load packages
+library(sp)
+library(raster)
+library(spup)
+
+# load and view the data
+data(dummyraster)
+par(mfrow= c(1,2))
+plot(rast_mean, main = "Mean")
+plot(rast_sd, main = "SD")
+
+# define uncertainty model for the DEM
+rastUM <- defineUM(uncertain = TRUE, distribution = "norm",
+                    distr_param = c(rast_mean, rast_sd))
+
+# create possible realizations of the rast
+rast_sample <- genSample(UMobject = rastUM, n = 20, samplemethod = "randomSampling", asList=FALSE)
+plot(subset(rast_sample, c(1:4)))
+
+# compute and plot the raster sample statistics
+# e.g. mean and standard deviation
+rast_sample_mean <- mean(rast_sample)
+# rast_sample_sd <- sd(rast_sample)
+# rast_stats <- raster::stack(rast_sample_mean, rast_sample_sd)
+# plot(rast_stats)
+
+# view rast model
+rast_model
+
+# run uncertainty propagation
+rast_model_sample <- propagate(rast_sample, model = rast_model, n = 10)
+
+# # view the sample of the model output
+# spplot(slope_sample[c(1:6)], main = list(label = "Examples of the slope realizations", cex = 1))
+# 
+# # compute and plot the slope sample statistics
+# # e.g. mean and standard deviation
+# slope_mean <- mean(slope_sample)
+# slope_sd <- sd(slope_sample, na.rm = TRUE)
+# slope_stats <- cbind(slope_mean, slope_sd)
+# spplot(slope_stats, main = list(label = "Mean and standard dev. of slope realizations", cex = 1))
+# 
+# # check the histogram of slope at at some random locations
+# par(mfrow = c(2,2))
+# hist(as.numeric(slope_sample@data[1256,]), main = "Location A", xlab = "Slope")
+# hist(as.numeric(slope_sample@data[2000,]), main = "Location B", xlab = "Slope")
+# hist(as.numeric(slope_sample@data[5000,]), main = "Location C", xlab = "Slope")
+# hist(as.numeric(slope_sample@data[5781,]), main = "Location D", xlab = "Slope")
+# 
+# # or quantiles
+# slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+# spplot(slope_q, mail = list(label = "Quantiles of slope realizations", cex = 1))
+
+
