@@ -6,6 +6,7 @@
 #' @param p vector of probs
 #'
 #' @return Sample of spatial variable. Matrix with n rows and length(p)-1 columns.
+#' 
 stratsamp <- function(n, distribution, parameters, p) {
   lims <- find_strata(p, distribution, parameters)
   outmat <- matrix(data = NA, nrow = n, ncol = length(p)-1)
