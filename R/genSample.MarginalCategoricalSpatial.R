@@ -3,7 +3,7 @@
 #'
 #' @usage genSample(UMobject, n, ...)
 #'
-#' @param UMobject uncertain object defined using defineUMs().
+#' @param UMobject uncertain object defined using defineUM().
 #' @param n Integer. Number of Monte Carlo realizations.
 #' @param ... additional parameters
 #' 
@@ -15,14 +15,14 @@
 #'
 #' # load data
 #' data(house)
-#' houseUM <- defineUMs(uncertain = TRUE, categories = c(100,200), cat_prob = houses_DF)
+#' houseUM <- defineUM(uncertain = TRUE, categories = c(100,200), cat_prob = houses_DF)
 #' h_sample <- genSample(houseUM, n = 10)
 #' str(h_sample)
 #'
-#' houseUM <- defineUMs(uncertain = TRUE, categories = c("yes", 1), cat_prob = houses_DF)
+#' houseUM <- defineUM(uncertain = TRUE, categories = c("yes", 1), cat_prob = houses_DF)
 #'
 #' @export
-genSample.MarginalCategoricalSpatial <- function(UMobject, n, ...) {
+genSample.MarginalCategoricalSpatial <- function(UMobject, n, asList = TRUE, ...) {
 
   categories <- UMobject[[2]]
   cat_prob <- UMobject[[3]]@data
