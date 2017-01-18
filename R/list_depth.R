@@ -12,6 +12,6 @@
 #' a <- list(list(1, 2), 3)
 #' depth(a)
 #' 
-depth <- function(List) {
+list_depth <- function(List) {
   ifelse(is.list(List), 1L + max(sapply(List, depth)), 0L)
 }
