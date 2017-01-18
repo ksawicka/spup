@@ -82,7 +82,7 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   if (is(UMlist[[1]], "MarginalNumericSpatial")) {
     class(mum) <- "JointNumericSpatial"
   } else {
-    class(mum) <- "JointNumericScalar"
+    class(mum) <- "JointScalar"
   }
   
   mum
