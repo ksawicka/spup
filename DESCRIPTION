@@ -14,6 +14,7 @@ Depends:
     purrr
 Imports:
     gstat,
+    mvtnorm,
     raster,
 Suggests:
     knitr
