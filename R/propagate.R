@@ -19,7 +19,7 @@
 #' @export
 propagate <- function(realizations, model, n, ...) {
   
-  d <- depth(realizations)
+  d <- list_depth(realizations)
   stopifnot(d < 3)
   model_output <- list()
   # one uncertain model input, MC sample saved in list
