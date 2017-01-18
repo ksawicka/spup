@@ -8,7 +8,7 @@
 #'
 #' @usage genSample(UMobject, n, samplemethod, p = 0, ...)
 #'
-#' @param UMobject uncertain object defined using defineUMs().
+#' @param UMobject uncertain object defined using defineUM().
 #' @param n Integer. Number of Monte Carlo realizations.
 #' @param samplemethod "randomSampling" or "stratifiedSampling".
 #' @param p A vector of quantiles. Optional. Only required if sample method is
@@ -23,15 +23,15 @@
 #' @examples
 #'
 #' # Example 1
-#' uncertain_scalar <- defineUMs(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
-#' scalar_sample <- genSample(uncertain_scalar, n = 10, samplemethod = "randomSampling")
+#' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
+#' scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "randomSampling")
 #' 
 #' # Example 2
-#' uncertain_scalar <- defineUMs(uncertain = TRUE, distribution = "beta", distr_param = c(10, 1, 2))
-#' scalar_sample <- genSample(uncertain_scalar, n = 10, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' scalarUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(10, 1, 2))
+#' scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "stratifiedSampling", p = 0:5/5)
 #'
 #' @export
-genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, ...) {
+genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
   stopifnot(UMobject$uncertain == TRUE)
   distribution <- UMobject[[2]]
