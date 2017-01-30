@@ -1,20 +1,32 @@
 #' Title Propagation function
 #'
 #' @param realizations a list or a list of lists; max one nesting is allowed.
-#' @param model a model that is written as a function in R
-#' @param n number of Monte Carlo Runs
-#' @param ... any arguments that the model takes on top of realizations
+#' @param model a model that is written as a function in R.
+#' @param n number of Monte Carlo Runs.
+#' @param ... any arguments that the model takes on top of realizations.
 #'
 #' @return model output realizations
 #'
 #' @examples
 #' 
+#' # continuous spatial data example with a single variable
 #' data(DEM)
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
 #' slope_sample <- propagate(dem_sample, model = Slope, n = 5, projection = CRS("+init=epsg:3857"))
+#' 
+#' # categorical spatial data example
+#' data(Rotterdam)
+#' woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
+#' woon_sample <- genSample(woonUM, 10)
+#' class(woon_sample)
+#' tax # the model takes SpatialGridDataFrame with a column called "Function"
+#' for (i in 1:10) names(woon_sample[[i]]) <- "Function"
+#' tax_uncert <- propagate(realizations = woon_sample, n = 10, model = tax)
+#' tax_uncert <- unlist(tax_uncert)
+#' summary(tax_uncert)
 #' 
 #' @export
 propagate <- function(realizations, model, n, ...) {
@@ -41,54 +53,6 @@ propagate <- function(realizations, model, n, ...) {
   }
   model_output
 }
-
-
-# set.seed(12345)
-# data(DEM)
-# dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
-# demUM <- defineUM(uncertain = TRUE, distribution = "norm",
-#                  distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
-# dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
-# 
-# a <- propagate(realizations = dem_sample, model = Slope, n = 5, projection = CRS("+init=epsg:3857"))
-# str(a)
-# spplot(a[[1]])
-# 
-# dem_sample2 <- dem_sample
-# k = c(2,2,2,2,2)
-# 
-# mymodel <- function(dem1, dem2, k) {
-#   dupa <- dem1
-#   dupa@data <- (dem1@data/dem2@data)*k
-#   dupa
-# }
-# a <- mymodel(dem_sample[[1]], dem_sample2[[1]], k=2)
-# spplot(a)
-# 
-# b <- propagate(list(dem_sample, dem_sample2), model = mymodel, n=5, k=2)
-# ll <- list(dem_sample, dem_sample2)
-# b <- propagate(ll, model = mymodel, n=5, k=5)
-
-# data(dummyraster)
-# rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
-# rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling")
-# rast_model1 <- function(r1) {
-#   r <- r1*2
-#   r
-# }
-# b <- propagate2(realizations = rast_sample, model = rast_model1, n =5)
-# str(b)
-# plot(b[[1]])
-#
-#
-# rast_model2 <- function(r1, r2) {
-#   r <- r1/r2 * 100
-#   r
-# }
-# rast_sample2 <- rast_sample
-# b <- propagate2(list(rast_sample,rast_sample2), rast_model2, 5)
-# str(b)
-# plot(b[[1]])
 
 
 
