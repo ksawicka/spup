@@ -19,6 +19,6 @@ number of observations.}
 sample of random deviates
 }
 \description{
-Sampling from a given distribution
+Only used in samplemethod "randomSampling" for MarginalNumericSpatial.
 }
 
