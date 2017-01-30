@@ -1,4 +1,6 @@
 #' Sampling from a given distribution
+#' 
+#' Only used in samplemethod "randomSampling" for MarginalNumericSpatial.
 #'
 #' @param n number of observations
 #' @param distribution A string describing selected distribution. The same as a part of
