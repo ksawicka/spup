@@ -55,12 +55,12 @@ data(DEM)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = F)
 str(dem_sample)
 
 # "randomSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList=F)
 str(dem_sample)
 
 demUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
@@ -76,18 +76,27 @@ demUM <- defineUM(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
 
+# Examples with rasters
 # load data
 data(dummyraster)
+
+# random sampling
 rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
-rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling")
+rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling", asList=F)
 str(rast_sample)
 class(rast_sample)
 
-# raster with auto-correlation
+# stratified sampling
+rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
+rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+str(rast_sample)
+class(rast_sample)
+
+# ugs (raster with auto-correlation)
 rast_crm <- makecrm(acf0 = 0.6, range = 6, model = "Sph")
 rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd),
 crm = rast_crm)
-rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs", asList = F)
+rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs")
 str(rast_sample)
 class(rast_sample)
 
