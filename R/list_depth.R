@@ -7,11 +7,11 @@
 #' @examples
 #' 
 #' a <- list(1,2)
-#' depth(a)
+#' list_depth(a)
 #' 
 #' a <- list(list(1, 2), 3)
-#' depth(a)
+#' list_depth(a)
 #' 
 list_depth <- function(List) {
-  ifelse(is.list(List), 1L + max(sapply(List, depth)), 0L)
+  ifelse(is.list(List), 1L + max(sapply(List, list_depth)), 0L)
 }
