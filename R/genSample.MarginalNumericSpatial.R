@@ -45,12 +45,12 @@
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
-#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = F)
 #' str(dem_sample)
 #'
 #' # "randomSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
-#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList=F)
 #' str(dem_sample)
 #' 
 #' demUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
@@ -66,18 +66,27 @@
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
 #' 
+#' # Examples with rasters
 #' # load data
 #' data(dummyraster)
+#' 
+#' # random sampling
 #' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
-#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling")
+#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling", asList=F)
 #' str(rast_sample)
 #' class(rast_sample)
 #' 
-#' # raster with auto-correlation
+#' # stratified sampling
+#' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
+#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' str(rast_sample)
+#' class(rast_sample)
+#' 
+#' # ugs (raster with auto-correlation)
 #' rast_crm <- makecrm(acf0 = 0.6, range = 6, model = "Sph")
 #' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd),
 #' crm = rast_crm)
-#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs", asList = F)
+#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs")
 #' str(rast_sample)
 #' class(rast_sample)
 #' 
@@ -117,16 +126,9 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {
-        l <- list()
-        l[[1]] <- X_sample@layers[[1]]
-        for (i in 2:nlayers(X_sample)) {
-          l[[i]] <- X_sample@layers[[i]]
-        }
-        X_sample <- l
+        X_sample <- map(1:n, function(x){X_sample[[x]]})
       }
-    }
-    
-    if (asList == TRUE) {
+    } else if (asList == TRUE) {
       X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
     }
   }
@@ -155,13 +157,9 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
         outstack <- raster::stack(outstack, outstack_i)
       }
       X_sample <- outstack
+      names(X_sample) <- paste("sim", c(1:n), sep = "")
       if (asList == TRUE) {
-        l <- list()
-        l[[1]] <- X_sample@layers[[1]]
-        for (i in 2:nlayers(X_sample)) {
-          l[[i]] <- X_sample@layers[[i]]
-        }
-        X_sample <- l  
+        X_sample <- map(1:n, function(x){X_sample[[x]]})
       }
     }
   }
@@ -170,24 +168,35 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
   if (samplemethod == "stratifiedSampling") {
     if (n %% (length(p)-1) != 0)
       stop("n should be divisable by the number of strata")
-    if (class(distr_param[[1]]) != "RasterLayer") {
-      stsS <- function(x, ...) {
-        parameters <- x
-        as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
+    
+    if (is(distr_param[[1]], "RasterLayer")) {
+      original_class <- "RasterLayer"
+      for (i in 1:length(distr_param)) {
+        distr_param[[i]] <- as(distr_param[[i]], "SpatialGridDataFrame")
       }
-      in1df <- do.call("cbind", distr_param)
-      in1mtx <- as.matrix(in1df@data)  
-      temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
-      X_sample <- distr_param[[1]]
-      X_sample@data <- as.data.frame(temp_samples)
-      names(X_sample@data) <- paste("sim", c(1:n), sep = "")
+    } else {original_class <- "SpatialDF"}
+    
+    stsS <- function(x, ...) {
+      parameters <- x
+      as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
+    }
+    in1df <- do.call("cbind", distr_param)
+    in1mtx <- as.matrix(in1df@data)  
+    temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
+    X_sample <- distr_param[[1]]
+    X_sample@data <- as.data.frame(temp_samples)
+    names(X_sample@data) <- paste("sim", c(1:n), sep = "")
+    
+    if (original_class == "RasterLayer") {
+      X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {
-        X_sample <- map(1:n, function(x){X_sample[x]})
+        X_sample <- map(1:n, function(x){X_sample[[x]]})
       }
-    } else {
-      print("Implement it for rasters.")
-    }  
+    } else if (asList == TRUE) {
+      X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
+    }
   }
+  
   X_sample
 } 
 
