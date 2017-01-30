@@ -30,9 +30,6 @@ Number of columns in the data frame cannot be smaller than number of categories.
 \item{id}{identifier of the variable; only in ude if the UM defined here 
 is going to be used in defineUM() to construct joint UM for numerical variables.}
 
-\item{cross_ids}{a vector of variables names that the defined one is cross-correlated with.
-Only in use if a sample is to be generated from joint PDF of cross-correlated variables.}
-
 \item{...}{additional parameters}
 }
 \value{
@@ -94,13 +91,11 @@ class(scalarUM)
 data(Madagascar)
 
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
-OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm,
-id = "OC", cross_ids = "TN")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 class(OC_UM)
 
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
-TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm,
-id = "TN", cross_ids = "OC")
+TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 class(TN_UM)
   
 }
