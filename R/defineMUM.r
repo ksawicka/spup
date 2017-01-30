@@ -19,12 +19,12 @@
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", 
 #'                   distr_param = c(OC, OC_sd), crm = OC_crm,
-#'                   id = "OC", cross_ids = "TN")
+#'                   id = "OC")
 #' class(OC_UM)
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", 
 #'                   distr_param = c(TN, TN_sd), crm = TN_crm,
-#'                   id = "TN", cross_ids = "OC")
+#'                   id = "TN")
 #' class(TN_UM)
 #' 
 #' soil_prop <- list(OC_UM,TN_UM)

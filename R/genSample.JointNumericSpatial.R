@@ -35,36 +35,36 @@
 #' # load data
 #' data(Madagascar)
 #' 
-#'  # Temporarily - convert to spatial grid data frames as raster not supported yet
-#'  OC <- as(OC, 'SpatialGridDataFrame')
-#'  TN <- as(TN, 'SpatialGridDataFrame')
-#'  OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
-#'  TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
+#'  # # Temporarily - convert to spatial grid data frames as raster not supported yet
+#'  # OC <- as(OC, 'SpatialGridDataFrame')
+#'  # TN <- as(TN, 'SpatialGridDataFrame')
+#'  # OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
+#'  # TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
 #' 
 #' # define marginal UMs
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd),
-#'                   crm = OC_crm, id = "OC", cross_ids = "TN")
+#'                   crm = OC_crm, id = "OC")
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd),
-#'                   crm = TN_crm, id = "TN", cross_ids = "OC")
+#'                   crm = TN_crm, id = "TN")
 #' 
-#'  # some dummy variable to test code on more than two
-#'  dummy <- OC
-#'  dummy@data <- OC@data*TN@data/2
-#'  names(dummy) <- "dummy"
-#'  dummy_sd <- dummy
-#'  dummy_sd@data <- dummy@data * 0.3
-#'  names(dummy_sd) <- "dummy_sd"
-#'  dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
-#'  dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
-#'                      crm = dummy_crm, id = "dummy", cross_ids = c("OC", "TN"))
+#' # # some dummy variable to test code on more than two
+#' # dummy <- OC
+#' # dummy@data <- OC@data*TN@data/2
+#' # names(dummy) <- "dummy"
+#' # dummy_sd <- dummy
+#' # dummy_sd@data <- dummy@data * 0.3
+#' # names(dummy_sd) <- "dummy_sd"
+#' # dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
+#' # dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
+#'                      crm = dummy_crm, id = "dummy")
 #' 
 #' # define joint UM
-#' #soil_prop <- list(OC_UM, TN_UM)
-#' #mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
-#'  soil_prop <- list(OC_UM, TN_UM, dummy_UM)
-#'   mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
+#' soil_prop <- list(OC_UM, TN_UM)
+#' mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
+#' # soil_prop <- list(OC_UM, TN_UM, dummy_UM)
+#' #  mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
 #' class(mySpatialMUM)
 #' 
 #' # sample

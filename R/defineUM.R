@@ -50,8 +50,6 @@
 #' @param cat_prob data frame or spatial data frame; A list of probabilities for the vector of categories. 
 #' Number of columns in the data frame cannot be smaller than number of categories.
 #' @param ... additional parameters
-#' @param cross_ids a vector of variables names that the defined one is cross-correlated with.
-#' Only in use if a sample is to be generated from joint PDF of cross-correlated variables.
 #'
 #' @return Object of a class "Marginal"A list of all necessary information for creating realizations of
 #' the uncertain variable.
@@ -80,19 +78,17 @@
 #' data(Madagascar)
 #'
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
-#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm,
-#' id = "OC", cross_ids = "TN")
+#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)
 #' 
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
-#' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm,
-#' id = "TN", cross_ids = "OC")
+#' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' class(TN_UM)
 #'   
 #' @export
 defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
                       crm = NULL, categories = NULL, cat_prob = NULL,
-                      id = NULL, cross_ids = NULL, ...) {
+                      id = NULL, ...) {
   
   if (class(uncertain) != "logical")
     stop("uncertain must be logical")
@@ -122,7 +118,6 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
                distr_param = distr_param, 
                crm = crm,
                id = id,
-               cross_ids = cross_ids,
                ...)  
     if (check_if_Spatial(distr_param[[1]])) 
       class(um) <- "MarginalNumericSpatial" 
@@ -137,7 +132,6 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
                categories = categories,
                cat_prob = cat_prob,
                id = id,
-               cross_ids = cross_ids,
                ...)
     if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
       class(um) <- "MarginalCategoricalSpatial"
