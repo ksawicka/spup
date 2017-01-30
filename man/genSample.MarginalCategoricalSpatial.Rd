@@ -29,7 +29,14 @@ houseUM <- defineUM(uncertain = TRUE, categories = c(100,200), cat_prob = houses
 h_sample <- genSample(houseUM, n = 10)
 str(h_sample)
 
-houseUM <- defineUM(uncertain = TRUE, categories = c("yes", 1), cat_prob = houses_DF)
+data(Rotterdam)
+woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
+# woon_sample <- genSample(woonUM, 10, asList=FALSE)
+# class(woon_sample)
+# str(woon_sample@data)
+# spplot(woon_sample)
+woon_sample <- genSample(woonUM, 10)
+class(woon_sample)
 
 }
 \author{
