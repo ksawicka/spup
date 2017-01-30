@@ -9,11 +9,11 @@ propagate(realizations, model, n, ...)
 \arguments{
 \item{realizations}{a list or a list of lists; max one nesting is allowed.}
 
-\item{model}{a model that is written as a function in R}
+\item{model}{a model that is written as a function in R.}
 
-\item{n}{number of Monte Carlo Runs}
+\item{n}{number of Monte Carlo Runs.}
 
-\item{...}{any arguments that the model takes on top of realizations}
+\item{...}{any arguments that the model takes on top of realizations.}
 }
 \value{
 model output realizations
@@ -23,12 +23,24 @@ Title Propagation function
 }
 \examples{
 
+# continuous spatial data example with a single variable
 data(DEM)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20)
 slope_sample <- propagate(dem_sample, model = Slope, n = 5, projection = CRS("+init=epsg:3857"))
+
+# categorical spatial data example
+data(Rotterdam)
+woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
+woon_sample <- genSample(woonUM, 10)
+class(woon_sample)
+tax # the model takes SpatialGridDataFrame with a column called "Function"
+for (i in 1:10) names(woon_sample[[i]]) <- "Function"
+tax_uncert <- propagate(realizations = woon_sample, n = 10, model = tax)
+tax_uncert <- unlist(tax_uncert)
+summary(tax_uncert)
 
 }
 
