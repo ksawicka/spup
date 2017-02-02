@@ -54,11 +54,9 @@ data(Madagascar)
 
 # define marginal UMs
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
-OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd),
-                  crm = OC_crm, id = "OC")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
-TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd),
-                  crm = TN_crm, id = "TN")
+TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 
 # # some dummy variable to test code on more than two
 # dummy <- OC
@@ -78,10 +76,12 @@ mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
 #  mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
 class(mySpatialMUM)
 
-# sample
-my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = F)
+# sample - "ugs" method
+my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = T)
 class(my_cross_sample)
 
+# sample - "randomSampling"
+my_cross_sample <- genSample(mySpatialMUM, 5, "randomSampling")
  
 "lhs" method example
 
