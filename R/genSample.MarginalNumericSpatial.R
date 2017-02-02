@@ -90,6 +90,13 @@
 #' str(rast_sample)
 #' class(rast_sample)
 #' 
+#' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
+#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
+#' class(OC_UM)
+#' dupa <- genSample(OC_UM, 5, "ugs", nmax=20)
+#' dupa
+#' 
+#' 
 #'
 #' @export
 genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
@@ -121,7 +128,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     # if it is Spatial data frame
     X_sample@data <- as.data.frame(apply(as.matrix(epsilon_sample@data), MARGIN = 2,
                                   function(x) distr_param1@data + distr_param2@data*x))
-    names(X_sample@data) <- paste("sim", c(1:n), sep = "")
+    if (!is.null(UMobject$id)) {
+      names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+    } else {
+      names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
 
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
@@ -145,7 +155,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       temp_samples <- t(apply(in1mtx, MARGIN = 1, ds))
       X_sample <- distr_param[[1]]
       X_sample@data <- as.data.frame(temp_samples)
-      names(X_sample@data) <- paste("sim", c(1:n), sep = "")
+      if (!is.null(UMobject$id)) {
+        names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+      } else {
+        names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
       if (asList == TRUE) {
         X_sample <- map(1:n, function(x){X_sample[x]})
       }
@@ -157,7 +170,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
         outstack <- raster::stack(outstack, outstack_i)
       }
       X_sample <- outstack
-      names(X_sample) <- paste("sim", c(1:n), sep = "")
+      if (!is.null(UMobject$id)) {
+        names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+      } else {
+        names(X_sample) <- paste("sim", c(1:n), sep = "")}
       if (asList == TRUE) {
         X_sample <- map(1:n, function(x){X_sample[[x]]})
       }
@@ -185,7 +201,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
     X_sample <- distr_param[[1]]
     X_sample@data <- as.data.frame(temp_samples)
-    names(X_sample@data) <- paste("sim", c(1:n), sep = "")
+    if (!is.null(UMobject$id)) {
+      names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+    } else {
+      names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
     
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
@@ -196,7 +215,6 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
     }
   }
-  
   X_sample
 } 
 
