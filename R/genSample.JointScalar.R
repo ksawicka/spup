@@ -14,38 +14,45 @@
 #'
 #' @examples
 #' 
-#' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(1, 2))                
-#' scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(3, 2))
-#' scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 2.5))                
+#' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(1, 2), id="Var1")                
+#' scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(3, 2), id="Var2")
+#' scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 2.5), id="Var3")                
 #' myMUM <- defineMUM(UMlist = list(scalarUM, scalarUM2, scalarUM3), 
 #'                matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
 #' my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList=F)
-#' str(my_sample)  
+#' my_sample  
 #' 
 #' @export
 genSample.JointScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
   # Calculate variance-covariance matrix VarCov
-  vector_of_means <- c()
-  vector_of_sd <- c()
+  means <- c()
+  sds <- c()
+  ids <- c()
   for (i in 1:length(UMobject[[1]])) {
-    vector_of_means[i] <- UMobject[[1]][[i]]$distr_param[1]
-    vector_of_sd[i] <- UMobject[[1]][[i]]$distr_param[2]
+    means[i] <- UMobject[[1]][[i]]$distr_param[1]
+    sds[i] <- UMobject[[1]][[i]]$distr_param[2]
+    ids[i] <- UMobject[[1]][[i]]$id
   }
   cormatrix <- UMobject[[2]]
-  VarCov <- varcov(vector_of_sd, cormatrix)
+  VarCov <- varcov(sds, cormatrix)
   
   if (samplemethod == "randomSampling") {
-    Cross_sample <- mvtnorm::rmvnorm(n, vector_of_means, VarCov)
+    Cross_sample <- mvtnorm::rmvnorm(n, means, VarCov)
+    colnames(Cross_sample) <- ids
+    rownames(Cross_sample) <- paste("sim", 1:n, sep = "")
+    
     if (asList) {
       l <- list()
       for (i in 1:ncol(Cross_sample)) {
         l_i <- Cross_sample[, i]
         l[[i]] <- map(1:n, function(x){l_i[x]})
       }
+      if (!is.null(ids)) names(l) <- ids
       Cross_sample <- l
+      }
     }
-  }
+  
     
   if (samplemethod == "lhs") {
     print("Here code for LHS sampling")
