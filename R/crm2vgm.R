@@ -26,5 +26,4 @@ crm2vgm <- function(crm, ...) {
                     model = model,
                     ...)
   vgm
-}
-
+} # test3
