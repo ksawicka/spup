@@ -41,8 +41,10 @@ genSample.MarginalCategoricalSpatial <- function(UMobject, n, asList = TRUE, ...
                                              prob = x)))
   X_sample <- UMobject[[3]]
   X_sample@data <- as.data.frame(temp_samples)
-  names(X_sample@data) <- paste("sim", c(1:n), sep = "")
-
+  if (!is.null(UMobject$id)) {
+    names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+  } else {
+    names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
   if (asList) {
     X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpDF to list
   }
