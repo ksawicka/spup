@@ -17,14 +17,10 @@
 #' 
 #' data(Madagascar)
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
-#' OC_UM <- defineUM(TRUE, distribution = "norm", 
-#'                   distr_param = c(OC, OC_sd), crm = OC_crm,
-#'                   id = "OC")
+#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
-#' TN_UM <- defineUM(TRUE, distribution = "norm", 
-#'                   distr_param = c(TN, TN_sd), crm = TN_crm,
-#'                   id = "TN")
+#' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' class(TN_UM)
 #' 
 #' soil_prop <- list(OC_UM,TN_UM)
@@ -34,9 +30,9 @@
 #' str(mySpatialMUM)
 #' 
 #' # scalar
-#' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(1, 2))                
-#' scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(3, 2))
-#' scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 2.5))                
+#' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(1, 2), id="Var1")                
+#' scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(3, 2), id="Var2")
+#' scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 2.5), id="Var3")                
 #' myMUM <- defineMUM(UMlist = list(scalarUM, scalarUM2, scalarUM3), 
 #'                matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
 #' class(myMUM)
@@ -44,9 +40,7 @@
 #' @export
 defineMUM <- function(UMlist, cormatrix, ...) {
   
-  # check - UMlist must have at least two items
-  
-  # stopifnot("UMlist is list of MarginalNumericalSpatial or MarginalScalar and all elements are of the same class")
+  stopifnot(length(UMlist) > 1)
   stopifnot(is(UMlist[[1]], "MarginalNumericSpatial") | is(UMlist[[1]], "MarginalScalar"))
   a <- c()
   for (i in 1:length(UMlist)) {
@@ -61,6 +55,11 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   }
   if (!isTRUE(all(a == "norm")))
     stop("Only normal distributions are supported for objects saved in UMlist.") 
+  
+  # all variables must have ids and all must be different
+  ids <- c()
+  for (i in 1:length(UMlist)) ids[i] <- UMlist[[i]]$id
+  stopifnot(length(ids) == length(unique(ids)))
   
   t <- 1E-7
   stopifnot(class(cormatrix) == "matrix")
