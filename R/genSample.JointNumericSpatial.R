@@ -43,11 +43,9 @@
 #' 
 #' # define marginal UMs
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
-#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd),
-#'                   crm = OC_crm, id = "OC")
+#' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
-#' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd),
-#'                   crm = TN_crm, id = "TN")
+#' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' 
 #' # # some dummy variable to test code on more than two
 #' # dummy <- OC
@@ -67,10 +65,12 @@
 #' #  mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
 #' class(mySpatialMUM)
 #' 
-#' # sample
-#' my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = F)
+#' # sample - "ugs" method
+#' my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = T)
 #' class(my_cross_sample)
 #' 
+#' # sample - "randomSampling"
+#' my_cross_sample <- genSample(mySpatialMUM, 5, "randomSampling")
 #'  
 #'"lhs" method example
 #' 
@@ -78,6 +78,21 @@
 genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
   n_vars <- length(UMobject[[1]])
+  
+  means <- c()
+  sds <- c()
+  for (i in 1:n_vars) {
+    means[i]  <- UMobject[[1]][[i]]$distr_param[1]
+    sds[i]    <- UMobject[[1]][[i]]$distr_param[2]
+  }
+  
+  if (is(means[[i]], "RasterLayer")) {
+    original_class <- "RasterLayer"
+    for (i in 1:n_vars) {
+      means[[i]] <- as(means[[i]], "SpatialGridDataFrame")
+      sds[[i]]   <- as(sds[[i]], "SpatialGridDataFrame")
+    }
+  } else {original_class <- "SpatialDF"}
   
   # "method ugs" - use gstat
   if (samplemethod == "ugs") {
@@ -88,25 +103,12 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
     # acf0s  <- c()
     ranges <- c()
     shapes <- c()
-    means <- list()
-    sds <- list()
     for (i in 1:n_vars) {
-      # acf0s[i]  <- UMobject[[1]][[i]]$crm[[1]]
       ranges[i] <- UMobject[[1]][[i]]$crm[[2]]
       shapes[i] <- UMobject[[1]][[i]]$crm[[3]]
-      means[i]  <- UMobject[[1]][[i]]$distr_param[1]
-      sds[i]    <- UMobject[[1]][[i]]$distr_param[2]
     } 
     stopifnot(isTRUE(all(ranges == ranges[1])))
     stopifnot(isTRUE(all(shapes == shapes[1])))
-    
-    if (is(means[[i]], "RasterLayer")) {
-      original_class <- "RasterLayer"
-      for (i in 1:n_vars) {
-        means[[i]] <- as(means[[i]], "SpatialGridDataFrame")
-        sds[[i]]   <- as(sds[[i]], "SpatialGridDataFrame")
-      }
-    } else {original_class <- "SpatialDF"}
     
     cormatrix <- UMobject[[2]]
     
@@ -124,10 +126,10 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
     
     # start building gstat object
     g <- gstat::gstat(NULL, id = ids[1], formula = z~1, 
-                      dummy = TRUE, beta = 0, model = vgms[[1]], nmax=24)#...)
+                      dummy = TRUE, beta = 0, model = vgms[[1]], ...)
     for (i in 2:n_vars) {
       g <- gstat::gstat(g, id = ids[i], formula = z~1,
-                        dummy = TRUE, beta = 0, model = vgms[[i]], nmax=24)#...)
+                        dummy = TRUE, beta = 0, model = vgms[[i]], ...)
     }
     for (i in 1:(n_vars - 1)) {
       for (j in (i + 1):n_vars) {
@@ -135,7 +137,7 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
                           model = gstat::vgm(cormatrix[i, j] * sqrt(psills[i]*psills[j]),
                                       model = shapes[1],
                                       range = ranges[1], 
-                                      cormatrix[i, j] * sqrt(nuggets[i]*nuggets[j])), nmax=24)#...)
+                                      cormatrix[i, j] * sqrt(nuggets[i]*nuggets[j])), ...)
       }
     }
     
@@ -145,10 +147,6 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
     
     # calculate Z = m + sd*epsilon for each variable
     Cross_sample <- epsilon_sample
-    
-    # means - this is a list
-    # sds - this is a list
-    # epsilon_sample
     Cross_sample@data[1:n] <- 
       as.data.frame(apply(as.matrix(epsilon_sample@data[1:n]),
                                     MARGIN = 2,
@@ -159,39 +157,15 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
                                       MARGIN = 2,
                                       function(x) means[[i+1]]@data + sds[[i+1]]@data*x))
     }
-    
-    # sort out output depending what spatial data and if list
-    if (original_class == "RasterLayer") {
-      Cross_sample <- raster::stack(Cross_sample)
-      if (asList == TRUE) {
-        l <- list()
-        l[[1]] <- map(1:n, function(x){Cross_sample[[x]]})
-        for (i in 1:n_vars-1) {
-          l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[[x]]})
-        }
-      Cross_sample <- l
-      }
-    } else if (asList == TRUE) {
-      l <- list()
-      l[[1]] <- map(1:n, function(x){Cross_sample[x]})
-      for (i in 1:n_vars-1) {
-        l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[x]})
-      }
-      Cross_sample <- l
-    }
   }
-  
-  # method "random Sampling" or "lhs"
-  # - do cell by cell as in .JointScalar and back save in spatial
-  
+
   if (samplemethod == "randomSampling") {
 
-    means <- c()
-    sds <- c()
+    ids <- c()
     for (i in 1:n_vars) {
-      means[i]  <- UMobject[[1]][[i]]$distr_param[1]
-      sds[i]    <- UMobject[[1]][[i]]$distr_param[2]
+      ids[i]    <- UMobject[[1]][[i]]$id
     }
+
     # put it all in one spatial data frame
     in1df <- means[[1]]
     for (i in 2:n_vars) in1df <- cbind(in1df, means[[i]])
@@ -206,22 +180,49 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
     for (i in 1:no_locations) {
       means_location <- as.numeric(in1df@data[i, c(1:n_vars)])
       sds_location   <- as.numeric(in1df@data[i, c((n_vars+1):(n_vars*2))])
-      VarCov <- varcov(sds_location, cormatrix)
-      Cross_sample_cell <- mvtnorm::rmvnorm(n, means_location, VarCov)
-      # use the id to name the variables here
-      Cross_sample@data[i, 1:n] <- Cross_sample_cell[, 1]
-      for (j in 1:n_vars-1) {
-        Cross_sample@data[i, c((j*n+1):(j*n+n))] <- Cross_sample_cell[, j+1]
+      if (!any(is.na(means_location)) & !any(is.na(sds_location))) {
+        VarCov <- varcov(sds_location, cormatrix)
+        Cross_sample_cell <- mvtnorm::rmvnorm(n, means_location, VarCov)
+        Cross_sample@data[i, 1:n] <- Cross_sample_cell[, 1]
+        for (j in 1:n_vars-1) {
+          Cross_sample@data[i, c((j*n+1):(j*n+n))] <- Cross_sample_cell[, j+1]
+        }
+      } else {
+        Cross_sample@data[i, 1:n] <- NA
+        for (j in 1:n_vars-1) {
+          Cross_sample@data[i, c((j*n+1):(j*n+n))] <- NA
+        }
       }
-      # here fix names of vars in spatial data frame
+    }
+    colnames(Cross_sample@data)[1:n] <- paste(ids[1], ".sim", 1:n, sep = "")
+    for (i in 1:n_vars-1) {
+      names(Cross_sample@data)[(i*n+1):(i*n+n)] <- paste(ids[i+1], ".sim", 1:n, sep = "")
     }
   }
 
-  if (samplemethod == "lhs") {
+  if (samplemethod == "lhs") { 
     print("lhs")
   }    
-    
-  Cross_sample
+  
+  if (original_class == "RasterLayer") {
+   Cross_sample <- raster::stack(Cross_sample)
+   if (asList == TRUE) {
+     l <- list()
+     l[[1]] <- map(1:n, function(x){Cross_sample[[x]]})
+     for (i in 1:n_vars-1) {
+       l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[[x]]})
+     }
+     Cross_sample <- l
+   }
+  } else if (asList == TRUE) {
+   l <- list()
+   l[[1]] <- map(1:n, function(x){Cross_sample[x]})
+   for (i in 1:n_vars-1) {
+     l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[x]})
+   }
+   Cross_sample <- l
   }
+  Cross_sample
+}
 
 
