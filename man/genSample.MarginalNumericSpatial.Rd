@@ -100,6 +100,13 @@ rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs")
 str(rast_sample)
 class(rast_sample)
 
+OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
+class(OC_UM)
+dupa <- genSample(OC_UM, 5, "ugs", nmax=20)
+dupa
+
+
 
 }
 \author{
