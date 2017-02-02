@@ -10,7 +10,7 @@
 #'
 #' @return sample of random deviates
 #'
-distribution_sampling_raster <- function(distribution, parameters_stack) {
+distribution_sampling_raster <- function(distribution, parameters_stack) { # I change something
   if (distribution == "beta") {
     outstack <- raster::overlay(parameters_stack, 
                                 fun = function(shape1, shape2, ncp) Vectorize(rbeta(shape1, shape2, ncp)))
