@@ -41,7 +41,10 @@ genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, asList = 
   ### RANDOM SAMP ---------------------------------------------------------------------
   if (samplemethod == "randomSampling") {
     X_sample <- distribution_sampling(n, distribution, distr_param)
-    names(X_sample) <- paste("sim", c(1:n), sep = "")
+    if (!is.null(UMobject$id)) {
+      names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+    } else {
+      names(X_sample) <- paste("sim", c(1:n), sep = "")}
   }
   
   ### STRATIFIED SAMP ------------------------------------------------------------------
@@ -53,7 +56,10 @@ genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, asList = 
         as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
       }
       X_sample <- stsS(distr_param)
-      names(X_sample) <- paste("sim", c(1:n), sep = "")
+      if (!is.null(UMobject$id)) {
+        names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+      } else {
+        names(X_sample) <- paste("sim", c(1:n), sep = "")}
  
   }
   X_sample
