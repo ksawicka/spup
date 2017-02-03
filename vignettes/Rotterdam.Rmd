@@ -65,7 +65,6 @@ The example data for tax calculation contain spatial distribution of buildings i
 
 
 ```{r, fig.width = 5, fig.height = 5} 
-
 # load packages
 library(sp)
 library(spup)
@@ -74,7 +73,6 @@ library(spup)
 data(Rotterdam)
 plot(woon, main = "Neighbourhood", cex.main = 1)
 head(woon@data)
-
 ```
 
 The 'woon' object is a SpatialPolygonDataFrame where each building is represented by one polygon. The attributes contain:
@@ -119,7 +117,6 @@ Generating possible realities of the building function can be completed by using
 Usually the sample must be large to obtain stable results. Let us run the sampling to obtain 10 realizations. Note the artument 'asList' has been set up to FALSE. This indicates that the sampling function will return an object of a class of the distribution parameters class. This is useful if you want to visualize the sample or compute summary statistics quickly.
 
 ```{r, fig.width = 7, fig.height = 7} 
-
 # create possible realizations of the building function
 woon_sample <- genSample(woonUM, 10, asList = FALSE)
 class(woon_sample)
@@ -135,10 +132,8 @@ spplot(woon_sample[c(3,4,1,2)], main = list(label = "Examples of the building fu
 In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'Rotterdam' data object includes an example of a pre-defined model that calculates slope using building function as input. Note that the model has a requirement that the building function is stored in a SpatialPolygonDataFrame and in a column named 'Function'.
 
 ```{r} 
-
 # view the model
 tax
-
 ```
 
 The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the Slope model with the building function realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
@@ -150,33 +145,27 @@ The propagation of uncertainty occurs when the model is run with an uncertain in
 In order to run the propagation function the sample of an uncertain input variable must be saved in a list. We can either coerce the existing **woon_sample** object or get it automatically setting up the 'asList' argument of `genSample()` to TRUE.
 
 ```{r} 
-
 # coerce  SpatialPolygonDataFrame to a list of individual SpatialPolygonDataFrames
 woon_sample <- map(1:ncol(woon_sample), function(x){woon_sample[x]})
 
 # or sample from uncertain input and save it in a list
 woon_sample <- genSample(UMobject = woonUM, n = 10, asList = TRUE)
 class(woon_sample)
-
 ```
 
 Earlier we noted that the construction of the model requires that the information of the building function is stored in a column named 'Function'. By default the sampling function returns ralizations named 'sim1', 'sim2', and so on, so we need to adjust that manualy. 
 
 ```{r} 
-
 for (i in 1:10) names(woon_sample[[i]]) <- "Function"
-
 ```
 
 Finally, run the propagation:
 
 ```{r} 
-
 # run uncertainty propagation
 tax_sample <- propagate(woon_sample, model = tax, n = 10)
 tax_sample
 summary(unlist(tax_sample))
-
 ```
 
 We can see that on average the city council should obtain the tax revenue of €2300000, but depending on the building classification this amount may vary by €120000. Basing on this cost estimation the policy makers may adapt more rigorous classification for the tax revenue.

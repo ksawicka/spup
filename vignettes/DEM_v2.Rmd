@@ -76,7 +76,6 @@ The 'DEM' data contains two spatial objects: a mean DEM of the area and the stan
 
 
 ```{r, fig.width = 5, fig.height = 3} 
-
 # load packages
 library(sp)
 library(spup)
@@ -87,7 +86,6 @@ str(dem30m)
 str(dem30m_sd)
 spplot(dem30m, main = list(label = "Mean DEM", cex = 1))
 summary(dem30m_sd)
-
 ```
 
 <br>
@@ -103,24 +101,19 @@ Let us assume that the spatial autocorrelation of the DEM errors is an exponenti
 <br>
 
 ```{r} 
-
 # define spatial correlogram model
 dem_crm <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
-
 ```
 
 We can view the correlogram by plotting it.
 
 ```{r, fig.width = 5, fig.height = 3} 
-
 plot(dem_crm, main = "DEM correlogram")
-
 ```
 
 Spatial correlograms summarise patterns of spatial autocorrelation in data and model residuals. They show the degree of correlation between values at two locations as a function of the separation distance between the locations. In the case above the correlation declines with distance, as is usually the case. The correlation becomes negligibly small for distances greater than 800 m. Notice also that the correlation is not perfect at distances close to zero. This signifies the so-called ‘nugget’ effect. You can manipulate the nugget effect, the shape of the correlation function and the maximum range by changing the parameters of the `makecrm()` function. Try, for example, these combinations and see how they look like:
 
 ```{r, fig.width = 7, fig.height = 5} 
-
 par(mfrow = c(2, 2))
 crm <- makecrm(acf0 = 0.8, range = 700, model = "Sph") 
 plot(crm, main = "'Spherical', acf0 = 0.8, range = 700")
@@ -130,7 +123,6 @@ crm <- makecrm(acf0 = 0.8, range = 700, model = "Lin")
 plot(crm, main = "'Linear', acf0 = 1.0, range = 700")
 crm <- makecrm(acf0 = 0.8, range = 200, model = "Gau") 
 plot(crm, main = "'Gausian', acf0 = 0.8, range = 200")
-
 ```
 
 
@@ -143,12 +135,10 @@ In order to complete the description of the uncertain variable we use the `defin
 
 
 ```{r} 
-
 # define uncertainty model for the DEM
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 class(demUM)
-
 ```
 
 <br>
@@ -166,7 +156,6 @@ Additional parameters may be also specified. For example, sampling of spatially 
 Usually the sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. Note the artument 'asList' has been set up to FALSE. This indicates that the sampling function will return an object of a class of the distribution parameters class. This is useful if you want to visualize the sample or compute summary statistics quickly.
 
 ```{r, fig.width = 7, fig.height = 7} 
-
 # create possible realizations of the DEM
 dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
 
@@ -177,7 +166,6 @@ spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope re
 We can view the mean and standard deviation of the sampled DEM. If the number of samples was very large then the mean of the sample would equal dem30m and the sd would equal dem30m_sd:
 
 ```{r, fig.width = 5, fig.height = 6}
-
 # compute and plot the slope sample statistics
 # e.g. mean and standard deviation
 dem_sample_mean <- mean(dem_sample)
@@ -187,13 +175,11 @@ s <- spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realiza
 print(m, split = c(1, 1, 1, 2), more = TRUE)
 print(s, split = c(1, 2, 1, 2))
 rm(m, s)
-
 ```
 
 The generated DEM realizations depend on the degree of spatial auto-correlation. For instance, notice that the realizatons become more ‘noisy’ if we assume less spatial-autocorrelation:
 
 ```{r, fig.width = 5, fig.height = 6} 
-
 dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
 demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
 dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
@@ -202,7 +188,6 @@ s2 <- spplot(dem_sample2, c(1), main = list(label = "dem_sample2, acf0 = 0.2, ra
 print(s1, split = c(1, 1, 1, 2), more = TRUE)
 print(s2, split = c(1, 2, 1, 2))
 rm(s1, s2)
-
 ```
 
 Can you spot the difference? Higher auto-correlation yields ‘smoothened’ realities. Lower values produce a more ‘noisy’ field.
@@ -212,10 +197,8 @@ Can you spot the difference? Higher auto-correlation yields ‘smoothened’ rea
 In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'DEM' data object includes an example of a pre-defined model that calculates slope using DEM as input. In this case the function is based on the `terrain()` function from the **raster** package. 
 
 ```{r} 
-
 # view the model
 Slope
-
 ```
 
 The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the Slope model with the DEM realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
@@ -227,20 +210,16 @@ The propagation of uncertainty occurs when the model is run with an uncertain in
 In order to run the propagation function the sample of an uncertain input variable must be saved in a list. We can either coerce the existing **dem_sample** object or get it automatically setting up the 'asList' argument of `genSample()` to TRUE.
 
 ```{r} 
-
 # coerce  SpatialGridDataFrame to a list of individual SpatialGridDataFrames
 dem_sample <- map(1:ncol(dem_sample), function(x){dem_sample[x]})
 
 # or sample from uncertain input and save it in a list
 dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
-
 ```
 
 ```{r} 
-
 # run uncertainty propagation
 slope_sample <- propagate(dem_sample, model = Slope, n = 100, projection = CRS("+init=epsg:3857"))
-
 ```
 
 <br>
@@ -251,7 +230,6 @@ We can now view the sample of model output realizations (i.e. slope) and visuali
 
 
 ```{r, fig.width = 7, fig.height = 7} 
-
 # coerce slopes list to a SpatialGridDataFrame
 s <- slope_sample[[1]]
 for (i in 2:length(slope_sample)) {
@@ -263,11 +241,9 @@ rm(s)
 
 # view the sample of the model output
 spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
-
 ```
 
 ```{r, fig.width = 5, fig.height = 6}
-
 # compute and plot the slope sample statistics
 # e.g. mean and standard deviation
 slope_mean <- mean(slope_sample)
@@ -277,13 +253,11 @@ s <- spplot(slope_sd, main = list(label = "Standard dev. of the slope realizatio
 print(m, split = c(1, 1, 1, 2), more = TRUE)
 print(s, split = c(1, 2, 1, 2))
 rm(m, s)
-
 ```
 
 We can see from the maps that lower slopes are observed at lower elevation and higher slopes at elevation. Since we used the roughness of the terrain as DEM sd approximation, the slope sd corresponds with the DEM sd. We can view example of slope realizations at locations with low and high elevation:
 
 ```{r, fig.width = 7, fig.height = 3}
-
 # check the histogram of slope at lowest and highest DEM 
 l <- which(dem30m@data == min(dem30m@data)) # there is no slope calculated for this outer value so we need to fins a different one
 l <- which(dem30m@data < 860)
@@ -302,7 +276,6 @@ hist(as.numeric(slope_sample@data[400,]), main = paste("Slope at low DEM,", "\n"
 hist(as.numeric(slope_sample@data[6898,]), main = paste("Slope at high DEM,", "\n",
      "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "Slope")
 rm(l, h)
-
 ```
 
 Here interpretation of histograms - KS: Why do we have higher slope at lower DEM/ Is this correct?
@@ -310,20 +283,16 @@ Here interpretation of histograms - KS: Why do we have higher slope at lower DEM
 We can also look at specific quantites of the slope sample. 
 
 ```{r, fig.width = 7, fig.height = 5}
-
 # or quantiles
 slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
 spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
-
 ```
 
 For example, find locations with steep slopes that are safe (slope < 0.5) for tourist skiing with probability 90%.
 
 ```{r, fig.width = 5, fig.height = 3}
-
 slope_q$safep90 <- factor(ifelse(slope_q$prob90perc > 0.5, 1, 0), labels = c("safe","hazard"))
 spplot(slope_q, "safep90", col.regions = c("green","red"), main = "Safe areas for skiing")
-
 ```
 <br>
 
