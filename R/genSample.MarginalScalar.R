@@ -34,13 +34,18 @@
 genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
   stopifnot(UMobject$uncertain == TRUE)
+  
+  # extract information from UMobject
   distribution <- UMobject[[2]]
   distr_param <- UMobject[[3]]
-  dots <- list(...)
   
   ### RANDOM SAMP ---------------------------------------------------------------------
   if (samplemethod == "randomSampling") {
+    
+    # use distribution_sampling.R to sample
     X_sample <- distribution_sampling(n, distribution, distr_param)
+    
+    # sort out names
     if (!is.null(UMobject$id)) {
       names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
     } else {
@@ -51,15 +56,19 @@ genSample.MarginalScalar <- function(UMobject, n, samplemethod, p = 0, asList = 
   if (samplemethod == "stratifiedSampling") {
     if (n %% (length(p)-1) != 0)
       stop("n should be divisable by the number of strata")
-      stsS <- function(x, ...) {
+      
+    # function to call stratsamp.R
+    stsS <- function(x, ...) {
         parameters <- x
         as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
-      }
-      X_sample <- stsS(distr_param)
-      if (!is.null(UMobject$id)) {
-        names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
-      } else {
-        names(X_sample) <- paste("sim", c(1:n), sep = "")}
+    }
+    X_sample <- stsS(distr_param)
+    
+    # sort out names
+    if (!is.null(UMobject$id)) {
+      names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
+    } else {
+      names(X_sample) <- paste("sim", c(1:n), sep = "")}
  
   }
   X_sample

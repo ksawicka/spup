@@ -93,11 +93,14 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
   if (class(uncertain) != "logical")
     stop("uncertain must be logical")
   
+  # must be explicit if want to work with continuous or categorical data
   if (!is.null(distr_param) & !is.null(cat_prob))
     stop("Only one of 'dist_param' or 'cat_prob' can be provided.")
   
   # recognise if it is a continuous or categorical variable
   # if it is continuous:
+  
+  # distribution parameters cannot be missing for cintinuaous variable and all must be of the same class
   if(!is.null(distr_param)) {
     a <- class(distr_param[[1]])
     if (length(distr_param) > 1) {
@@ -105,35 +108,49 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
         a <- c(a, class(distr_param[[i+1]]))
       }
     }
-    # if dist_param are all the same class
     if (!isTRUE(all(a == a[1])))
       stop("Distribution parameters must be objects of the same class.")
+    
     # if distribution is not null, a string, and belongs to the list of supported distributions
     if (is.null(distribution))
       stop("Distribution type is missing.")
     if (class(distribution) != "character")
       stop("Distribution type must be 'string'.")
+    
+    # if all above OK, collate all information into a list
     um <- list(uncertain = uncertain,
                distribution = distribution,
                distr_param = distr_param, 
                crm = crm,
                id = id,
                ...)  
+    
+    # assign class
     if (check_if_Spatial(distr_param[[1]])) 
       class(um) <- "MarginalNumericSpatial" 
     else if (class(distr_param[[1]]) == "numeric") 
       class(um) <- "MarginalScalar"
     else 
       stop("Class of distribution parameters is not supported.")
+  
+  # if it categorical:
   } else if (is.null(distr_param)) {
+    
+    # vector of categories cannot be missing
     if (is.null(categories))
       stop("Categories argument is missing.")
+    
+    # if all above OK, collate all information into a list
     um <- list(uncertain = uncertain,
                categories = categories,
                cat_prob = cat_prob,
                id = id,
                ...)
-    if (check_if_Spatial(cat_prob)) # here need to decide what class we allow for sptial, e.g raster stack? what is it is polygons?
+    
+    # assign class
+    if (check_if_Spatial(cat_prob)) 
+      class(um) <- "MarginalCategoricalSpatial"
+    else if (is(cat_prob, "RasterLayer"))
       class(um) <- "MarginalCategoricalSpatial"
     else
       class(um) <- "MarginalCategoricalDataFrame" 

@@ -31,20 +31,28 @@
 #' @export
 genSample.MarginalCategoricalSpatial <- function(UMobject, n, asList = TRUE, ...) {
 
+  # extract information from UMobject
   categories <- UMobject[[2]]
   cat_prob <- UMobject[[3]]@data
   in1mtx <- as.matrix(cat_prob)
+  
+  # sample
   temp_samples <- t(apply(in1mtx, MARGIN = 1, 
                           function(x) sample(categories, 
                                              size = n, 
                                              replace = TRUE, 
                                              prob = x)))
-  X_sample <- UMobject[[3]]
+  
+  X_sample <- UMobject[[3]] # assign geometry
   X_sample@data <- as.data.frame(temp_samples)
+  
+  # sort out the names
   if (!is.null(UMobject$id)) {
     names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
   } else {
     names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
+  
+  # if asList = T convert spatial data frame to a list
   if (asList) {
     X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpDF to list
   }

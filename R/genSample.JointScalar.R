@@ -25,7 +25,7 @@
 #' @export
 genSample.JointScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
-  # Calculate variance-covariance matrix VarCov
+  # extract parameters of normal distribution for all objects
   means <- c()
   sds <- c()
   ids <- c()
@@ -34,30 +34,37 @@ genSample.JointScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRU
     sds[i] <- UMobject[[1]][[i]]$distr_param[2]
     ids[i] <- UMobject[[1]][[i]]$id
   }
+  
+  # extract correlation matrix from UMobject
   cormatrix <- UMobject[[2]]
+  
+  # calculate variance-covariance matrix VarCov
   VarCov <- varcov(sds, cormatrix)
   
+  
+  # ------------- method "randomSampling" --------------
   if (samplemethod == "randomSampling") {
     Cross_sample <- mvtnorm::rmvnorm(n, means, VarCov)
     colnames(Cross_sample) <- ids
     rownames(Cross_sample) <- paste("sim", 1:n, sep = "")
     
-    if (asList) {
-      l <- list()
-      for (i in 1:ncol(Cross_sample)) {
-        l_i <- Cross_sample[, i]
-        l[[i]] <- map(1:n, function(x){l_i[x]})
-      }
-      if (!is.null(ids)) names(l) <- ids
-      Cross_sample <- l
-      }
+  if (asList) {
+    l <- list()
+    for (i in 1:ncol(Cross_sample)) {
+      l_i <- Cross_sample[, i]
+      l[[i]] <- map(1:n, function(x){l_i[x]})
     }
+    if (!is.null(ids)) names(l) <- ids
+    Cross_sample <- l
+    }
+  } # end sampling with "randomSampling"
   
-    
+  
+  # -------------------- method "lhs" ------------------  
   if (samplemethod == "lhs") {
     print("Here code for LHS sampling")
-  }
- 
+  } # end sampling with "lhs"
+  
   Cross_sample
 }
 

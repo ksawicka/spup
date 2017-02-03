@@ -8,8 +8,13 @@
 #' @return Sample of spatial variable. Matrix with n rows and length(p)-1 columns.
 #' 
 stratsamp <- function(n, distribution, parameters, p) {
+  
+  # find limeses of the strata
   lims <- find_strata(p, distribution, parameters)
+  
+  # initiate output matrix
   outmat <- matrix(data = NA, nrow = n, ncol = length(p)-1)
+  
   counts <- rep(0, length(lims)-1)
   while (any(counts < n)) {
     r <- distribution_sampling(1, distribution, parameters)

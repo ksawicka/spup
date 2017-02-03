@@ -101,11 +101,16 @@
 #' @export
 genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
   
+  # PRELIMINARIES -------------------------------------------------------------------
+  # ---------------------------------------------------------------------------------
+  
   stopifnot(UMobject$uncertain == TRUE)
+  
+  # extract information from UMobject
   distribution <- UMobject[[2]]
   distr_param <- UMobject[[3]]
   crm <- UMobject[[4]]
-  dots <- list(...)
+  
   
   ### UGS ----------------------------------------------------------------------------
   if (samplemethod == "ugs") { 
@@ -113,26 +118,41 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       stop("Correlogram model is required for the 'ugs' sampling method.")
     if (distribution != "norm")
       stop("Only normal distribution can be assumed in the 'ugs' method.")
+    
+    # recognise if dealing with rester or spatial data frame objects,
+    # if raster then converst it to spatial grid
     if (is(distr_param[[1]], "RasterLayer")) {
       original_class <- "RasterLayer"
       distr_param[[1]] <- as(distr_param[[1]], "SpatialGridDataFrame")
       distr_param[[2]] <- as(distr_param[[2]], "SpatialGridDataFrame")
     } else {original_class <- "SpatialDF"}
+    
+    # split dustr_param into separate objects to ease code below
     for (i in 1:2) {
       assign(paste0("distr_param", i), distr_param[[i]])
     }
-    mask <- distr_param1
+    
+    mask <- distr_param1 # assign geometry 
+    
+    # create gstat object
     g <- gstat::gstat(formula = z~1, dummy = TRUE, beta = 0, model = crm2vgm(crm), ...)
+    
+    # simulate epsilon
     epsilon_sample <- predict(object = g, newdata = mask, nsim = n)
-    X_sample <- epsilon_sample
-    # if it is Spatial data frame
+    
+    # calculate Z = m + sd*epsilon
+    X_sample <- epsilon_sample # assign geometry
     X_sample@data <- as.data.frame(apply(as.matrix(epsilon_sample@data), MARGIN = 2,
                                   function(x) distr_param1@data + distr_param2@data*x))
+    
+    # sort out names
     if (!is.null(UMobject$id)) {
       names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
     } else {
       names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
 
+    # sort out final product depending on if Raster or spatial data frame
+    # and if object to be returned as list
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {
@@ -141,35 +161,57 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     } else if (asList == TRUE) {
       X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
     }
-  }
+  } # end sampling with "ugs"
   
   ### RANDOM SAMP ---------------------------------------------------------------------
   if (samplemethod == "randomSampling") {
+    
+    # sampling from class spatial data frame 
     if (class(distr_param[[1]]) != "RasterLayer") { # so all other spatial classes
+      
+      # function that calls distribution_sampling.R in apply()
       ds <- function(x) {
         parameters <- x
         distribution_sampling(n, distribution, parameters)
       }
+      
+      # convert data to matrix to be able to use apply()
       in1df <- do.call("cbind", distr_param)
       in1mtx <- as.matrix(in1df@data)
+      
+      # sample
       temp_samples <- t(apply(in1mtx, MARGIN = 1, ds))
-      X_sample <- distr_param[[1]]
+      
+      # save sample in X_sample object
+      X_sample <- distr_param[[1]] # assign geometry
       X_sample@data <- as.data.frame(temp_samples)
+      
+      # sort out names
       if (!is.null(UMobject$id)) {
         names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
       } else {
         names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
+      
+      # if asList = T converst sample to a list
       if (asList == TRUE) {
         X_sample <- map(1:n, function(x){X_sample[x]})
       }
+      
+    # sampling from raster
     } else {
+      # save distribution parameters in a raster stack
       in1stack <- raster::stack(distr_param)
+      # sample using distribution_sampling_raster.R
+      # first MC realization
       outstack <- distribution_sampling_raster(distribution, parameters_stack = in1stack)
+      # the rest of MC realizations
       for (i in 1:(n-1)) {
         outstack_i <- distribution_sampling_raster(distribution, parameters_stack = in1stack)
         outstack <- raster::stack(outstack, outstack_i)
       }
       X_sample <- outstack
+      
+      # sort out names
       if (!is.null(UMobject$id)) {
         names(X_sample) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
       } else {
@@ -185,6 +227,8 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     if (n %% (length(p)-1) != 0)
       stop("n should be divisable by the number of strata")
     
+    # recognise if dealing with rester or spatial data frame objects,
+    # if raster then converst it to spatial grid
     if (is(distr_param[[1]], "RasterLayer")) {
       original_class <- "RasterLayer"
       for (i in 1:length(distr_param)) {
@@ -192,20 +236,31 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       }
     } else {original_class <- "SpatialDF"}
     
+    # function to call stratsamp.R in apply()
     stsS <- function(x, ...) {
       parameters <- x
       as.numeric(stratsamp(n = n/(length(p)-1), distribution, parameters, p, ...))
     }
+    
+    # convert data to matrix to be able to use apply()
     in1df <- do.call("cbind", distr_param)
     in1mtx <- as.matrix(in1df@data)  
+    
+    # sample
     temp_samples <- t(apply(in1mtx, MARGIN = 1, stsS))
-    X_sample <- distr_param[[1]]
+    
+    # save sample in X_sample object
+    X_sample <- distr_param[[1]] # assign geometry
     X_sample@data <- as.data.frame(temp_samples)
+    
+    # sort out names
     if (!is.null(UMobject$id)) {
       names(X_sample@data) <- paste(UMobject$id, ".sim", c(1:n), sep = "")
     } else {
       names(X_sample@data) <- paste("sim", c(1:n), sep = "")}
     
+    # sort out final product depending on if Raster or spatial data frame
+    # and if object to be returned as list
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {

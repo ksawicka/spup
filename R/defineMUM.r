@@ -40,8 +40,13 @@
 #' @export
 defineMUM <- function(UMlist, cormatrix, ...) {
   
+  # multivariate UM must be about min two variables
   stopifnot(length(UMlist) > 1)
+  
+  # multivariate UM is only allowed for numerical variables
   stopifnot(is(UMlist[[1]], "MarginalNumericSpatial") | is(UMlist[[1]], "MarginalScalar"))
+  
+  # all uncertain objects must be of the same class
   a <- c()
   for (i in 1:length(UMlist)) {
     a[i] <- class(UMlist[[i]])
@@ -49,7 +54,7 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   if (!isTRUE(all(a == a[1])))
     stop("Object in UMlist must all be of the same class.")
   
-  # stopifnot("distribution type of all elements of UMlist is normal")
+  # all objects must have normal distribution
   for (i in 1:length(UMlist)) {
     a[i] <- UMlist[[i]]$distribution
   }
@@ -61,6 +66,7 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   for (i in 1:length(UMlist)) ids[i] <- UMlist[[i]]$id
   stopifnot(length(ids) == length(unique(ids)))
   
+  # satisfy conditions for the correlation matrix
   t <- 1E-7
   stopifnot(class(cormatrix) == "matrix")
   stopifnot(dim(cormatrix)[1] == length(UMlist))
@@ -76,13 +82,13 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   mum <- list(UMlist = UMlist,
               cormatrix = cormatrix,
               ...)
-
+  
+  # assign class
   if (is(UMlist[[1]], "MarginalNumericSpatial")) {
     class(mum) <- "JointNumericSpatial"
   } else {
     class(mum) <- "JointScalar"
   }
-  
   mum
 }
 

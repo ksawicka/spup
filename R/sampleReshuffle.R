@@ -1,6 +1,17 @@
 # Stefan van Dam
 # 1 February 2016
 
+#' Sample reshuffle
+#'
+#' @param sample_matrix 
+#'
+#' @return
+#' 
+#' @examples
+#' 
+#' t1 <- matrix(1:100, 20, 5)
+#' sampleReshuffle(t1)
+#' 
 sampleReshuffle <- function(sample_matrix) {
   new_matrix <- matrix(NA, nrow = nrow(sample_matrix), ncol = ncol(sample_matrix))
 
@@ -21,6 +32,3 @@ sampleReshuffle <- function(sample_matrix) {
   return(new_matrix)
 }
 
-# t1 <- matrix(1:100, 20, 5)
-
-# sampleReshuffle(t1)

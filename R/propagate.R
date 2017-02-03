@@ -34,6 +34,7 @@ propagate <- function(realizations, model, n, ...) {
   d <- list_depth(realizations)
   stopifnot(d < 3)
   model_output <- list()
+  
   # one uncertain model input, MC sample saved in list
   if (d == 1) {
     stopifnot(n <= length(realizations)) # can't run model for more n than MC samples
@@ -41,8 +42,8 @@ propagate <- function(realizations, model, n, ...) {
       model_input <- realizations[[i]]
       model_output[[i]] <- do.call(what = model, args = list(model_input, ...))
     }
+  # more than one uncertain input to the model
   } else if (d == 2) {
-    # print("method for many arguments")
     for (i in 1:n) {
       model_input <- list()
       for (j in 1:length(realizations)) {
@@ -52,7 +53,7 @@ propagate <- function(realizations, model, n, ...) {
     }
   }
   model_output
-} # test
+}
 
 
 
