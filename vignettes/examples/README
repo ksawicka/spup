@@ -1,0 +1,2 @@
+# demo C-code to be compiled with
+gcc kasia.c -o kasia

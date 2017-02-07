@@ -11,7 +11,8 @@ License: GPL-2
 VignetteBuilder: knitr
 Depends:
     magrittr,
-    purrr
+    purrr,
+    whisker
 Imports:
     gstat,
     mvtnorm,
