@@ -19,7 +19,6 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
     cex.lab = 0.8)
 
 ## ---- fig.width = 5, fig.height = 5--------------------------------------
-
 # load packages
 library(sp)
 library(spup)
@@ -29,7 +28,6 @@ data(Rotterdam)
 plot(woon, main = "Neighbourhood", cex.main = 1)
 head(woon@data)
 
-
 ## ------------------------------------------------------------------------
 
 # define uncertainty model for the bulding function
@@ -38,7 +36,6 @@ class(woonUM)
 
 
 ## ---- fig.width = 7, fig.height = 7--------------------------------------
-
 # create possible realizations of the building function
 woon_sample <- genSample(woonUM, 10, asList = FALSE)
 class(woon_sample)
@@ -47,13 +44,10 @@ class(woon_sample)
 spplot(woon_sample[c(3,4,1,2)], main = list(label = "Examples of the building function realizations", cex = 1))
 
 ## ------------------------------------------------------------------------
-
 # view the model
 tax
 
-
 ## ------------------------------------------------------------------------
-
 # coerce  SpatialPolygonDataFrame to a list of individual SpatialPolygonDataFrames
 woon_sample <- map(1:ncol(woon_sample), function(x){woon_sample[x]})
 
@@ -61,17 +55,12 @@ woon_sample <- map(1:ncol(woon_sample), function(x){woon_sample[x]})
 woon_sample <- genSample(UMobject = woonUM, n = 10, asList = TRUE)
 class(woon_sample)
 
-
 ## ------------------------------------------------------------------------
-
 for (i in 1:10) names(woon_sample[[i]]) <- "Function"
 
-
 ## ------------------------------------------------------------------------
-
 # run uncertainty propagation
 tax_sample <- propagate(woon_sample, model = tax, n = 10)
 tax_sample
 summary(unlist(tax_sample))
-
 

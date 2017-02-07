@@ -42,5 +42,27 @@ tax_uncert <- propagate(realizations = woon_sample, n = 10, model = tax)
 tax_uncert <- unlist(tax_uncert)
 summary(tax_uncert)
 
+# cross-correlated example
+# load data
+data(Madagascar)
+
+# define marginal UMs
+OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
+TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
+TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
+
+# define joint UM
+mySpatialMUM <- defineMUM(list(OC_UM, TN_UM), matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
+
+# sample - "ugs" method
+my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24)
+class(my_cross_sample)
+
+# run propagation
+CN_sample <- propagate(realizations = my_cross_sample, model = C_N_model_raster, n = 5)
+CN_sample
+
+
 }
 

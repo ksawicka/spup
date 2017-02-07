@@ -19,7 +19,6 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
     cex.lab = 0.8)
 
 ## ---- fig.width = 5, fig.height = 3--------------------------------------
-
 # load packages
 library(sp)
 library(spup)
@@ -31,20 +30,14 @@ str(dem30m_sd)
 spplot(dem30m, main = list(label = "Mean DEM", cex = 1))
 summary(dem30m_sd)
 
-
 ## ------------------------------------------------------------------------
-
 # define spatial correlogram model
 dem_crm <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
 
-
 ## ---- fig.width = 5, fig.height = 3--------------------------------------
-
 plot(dem_crm, main = "DEM correlogram")
 
-
 ## ---- fig.width = 7, fig.height = 5--------------------------------------
-
 par(mfrow = c(2, 2))
 crm <- makecrm(acf0 = 0.8, range = 700, model = "Sph") 
 plot(crm, main = "'Spherical', acf0 = 0.8, range = 700")
@@ -55,17 +48,13 @@ plot(crm, main = "'Linear', acf0 = 1.0, range = 700")
 crm <- makecrm(acf0 = 0.8, range = 200, model = "Gau") 
 plot(crm, main = "'Gausian', acf0 = 0.8, range = 200")
 
-
 ## ------------------------------------------------------------------------
-
 # define uncertainty model for the DEM
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 class(demUM)
 
-
 ## ---- fig.width = 7, fig.height = 7--------------------------------------
-
 # create possible realizations of the DEM
 dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
 
@@ -73,7 +62,6 @@ dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 
 spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
 
 ## ---- fig.width = 5, fig.height = 6--------------------------------------
-
 # compute and plot the slope sample statistics
 # e.g. mean and standard deviation
 dem_sample_mean <- mean(dem_sample)
@@ -84,9 +72,7 @@ print(m, split = c(1, 1, 1, 2), more = TRUE)
 print(s, split = c(1, 2, 1, 2))
 rm(m, s)
 
-
 ## ---- fig.width = 5, fig.height = 6--------------------------------------
-
 dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
 demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
 dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
@@ -96,30 +82,22 @@ print(s1, split = c(1, 1, 1, 2), more = TRUE)
 print(s2, split = c(1, 2, 1, 2))
 rm(s1, s2)
 
-
 ## ------------------------------------------------------------------------
-
 # view the model
 Slope
 
-
 ## ------------------------------------------------------------------------
-
 # coerce  SpatialGridDataFrame to a list of individual SpatialGridDataFrames
 dem_sample <- map(1:ncol(dem_sample), function(x){dem_sample[x]})
 
 # or sample from uncertain input and save it in a list
 dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
 
-
 ## ------------------------------------------------------------------------
-
 # run uncertainty propagation
 slope_sample <- propagate(dem_sample, model = Slope, n = 100, projection = CRS("+init=epsg:3857"))
 
-
 ## ---- fig.width = 7, fig.height = 7--------------------------------------
-
 # coerce slopes list to a SpatialGridDataFrame
 s <- slope_sample[[1]]
 for (i in 2:length(slope_sample)) {
@@ -132,9 +110,7 @@ rm(s)
 # view the sample of the model output
 spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
 
-
 ## ---- fig.width = 5, fig.height = 6--------------------------------------
-
 # compute and plot the slope sample statistics
 # e.g. mean and standard deviation
 slope_mean <- mean(slope_sample)
@@ -145,9 +121,7 @@ print(m, split = c(1, 1, 1, 2), more = TRUE)
 print(s, split = c(1, 2, 1, 2))
 rm(m, s)
 
-
 ## ---- fig.width = 7, fig.height = 3--------------------------------------
-
 # check the histogram of slope at lowest and highest DEM 
 l <- which(dem30m@data == min(dem30m@data)) # there is no slope calculated for this outer value so we need to fins a different one
 l <- which(dem30m@data < 860)
@@ -167,17 +141,12 @@ hist(as.numeric(slope_sample@data[6898,]), main = paste("Slope at high DEM,", "\
      "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "Slope")
 rm(l, h)
 
-
 ## ---- fig.width = 7, fig.height = 5--------------------------------------
-
 # or quantiles
 slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
 spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
 
-
 ## ---- fig.width = 5, fig.height = 3--------------------------------------
-
 slope_q$safep90 <- factor(ifelse(slope_q$prob90perc > 0.5, 1, 0), labels = c("safe","hazard"))
 spplot(slope_q, "safep90", col.regions = c("green","red"), main = "Safe areas for skiing")
-
 
