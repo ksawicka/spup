@@ -1,0 +1,66 @@
+---
+title: "Spatial uncertainty propagation analysis"
+author: "Kasia Sawicka and Gerard Heuvelink"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+# output: rmarkdown::word_document
+subtitle: Case study with calling external model.
+vignette: >
+  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+```
+
+```{r, echo = FALSE}
+knitr::opts_knit$set(global.par = TRUE)
+```
+
+```{r, echo = FALSE}
+par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2, cex.axis = 0.8,
+    cex.lab = 0.8)
+```
+
+
+### Introduction
+
+Ofter, environmental models are developed in other languages than R, for example C or FROTRAN. It significanly speeds up processing. In this simple example, we show how to perform uncertainty analysis with a basic model written in C.
+
+<br>
+
+### Adapted Monte Carlo methodology for uncertainty analysis
+
+The adapted uncertainty propagation analysis approach is based on the Monte Carlo method that computes the output of the model repeatedly, with input values that are randomly sampled from their pdfs. The set of model outputs forms a random sample from the output pdf. The method thus consists of the following steps:
+
+1.	Characterise uncertain model inputs/parameters with pdfs.
+1.	Repeatedly sample from the pdfs of uncertain inputs/parameters.
+1.	Run model with sampled inputs and store model outputs.
+1. 	Compute summary statistics of model outputs.
+
+<br>
+
+### Uncertainty propagation analysis with 'spup'
+
+
+
+
+### Acknowledgements
+
+We thank Dennis Walvoort for his valuable contribution to the development of this package.
+
+This project has received funding from the European Union’s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 607000.
+
