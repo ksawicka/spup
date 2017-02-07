@@ -1,6 +1,6 @@
 ---
 title: "Spatial uncertainty propagation analysis"
-author: "Kasia Sawicka"
+author: "Kasia Sawicka and Gerarg Heuvelink"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
@@ -110,7 +110,7 @@ OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 ```
 
-We can view the correlograms by plotting it.
+We can view the correlograms by plotting them.
 
 ```{r, fig.width = 5, fig.height = 3} 
 plot(OC_crm, main = "DEM correlogram")
@@ -136,7 +136,7 @@ class(TN_UM)
 
 ```
 
-Both of the variables are of the same class "MarginalNumericSpatial". This is one of the requirements for defining a multivariate uncertainty model next. We use the `defineMUM()` function to collate information about uncertainty in each variable as above, and information about their cross-correlation. The required fintion arguments are:
+Both of the variables are of the same class "MarginalNumericSpatial". This is one of the requirements for defining a multivariate uncertainty model next. We use the `defineMUM()` function to collate information about uncertainty in each variable as above, and information about their cross-correlation. The required funtion arguments are:
 * a list of defined uncertainty models (by `defineUM()`) for the selected variables,
 * a correlation matrix.
 
@@ -149,185 +149,197 @@ The correlation matrix must satisfy a range of conditions:
 
 ```{r}
 # define multivariate uncertainty model
-
+mySpatialMUM <- defineMUM(UMlist = list(OC_UM, TN_UM), 
+                          cormatrix = matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
+class(mySpatialMUM)
 ```
-
 
 <br>
 
-#### Generate possible realities of DEM
+#### Generate possible realities of OC and TN
 
-Generating possible realities of the DEM can be completed by using the genSample() function. The required information to pass to the function includes:
+Generating possible realities of the selected variables can be completed by using the `genSample()` function. The required information to pass to the function includes:
 
 * defined uncertain object (as above).
-* number of realizations to return.
-* sampling method. In case of spatially correlated variables, the method "ugs" (method based on unconditional gaussian simulation) is reccomended, otherwise spatial correlation will not be taken into account. Other sampling methods include "randomSampling" and "stratifiedSampling". See `?genSample` for more details.
+* number of realizations per variable to return.
+* sampling method. In case of spatially correlated variables, the method "ugs" (method based on unconditional gaussian simulation) is reccomended, otherwise spatial correlation will not be taken into account. Other sampling methods include "randomSampling" and "lhs" (Latin Hypercube Samplig), where cross-corelations can be accounted for but spatial auto-correlation is neglected. See `?genSample` for more details.
 
 Additional parameters may be also specified. For example, sampling of spatially correlated variable is based on the 'gstat' package that allows for limiting the number of nearest observations that should be used for the simulation.
 
-Usually the sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. Note the artument 'asList' has been set up to FALSE. This indicates that the sampling function will return an object of a class of the distribution parameters class. This is useful if you want to visualize the sample or compute summary statistics quickly.
 
-```{r, fig.width = 7, fig.height = 7} 
-
-# create possible realizations of the DEM
-dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
-
-# view several realizations of DEM
-spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
+```{r}
+# create possible realizations from the joint distribution of OC and TN
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 4, samplemethod = "ugs", nmax = 20, asList = FALSE)
 ```
 
-We can view the mean and standard deviation of the sampled DEM. If the number of samples was very large then the mean of the sample would equal dem30m and the sd would equal dem30m_sd:
+Note the argument 'asList' has been set up to FALSE. This indicates that the sampling function will return an object of a class of the distribution parameters class. This is useful if you want to visualize the sample or compute summary statistics quickly.
+
+```{r, fig.width = 7, fig.height = 5}
+# view the sample structure
+OCTN_sample
+
+# plot realizations of OC and TN
+plot(OCTN_sample)
+```
+
+Usually the sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. This may take a minute.
+
+```{r}
+# create possible realizations from the joint distribution of OC and TN
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
+```
+
+We can view the mean and standard deviation of the sampled OC and TN. If the number of samples was very large then the mean of the sample of each would equal the mean  OC and TN, and the sd would equal their sds.
 
 ```{r, fig.width = 5, fig.height = 6}
-
-# compute and plot the slope sample statistics
+# compute and plot OC and TN sample statistics
 # e.g. mean and standard deviation
-dem_sample_mean <- mean(dem_sample)
-dem_sample_sd <- sd(dem_sample)
-m <- spplot(dem_sample_mean, main = list(label = "Mean of the DEM realizations", cex = 1))
-s <- spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realizations", cex = 1))
-print(m, split = c(1, 1, 1, 2), more = TRUE)
-print(s, split = c(1, 2, 1, 2))
-rm(m, s)
+OC_sample <- OCTN_sample[[1:100]]
+TN_sample <- OCTN_sample[[101:200]]
+OC_sample_mean <- mean(OC_sample)
+TN_sample_mean <- mean(TN_sample)
+OC_sample_sd <- calc(OC_sample, fun = sd)  
+TN_sample_sd <- calc(TN_sample, fun = sd)
 
+par(mfrow= c(1,2))
+plot(OC_sample_mean, main = "Mean of OC realizations")
+plot(TN_sample_mean, main = "Mean of TN realizations")
 ```
 
-The generated DEM realizations depend on the degree of spatial auto-correlation. For instance, notice that the realizatons become more ‘noisy’ if we assume less spatial-autocorrelation:
+We can also view the cross-corelations between two variables.
 
 ```{r, fig.width = 5, fig.height = 6} 
-
-dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
-demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
-dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
-s1 <- spplot(dem_sample, c(1), main = list(label = "dem_sample, acf0 = 0.8, range = 300m", cex = 1))
-s2 <- spplot(dem_sample2, c(1), main = list(label = "dem_sample2, acf0 = 0.2, range = 300m", cex = 1))
-print(s1, split = c(1, 1, 1, 2), more = TRUE)
-print(s2, split = c(1, 2, 1, 2))
-rm(s1, s2)
+# R package GGally provides a nice option for plotting correlations
+library(GGally)
+octn <- cbind(as.data.frame(OC_sample[[1]]), as.data.frame(TN_sample[[1]]))
+ggscatmat(data = octn, alpha=0.15) 
+ # + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
 
 ```
 
-Can you spot the difference? Higher auto-correlation yields ‘smoothened’ realities. Lower values produce a more ‘noisy’ field.
 
-#### Uncertainty propagation through the model that calculates slope using DEM as input
+#### Uncertainty propagation through the model that calculates C/N ratio
 
 In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'DEM' data object includes an example of a pre-defined model that calculates slope using DEM as input. In this case the function is based on the `terrain()` function from the **raster** package. 
 
 ```{r} 
-
 # view the model
-Slope
-
+C_N_model_raster
 ```
 
-The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the Slope model with the DEM realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
+The propagation of uncertainty occurs when the model is run with the uncertain inputs. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the C/N ratio model with the OC and TN realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
 
 * a sample from the uncertain model inputs and any other remaining model inputs and parameters as a list.
 * the model as a function in R.
 * the number of Monte Carlo runs. This can be equal or smaller than the number of realizations of the uncertain input variable(s).
 
-In order to run the propagation function the sample of an uncertain input variable must be saved in a list. We can either coerce the existing **dem_sample** object or get it automatically setting up the 'asList' argument of `genSample()` to TRUE.
+In order to run the propagation function the samples of uncertain input variables must be saved in lists and then collated into a list of these lists. We can either coerce the existing **OCTN_sample** object or get it automatically setting up the 'asList' argument of `genSample()` to TRUE.
 
 ```{r} 
-
-# coerce  SpatialGridDataFrame to a list of individual SpatialGridDataFrames
-dem_sample <- map(1:ncol(dem_sample), function(x){dem_sample[x]})
-
-# or sample from uncertain input and save it in a list
-dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
-
+# coerce  a raster stack to a list 
+# in our example we consider two variables, so we need a list of two lists with realizations
+l <- list()
+l[[1]] <- map(1:100, function(x){OCTN_sample[[x]]})
+l[[2]] <- map(101:200, function(x){OCTN_sample[[x]]})
+OCTN_sample <- l
+     
+# or sample from uncertain input and save it in a list by setting asList argument to TRUE (default)
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
 ```
 
 ```{r} 
-
 # run uncertainty propagation
-slope_sample <- propagate(dem_sample, model = Slope, n = 100, projection = CRS("+init=epsg:3857"))
-
+CN_sample <- propagate(realizations = OCTN_sample,
+                       model = C_N_model_raster, n = 100)
 ```
 
 <br>
 
 #### Visualization of results
 
-We can now view the sample of model output realizations (i.e. slope) and visualize uncertainty by calculating and plotting the sample mean and standard deviation. In our case we need to coerce the output of the `propagation`function saved as a list back to a SpatialGridDataFrame. 
+We can now view the sample of model output realizations (i.e. C/N) and visualize uncertainty by calculating and plotting the sample mean and standard deviation. In our case we need to coerce the output of the `propagate()`function saved as a list back to a RasterStack. 
 
 
-```{r, fig.width = 7, fig.height = 7} 
-
-# coerce slopes list to a SpatialGridDataFrame
-s <- slope_sample[[1]]
-for (i in 2:length(slope_sample)) {
-  s@data[i] <- slope_sample[[i]]@data
-}
-names(s@data) <- paste("slope", c(1:ncol(s)), sep = "")
-slope_sample <- s
-rm(s)
+```{r, fig.width = 7, fig.height = 5} 
+# coerce C/Ns list to a RasterStack
+CN_sample <- stack(CN_sample)
+names(CN_sample) <- paste("CN.", c(1:nlayers(CN_sample)), sep = "")
 
 # view the sample of the model output
-spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
-
+par(mfrow = c(1,1))
+plot(CN_sample[[1:6]])
 ```
-
-```{r, fig.width = 5, fig.height = 6}
-
-# compute and plot the slope sample statistics
-# e.g. mean and standard deviation
-slope_mean <- mean(slope_sample)
-slope_sd <- sd(slope_sample, na.rm = TRUE) # na.rm = TRUE is necessary, because slope cannot be calculated at the border
-m <- spplot(slope_mean, main = list(label = "Mean of the slope realizations", cex = 1))
-s <- spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations", cex = 1))
-print(m, split = c(1, 1, 1, 2), more = TRUE)
-print(s, split = c(1, 2, 1, 2))
-rm(m, s)
-
-```
-
-We can see from the maps that lower slopes are observed at lower elevation and higher slopes at elevation. Since we used the roughness of the terrain as DEM sd approximation, the slope sd corresponds with the DEM sd. We can view example of slope realizations at locations with low and high elevation:
-
-```{r, fig.width = 7, fig.height = 3}
-
-# check the histogram of slope at lowest and highest DEM 
-l <- which(dem30m@data == min(dem30m@data)) # there is no slope calculated for this outer value so we need to fins a different one
-l <- which(dem30m@data < 860)
-l
-# lets take location 400 for l.
-h <- which(dem30m@data == max(dem30m@data))
-h
-l_mean <- mean(as.numeric(slope_sample@data[400,]))
-l_sd <- sd(as.numeric(slope_sample@data[400,]))
-h_mean <- mean(as.numeric(slope_sample@data[6898,]))
-h_sd <- sd(as.numeric(slope_sample@data[6898,]))
-
-par(mfrow = c(1,2))
-hist(as.numeric(slope_sample@data[400,]), main = paste("Slope at low DEM,", "\n",
-     "mean = ", round(l_mean, 2), ", sd = ", round(l_sd, 2), sep = ""), xlab = "Slope")
-hist(as.numeric(slope_sample@data[6898,]), main = paste("Slope at high DEM,", "\n",
-     "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "Slope")
-rm(l, h)
-
-```
-
-Here interpretation of histograms - KS: Why do we have higher slope at lower DEM/ Is this correct?
-
-We can also look at specific quantites of the slope sample. 
 
 ```{r, fig.width = 7, fig.height = 5}
-
-# or quantiles
-slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
-spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
-
+# compute and plot the slope sample statistics
+# e.g. mean and standard deviation
+CN_mean <- mean(CN_sample)
+CN_sd <- calc(CN_sample, fun = sd) 
+par(mfrow = c(1,2))
+plot(CN_mean, main = "C/N mean")
+plot(CN_sd, main = "C/N sd")
 ```
 
-For example, find locations with steep slopes that are safe (slope < 0.5) for tourist skiing with probability 90%.
+We can also view example of C/N realizations at specific locations, for example where is highiest and lowest:
+
+```{r, fig.width = 7, fig.height = 3}
+l_mean <- mean(CN_sample[which.min(OC)])
+l_sd <- sd(CN_sample[which.min(OC)])
+h_mean <- mean(CN_sample[which.max(OC)])
+h_sd <- sd(CN_sample[which.max(OC)])
+
+par(mfrow = c(1,2))
+hist(CN_sample[which.min(OC)], main = paste("C/N at lowest OC,", "\n",
+     "mean = ", round(l_mean, 2), ", sd = ", round(l_sd, 2), sep = ""), xlab = "C/N")
+hist(CN_sample[which.max(OC)], main = paste("C/N at highiest OC,", "\n",
+     "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "C/N")
+```
+
+We can also look at specific quantiles of the C/N ratio sample. The method for SpatialGridDataFrame class implemented in 'spup' allow us to do it quickly.
+
+```{r, fig.width = 7, fig.height = 5}
+# calculate quantiles
+CN_sample_df <- as(CN_sample, "SpatialGridDataFrame")
+CN_q <- quantile(CN_sample_df, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+spplot(CN_q[c(3,4,1,2)], main = list(label = "Quantiles of C/N realizations", cex = 1))
+```
+
+For example, identify locations with lower C/N than optimal 24, with probability of 90%. This information might be used by farmers to identify which plots require action on improving soil quality.
 
 ```{r, fig.width = 5, fig.height = 3}
-
-slope_q$safep90 <- factor(ifelse(slope_q$prob90perc > 0.5, 1, 0), labels = c("safe","hazard"))
-spplot(slope_q, "safep90", col.regions = c("green","red"), main = "Safe areas for skiing")
-
+CN_q$good4crops <- factor(ifelse(CN_q$prob90perc < 24, 1, 0), labels = c("Good quality","Improvements needed"))
+spplot(CN_q, "good4crops", col.regions = c("darkolivegreen2","firebrick1"), main = "Areas with sufficient C/N")
 ```
 <br>
+
+We can also calculate OC and TN uncertainty contribution to the uncertainty in predicting C/N. We have already calculated the total uncertainty in C/N predictions assuming both OC and TN are uncertain. To identify their contributions we can to run the propagation with only one of them being uncertain. For the other input assume its mean is the certain information.
+
+
+```{r}
+# calculate total variance as a measure of total uncertainty
+CN_tot_var <- calc(CN_sample, fun = var)
+
+# OC contribution
+OC_sample <- OCTN_sample[[1]]
+CN_sample_oc <- propagate(realizations = OC_sample, model = C_N_model_raster, TN = TN, n = 100)
+CN_sample_oc <- stack(CN_sample_oc)
+CN_oc_var <- calc(CN_sample_oc, fun = var)
+OC_contribution <- (CN_oc_var/CN_tot_var)*100
+
+# TN contribution
+TN_sample <- OCTN_sample[[2]]
+CN_sample_tn <- propagate(realizations = TN_sample, model = C_N_model_raster, OC = OC, n = 100)
+CN_sample_tn <- stack(CN_sample_tn)
+CN_tn_var <- calc(CN_sample_tn, fun = var)
+TN_contribution <- (CN_tn_var/CN_tot_var)*100
+
+# plot results
+par(mfrow = c(2,2))
+plot(CN_mean, main = "C/N mean")
+plot(CN_sd, main = "C/N sd")
+plot(OC_contribution, main = "OC contribution to total C/N var [%]")
+plot(TN_contribution, main = "TN contribution to total C/N var [%]")
+```
 
 
 

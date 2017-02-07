@@ -1,6 +1,6 @@
 ---
 title: "Spatial uncertainty propagation analysis"
-author: "Kasia Sawicka"
+author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
