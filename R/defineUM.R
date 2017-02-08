@@ -14,21 +14,24 @@
 #' If no spatial correlations between residuals is assumed, allowed
 #' distributions for marginal uncertainty models are listed in Table 1.
 #' 
-#' Add bit about that only parametric are allowed to sample from both discrite
-#' and continuos...
-#'
-#'
-#'
-#' Table 1 Parametric probability models allowed in defineUM().
-#' \tabular{rlllll}{ \tab \strong{Numeric type} \tab \strong{Distribution} \tab
-#' \strong{Syntax} \tab \strong{Parameters} \tab \strong{Description} \cr \tab
-#' Continuous \tab Beta \tab "beta" \tab c(\eqn{\alpha}, \eqn{\beta}) \tab
-#' Shape parameters \eqn{\alpha} > 0, \eqn{\beta} > 0 \cr \tab Continuous \tab
-#' Cauchy \tab \tab \tab \cr \tab Continuous \tab Chi-squared \tab \tab \tab
-#' \cr \tab Continuous \tab Continuous uniform \tab \tab \tab \cr \tab
-#' Continuous \tab Exponential \tab \tab \tab \cr \tab Continuous \tab Gamma
-#' \tab \tab \tab \cr \tab Continuous \tab \tab \tab \tab
-#'
+#' Table 1 Parametric probability models allowed in defineUM(). 
+#' For more details look up ?distribution.
+#' \tabular{rlllll}{ \tab \strong{Distribution} \tab \strong{Syntax} \tab \strong{Parameters} 
+#' \cr \tab beta               \tab "beta"    \tab \eqn{shape1}, \eqn{shape2}, \eqn{ncp} 
+#' \cr \tab binomial           \tab "binom"   \tab \eqn{size}, \eqn{prob}                
+#' \cr \tab Cauchy             \tab "cauchy"  \tab \eqn{location}, \eqn{scale}             
+#' \cr \tab chi-squared        \tab "chisq"   \tab \eqn{df}, \eqn{ncp}                   
+#' \cr \tab exponential        \tab "exp"     \tab \eqn{rate}                             
+#' \cr \tab gamma              \tab "gamma"   \tab \eqn{shape}, \eqn{rate}                
+#' \cr \tab geometric          \tab "geom"    \tab \eqn{prob}                             
+#' \cr \tab hypergeometric     \tab "hyper"   \tab \eqn{m}, \eqn{n}, \eqn{k}             
+#' \cr \tab log-normal         \tab "lnorm"   \tab \eqn{meanlog}, \eqn{sdlog}            
+#' \cr \tab negative binomial  \tab "nbinom"  \tab \eqn{size}, \eqn{prob}, \eqn{mu}    
+#' \cr \tab normal             \tab "norm"    \tab \eqn{mean}, \eqn{sd} 
+#' \cr \tab Poisson            \tab "pois"    \tab \eqn{lambda}
+#' \cr \tab Student's          \tab "t"       \tab \eqn{df}, \eqn{ncp} 
+#' \cr \tab uniform            \tab "unif"    \tab \eqn{min}, \eqn{max} 
+#' \cr \tab Weibull            \tab "weibull" \tab \eqn{shape}, \eqn{scale} 
 #' }
 #'
 #' @usage defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
