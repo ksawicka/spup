@@ -1,5 +1,6 @@
 #' Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated
-#' and described by joint PDF or a list from independent objects using random sampling or LHS method.
+#' 
+#' Uncertain objects are described by joint PDF or a list from independent objects using random sampling or LHS method.
 #'
 #' \strong{"ugs"} Unconditional gaussian simulation of spatially
 #' cross-correlated errors.
@@ -47,7 +48,7 @@
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' 
-#' # # some dummy variable to test code on more than two
+#' # # some dummy variable to test code on more than two variables
 #' # dummy <- OC
 #' # dummy@data <- OC@data*TN@data/2
 #' # names(dummy) <- "dummy"
