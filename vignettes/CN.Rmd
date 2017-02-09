@@ -1,10 +1,10 @@
 ---
 title: "Spatial uncertainty propagation analysis"
-author: "Kasia Sawicka and Gerarg Heuvelink"
+author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
-subtitle: Case study with cross-correlated variables.
+subtitle: Case study with cross-correlated variables
 vignette: >
   %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
   %\VignetteEngine{knitr::rmarkdown}
@@ -114,8 +114,8 @@ TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 We can view the correlograms by plotting them.
 
 ```{r, fig.width = 7, fig.height = 3} 
-plot(OC_crm, main = "DEM correlogram")
-plot(TN_crm, main = "DEM correlogram")
+plot(OC_crm, main = "OC correlogram")
+plot(TN_crm, main = "TN correlogram")
 ```
 
 Spatial correlograms summarise patterns of spatial autocorrelation in data and model residuals. They show the degree of correlation between values at two locations as a function of the separation distance between the locations. In the case above the correlation declines with distance, as is usually the case. The correlation becomes negligibly small for distances greater than 1000m. More about correlograms is included in the DEM vignette.

@@ -44,8 +44,8 @@ plot(TN_crm, main = "DEM correlogram")
 
 ## ------------------------------------------------------------------------
 # define uncertainty model for the OC and TN
-OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
-TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd/3), crm = OC_crm, id = "OC")
+TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd/3), crm = TN_crm, id = "TN")
 class(OC_UM)
 class(TN_UM)
 
