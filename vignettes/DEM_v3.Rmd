@@ -154,7 +154,7 @@ Generating possible realities of the elevation can be completed by using the gen
 
 Additional parameters may be also specified. For example, sampling of spatially correlated variable is based on the 'gstat' package that allows for limiting the number of nearest observations that should be used for simulation.
 
-The sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. Note that the argument 'asList' has been set up to FALSE. This indicates that the sampling function will return an object of the same class as maps of the elevation mean and sd. This is useful if you want to visualize the sample or compute summary statistics quickly.
+The sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. Note that the argument 'asList' has been set to FALSE. This indicates that the sampling function will return an object of the same class as maps of the elevation mean and sd. This is useful if you want to visualize the sample or compute summary statistics quickly.
 
 ```{r, fig.width = 7, fig.height = 7} 
 # create realizations of the DEM
@@ -256,7 +256,7 @@ print(s, split = c(1, 2, 1, 2))
 rm(m, s)
 ```
 
-This shows that lower slopes are observed at lower elevation and higher slopes at higher elevation. Since we used the terrain roughness as sd approximation, the slope sd corresponds with the elevation sd. We can view example of slope realizations at locations with low and high elevation:
+This shows that lower slopes are observed at lower elevation and higher slopes at higher elevation. Since slope is a nearly linear combination of elevation differences, the slope sd has a similar spatial pattern as elevation sd. We can view example of slope realizations at locations with low and high elevation:
 
 ```{r, fig.width = 7, fig.height = 3}
 # check the histogram of slope at lowest and highest DEM 
@@ -306,7 +306,7 @@ slope_q$safep90 <- NA
 slope_q$safep90[slope_q$prob90perc < 0.5 & slope_q$prob90perc > 0.2] <- "good"
 slope_q$safep90[is.na(slope_q$safep90)] <- "bad"
 slope_q$safep90 <- as.factor(slope_q$safep90)
-spplot(slope_q, "safep90", col.regions = c("red","green"), main = "Good slope for skiing")
+spplot(slope_q, "safep90", col.regions = c("red","green"), main = "90% certain suitable for skiing")
 ```
 
 Additionally to guarantee snow we can select areas with elevation > 1000m.
@@ -325,7 +325,7 @@ snow_poly <- aggregate(snow_poly, by = "Elev1000")
 transparent_grey <- rgb(0,0,0, alpha = 0.35)
 spl <- list("sp.grid", slope_q[5], col = c("red","green"))
 spplot(snow_poly, col.regions = c(transparent_grey, "transparent"),  
-       main = "Good areas for skiing",
+       main = "90% certain suitable for skiing and snow presence",
        sp.layout = spl)
 ```
 
