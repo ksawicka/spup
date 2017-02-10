@@ -44,7 +44,7 @@ We can use the Monte Carlo (MC) method to analyse how the error propagates throu
 
 <br>
 
-### Adapted Monte Carlo methodology for spatial uncertainty analysis with spatially cross-correlated variables
+### Monte Carlo methodology for spatial uncertainty analysis with spatially cross-correlated variables
 
 The adapted uncertainty propagation analysis approach is based on the Monte Carlo method that computes the output of the model repeatedly, with input values that are randomly sampled from their joint probability distribution functions (pdf). The set of model outputs forms a random sample from the output pdf, so that the parameters of the distribution, such as the mean, variance and quantiles, can be estimated from the sample. The method thus consists of the following steps:
 
@@ -74,7 +74,7 @@ The example data for C/N calculations are a 250m resolution mean OC and TN (tota
 The 'Madagascar' dataset contains four spatial objects: a mean OC and TN of the area and their standard deviation. It also has a saved function that calculates C/N using OC and TN that will be used later.
 
 
-```{r, fig.width = 5, fig.height = 3} 
+```{r, fig.width = 7, fig.height = 3} 
 # load packages
 library(spup)
 library(raster)
@@ -84,10 +84,10 @@ data(Madagascar)
 par(mfrow = c(1,2))
 class(OC)
 class(TN)
-# plot(OC, main = "Mean of Organic Carbon") # vignette has problem compiling here
-# plot(TN, main = "Mean of Total Nitrogen")
-# summary(OC)
-# summary(TN)
+plot(OC, main = "Mean of Organic Carbon") # vignette has problem compiling here
+plot(TN, main = "Mean of Total Nitrogen")
+summary(OC)
+summary(TN)
 ```
 
 
@@ -120,10 +120,10 @@ plot(TN_crm, main = "TN correlogram")
 
 Spatial correlograms summarise patterns of spatial autocorrelation in data and model residuals. They show the degree of correlation between values at two locations as a function of the separation distance between the locations. In the case above the correlation declines with distance, as is usually the case. The correlation becomes negligibly small for distances greater than 1000m. More about correlograms is included in the DEM vignette.
 
-In order to complete the description of the single uncertain variable we use the `defineUM()` function that collates all information about the DEM uncertainty into one object. The minimum information required is:
+In order to complete the description of the single uncertain variable we use the `defineUM()` function that collates all information about the OC and TN uncertainty. The minimum information required is:
 * a logical value that indicates if the object is uncertain,
 * the type of the distribution to sample from. In case of variables with spatially correlated errors only the normal distribution is supported. For details on supported distributions and required parameters see `?defineUM`,
-* the list of distribution parameters, for example a mean and a standard deviation (sd) for the normal distribution. In the case presented here, these are maps of the mean DEM and standard deviation of the DEM error, 
+* the list of distribution parameters, for example a mean and a standard deviation (sd) for the normal distribution. In the case presented here, these are maps of the mean OC or TN and standard deviation of the OC or TN, accordingly, 
 * correlogram model,
 * the variable id.
 
@@ -186,7 +186,8 @@ Usually the sample must be large to obtain stable results. Let us run the sampli
 
 ```{r}
 # create possible realizations from the joint distribution of OC and TN
-OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
+MC <- 100
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = MC, samplemethod = "ugs", nmax = 20, asList = FALSE)
 ```
 
 We can view the mean and standard deviation of the sampled OC and TN. If the number of samples was very large then the mean of the sample of each would equal the mean  OC and TN, and the sd would equal their sds.
@@ -194,8 +195,8 @@ We can view the mean and standard deviation of the sampled OC and TN. If the num
 ```{r, fig.width = 7, fig.height = 3}
 # compute and plot OC and TN sample statistics
 # e.g. mean and standard deviation
-OC_sample <- OCTN_sample[[1:100]]
-TN_sample <- OCTN_sample[[101:200]]
+OC_sample <- OCTN_sample[[1:MC]]
+TN_sample <- OCTN_sample[[(MC+1):(2*MC)]]
 OC_sample_mean <- mean(OC_sample)
 TN_sample_mean <- mean(TN_sample)
 OC_sample_sd <- calc(OC_sample, fun = sd)  
@@ -220,7 +221,7 @@ ggscatmat(data = octn, alpha=0.15)
 
 #### Uncertainty propagation through the model that calculates C/N ratio
 
-In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'DEM' data object includes an example of a pre-defined model that calculates slope using DEM as input. In this case the function is based on the `terrain()` function from the **raster** package. 
+In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'Madagascar' data object includes an example of a pre-defined model that calculates C/N using OC and TN as input.  
 
 ```{r} 
 # view the model
@@ -244,13 +245,13 @@ l[[2]] <- map(101:200, function(x){OCTN_sample[[x]]})
 OCTN_sample <- l
      
 # or sample from uncertain input and return it automatically in a list by setting asList argument to TRUE (default)
-OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = MC, samplemethod = "ugs", nmax = 20, asList = TRUE)
 ```
 
 ```{r} 
 # run uncertainty propagation
 CN_sample <- propagate(realizations = OCTN_sample,
-                       model = C_N_model_raster, n = 100)
+                       model = C_N_model_raster, n = MC)
 ```
 
 <br>
@@ -321,14 +322,14 @@ CN_tot_var <- calc(CN_sample, fun = var)
 
 # OC contribution
 OC_sample <- OCTN_sample[[1]]
-CN_sample_oc <- propagate(realizations = OC_sample, model = C_N_model_raster, TN = TN, n = 100)
+CN_sample_oc <- propagate(realizations = OC_sample, model = C_N_model_raster, TN = TN, n = MC)
 CN_sample_oc <- stack(CN_sample_oc)
 CN_oc_var <- calc(CN_sample_oc, fun = var)
 OC_contribution <- (CN_oc_var/CN_tot_var)*100
 
 # TN contribution
 TN_sample <- OCTN_sample[[2]]
-CN_sample_tn <- propagate(realizations = TN_sample, model = C_N_model_raster, OC = OC, n = 100)
+CN_sample_tn <- propagate(realizations = TN_sample, model = C_N_model_raster, OC = OC, n = MC)
 CN_sample_tn <- stack(CN_sample_tn)
 CN_tn_var <- calc(CN_sample_tn, fun = var)
 TN_contribution <- (CN_tn_var/CN_tot_var)*100

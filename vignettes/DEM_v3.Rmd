@@ -2,8 +2,8 @@
 title: "Spatial uncertainty propagation analysis"
 author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-# output: rmarkdown::word_document
+# output: rmarkdown::html_vignette
+output: rmarkdown::word_document
 # output: rmarkdown::pdf_document
 subtitle: Case study with spatially variable standard deviation - slope calculations
   with a digital elevation model (DEM)
@@ -76,17 +76,18 @@ The example data for slope calculations are a 30m resolution mean DEM and standa
 The 'DEM' data contains two spatial objects: a mean and the standard deviation map. It also has a saved function that calculates slope from elevation that will be used later.
 
 
-```{r, fig.width = 5, fig.height = 3} 
+```{r, fig.width = 5, fig.height = 6} 
 # load packages
 library(sp)
 library(spup)
+library(gridExtra)
 
 # load and view the data
 data(DEM)
 str(dem30m)
 str(dem30m_sd)
-spplot(dem30m, main = list(label = "Mean DEM", cex = 1))
-summary(dem30m_sd)
+grid.arrange(spplot(dem30m, main = list(label = "Mean DEM [m]", cex = 1)),
+             spplot(dem30m_sd, main = list(label = "DEM sd [m]", cex = 1)))
 ```
 
 <br>
@@ -161,7 +162,7 @@ The sample must be large to obtain stable results. Let us run the sampling to ob
 dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
 
 # view several realizations of DEM
-spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope realizations", cex = 1))
+spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the DEM realizations", cex = 1))
 ```
 
 We can view the mean and standard deviation of the sampled elevation. If the sample size was very large then the sample mean would be close to 'dem30m' and the sd close to 'dem30m_sd':
@@ -171,11 +172,8 @@ We can view the mean and standard deviation of the sampled elevation. If the sam
 # e.g. mean and standard deviation
 dem_sample_mean <- mean(dem_sample)
 dem_sample_sd <- sd(dem_sample)
-m <- spplot(dem_sample_mean, main = list(label = "Mean of the DEM realizations", cex = 1))
-s <- spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realizations", cex = 1))
-print(m, split = c(1, 1, 1, 2), more = TRUE)
-print(s, split = c(1, 2, 1, 2))
-rm(m, s)
+grid.arrange(spplot(dem_sample_mean, main = list(label = "Mean of the DEM realizations", cex = 1)),
+             spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realizations", cex = 1)))
 ```
 
 The spatial pattern of the generated realizations depends on the degree of spatial auto-correlation. For instance, notice that the realizations become more ‘noisy’ if we assume less spatial-autocorrelation:
@@ -184,11 +182,8 @@ The spatial pattern of the generated realizations depends on the degree of spati
 dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
 demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
 dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
-s1 <- spplot(dem_sample, c(1), main = list(label = "dem_sample, acf0 = 0.8, range = 300m", cex = 1))
-s2 <- spplot(dem_sample2, c(1), main = list(label = "dem_sample2, acf0 = 0.2, range = 300m", cex = 1))
-print(s1, split = c(1, 1, 1, 2), more = TRUE)
-print(s2, split = c(1, 2, 1, 2))
-rm(s1, s2)
+grid.arrange(spplot(dem_sample, c(1), main = list(label = "dem_sample, acf0 = 0.8, range = 300m", cex = 1)),
+             spplot(dem_sample2, c(1), main = list(label = "dem_sample2, acf0 = 0.2, range = 300m", cex = 1)))
 ```
 
 Can you spot the difference? Higher auto-correlation yields ‘smoothened’ realizations. Lower values produce a more ‘noisy’ field.
@@ -220,7 +215,7 @@ dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 
 
 ```{r} 
 # run uncertainty propagation
-slope_sample <- propagate(dem_sample, model = Slope, n = 100, projection = CRS("+init=epsg:3857"))
+slope_sample <- propagate(dem_sample, model = Slope, n = 100)
 ```
 
 <br>
@@ -249,46 +244,48 @@ spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope 
 # e.g. mean and standard deviation
 slope_mean <- mean(slope_sample)
 slope_sd <- sd(slope_sample, na.rm = TRUE) # na.rm = TRUE is necessary, because slope cannot be calculated at the border
-m <- spplot(slope_mean, main = list(label = "Mean of the slope realizations", cex = 1))
-s <- spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations", cex = 1))
-print(m, split = c(1, 1, 1, 2), more = TRUE)
-print(s, split = c(1, 2, 1, 2))
-rm(m, s)
+grid.arrange(spplot(slope_mean, main = list(label = "Mean of the slope realizations", cex = 1)),
+             spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations", cex = 1)))
 ```
 
-This shows that lower slopes are observed at lower elevation and higher slopes at higher elevation. Since slope is a nearly linear combination of elevation differences, the slope sd has a similar spatial pattern as elevation sd. We can view example of slope realizations at locations with low and high elevation:
+We can view example of slope realizations at locations:
+
+```{r, fig.width = 5, fig.height = 3}
+# selec a couple of locations and plot points on the slope map
+loc1 <- 2200
+loc2 <- 6200
+points <- data.frame(t(coordinates(slope_sample)[loc1,]))
+points[2,] <- t(coordinates(slope_sample)[loc2,])
+coordinates(points) <- ~ s1 + s2
+proj4string(points) <- proj4string(slope_sample)
+spplot(slope_sample, c(1), col.regions = grey.colors(16),
+       sp.layout = c('sp.points', points, col = "red", pch = 19, cex = 1.2))
+```
 
 ```{r, fig.width = 7, fig.height = 3}
-# check the histogram of slope at lowest and highest DEM 
-l <- which(dem30m@data == min(dem30m@data)) # there is no slope calculated for this outer value so we need to fins a different one
-l <- which(dem30m@data < 860)
-l
-# lets take location 400 for l.
-h <- which(dem30m@data == max(dem30m@data))
-h
-l_mean <- mean(as.numeric(slope_sample@data[400,]))
-l_sd <- sd(as.numeric(slope_sample@data[400,]))
-h_mean <- mean(as.numeric(slope_sample@data[6898,]))
-h_sd <- sd(as.numeric(slope_sample@data[6898,]))
+l_mean <- mean(as.numeric(slope_sample@data[loc1,]))
+l_sd <- sd(as.numeric(slope_sample@data[loc1,]))
+h_mean <- mean(as.numeric(slope_sample@data[loc2,]))
+h_sd <- sd(as.numeric(slope_sample@data[loc2,]))
 
 par(mfrow = c(1,2))
-hist(as.numeric(slope_sample@data[400,]), main = paste("Slope at low DEM,", "\n",
+hist(as.numeric(slope_sample@data[loc1,]), main = paste("Slope at high DEM sd,", "\n",
      "mean = ", round(l_mean, 2), ", sd = ", round(l_sd, 2), sep = ""), xlab = "Slope")
-hist(as.numeric(slope_sample@data[6898,]), main = paste("Slope at high DEM,", "\n",
+hist(as.numeric(slope_sample@data[loc2,]), main = paste("Slope at low DEM sd,", "\n",
      "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "Slope")
-rm(l, h)
 ```
+
+Since slope is a nearly linear combination of elevation differences, the slope sd has a similar spatial pattern as elevation sd. Therefore at locations with high elevation sd we get much higher uncertainty in slope predictions.
+
 
 ```{r, fig.width = 5, fig.height = 5}
 # scatter plot of slope against elevation
 library(GGally)
-slope1 <- Slope(dem30m, CRS("+init=epsg:3857"))
+slope1 <- Slope(dem30m)
 names(slope1@grid@ cellcentre.offset) <- c("x", "y")
-df <- cbind(dem30m@data, slope1@data)
+df <- cbind(dem30m_sd@data, slope1@data)
 ggscatmat(data = df, alpha=0.15)
 ```
-
-Here interpretation of histograms - KS: Why do we have higher slope at lower DEM/ Is this correct?
 
 We can also look at specific quantiles of the slope sample. 
 

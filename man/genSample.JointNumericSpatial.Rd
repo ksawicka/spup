@@ -2,8 +2,7 @@
 % Please edit documentation in R/genSample.JointNumericSpatial.R
 \name{genSample.JointNumericSpatial}
 \alias{genSample.JointNumericSpatial}
-\title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated
-and described by joint PDF or a list from independent objects using random sampling or LHS method.}
+\title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated}
 \usage{
 genSample(UMobject, varcov, n, samplemethod, p = 0, ...)
 }
@@ -28,10 +27,12 @@ A Monte Carlo sample of the variables of interest. If asList = TRUE returns
 list of all samples as lists.
 }
 \description{
-\strong{"ugs"} Unconditional gaussian simulation of spatially
-cross-correlated errors.
+Uncertain objects are described by joint PDF or a list from independent objects using random sampling or LHS method.
 }
 \details{
+\strong{"ugs"} Unconditional gaussian simulation of spatially
+cross-correlated errors.
+
 \strong{"randomSampling"} Sampling multivariate distribution using eigenvalue decomposition
 (based on 'mvtnorm' package).
 
@@ -58,7 +59,7 @@ OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm =
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 
-# # some dummy variable to test code on more than two
+# # some dummy variable to test code on more than two variables
 # dummy <- OC
 # dummy@data <- OC@data*TN@data/2
 # names(dummy) <- "dummy"

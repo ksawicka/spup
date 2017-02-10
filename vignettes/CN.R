@@ -18,7 +18,7 @@ knitr::opts_knit$set(global.par = TRUE)
 par(mar = c(3, 4, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2, cex.axis = 0.8,
     cex.lab = 0.8)
 
-## ---- fig.width = 5, fig.height = 3--------------------------------------
+## ---- fig.width = 7, fig.height = 3--------------------------------------
 # load packages
 library(spup)
 library(raster)
@@ -28,10 +28,10 @@ data(Madagascar)
 par(mfrow = c(1,2))
 class(OC)
 class(TN)
-# plot(OC, main = "Mean of Organic Carbon") # vignette has problem compiling here
-# plot(TN, main = "Mean of Total Nitrogen")
-# summary(OC)
-# summary(TN)
+plot(OC, main = "Mean of Organic Carbon") # vignette has problem compiling here
+plot(TN, main = "Mean of Total Nitrogen")
+summary(OC)
+summary(TN)
 
 ## ------------------------------------------------------------------------
 # define spatial correlogram models
@@ -39,13 +39,13 @@ OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 
 ## ---- fig.width = 7, fig.height = 3--------------------------------------
-plot(OC_crm, main = "DEM correlogram")
-plot(TN_crm, main = "DEM correlogram")
+plot(OC_crm, main = "OC correlogram")
+plot(TN_crm, main = "TN correlogram")
 
 ## ------------------------------------------------------------------------
 # define uncertainty model for the OC and TN
-OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd/3), crm = OC_crm, id = "OC")
-TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd/3), crm = TN_crm, id = "TN")
+OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
+TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 class(OC_UM)
 class(TN_UM)
 
@@ -68,13 +68,14 @@ plot(OCTN_sample)
 
 ## ------------------------------------------------------------------------
 # create possible realizations from the joint distribution of OC and TN
-OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
+MC <- 100
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = MC, samplemethod = "ugs", nmax = 20, asList = FALSE)
 
 ## ---- fig.width = 7, fig.height = 3--------------------------------------
 # compute and plot OC and TN sample statistics
 # e.g. mean and standard deviation
-OC_sample <- OCTN_sample[[1:100]]
-TN_sample <- OCTN_sample[[101:200]]
+OC_sample <- OCTN_sample[[1:MC]]
+TN_sample <- OCTN_sample[[(MC+1):(2*MC)]]
 OC_sample_mean <- mean(OC_sample)
 TN_sample_mean <- mean(TN_sample)
 OC_sample_sd <- calc(OC_sample, fun = sd)  
@@ -105,12 +106,12 @@ l[[2]] <- map(101:200, function(x){OCTN_sample[[x]]})
 OCTN_sample <- l
      
 # or sample from uncertain input and return it automatically in a list by setting asList argument to TRUE (default)
-OCTN_sample <- genSample(UMobject = mySpatialMUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
+OCTN_sample <- genSample(UMobject = mySpatialMUM, n = MC, samplemethod = "ugs", nmax = 20, asList = TRUE)
 
 ## ------------------------------------------------------------------------
 # run uncertainty propagation
 CN_sample <- propagate(realizations = OCTN_sample,
-                       model = C_N_model_raster, n = 100)
+                       model = C_N_model_raster, n = MC)
 
 ## ---- fig.width = 7, fig.height = 5--------------------------------------
 # coerce C/Ns list to a RasterStack
@@ -158,14 +159,14 @@ CN_tot_var <- calc(CN_sample, fun = var)
 
 # OC contribution
 OC_sample <- OCTN_sample[[1]]
-CN_sample_oc <- propagate(realizations = OC_sample, model = C_N_model_raster, TN = TN, n = 100)
+CN_sample_oc <- propagate(realizations = OC_sample, model = C_N_model_raster, TN = TN, n = MC)
 CN_sample_oc <- stack(CN_sample_oc)
 CN_oc_var <- calc(CN_sample_oc, fun = var)
 OC_contribution <- (CN_oc_var/CN_tot_var)*100
 
 # TN contribution
 TN_sample <- OCTN_sample[[2]]
-CN_sample_tn <- propagate(realizations = TN_sample, model = C_N_model_raster, OC = OC, n = 100)
+CN_sample_tn <- propagate(realizations = TN_sample, model = C_N_model_raster, OC = OC, n = MC)
 CN_sample_tn <- stack(CN_sample_tn)
 CN_tn_var <- calc(CN_sample_tn, fun = var)
 TN_contribution <- (CN_tn_var/CN_tot_var)*100

@@ -4,19 +4,18 @@
 \alias{genSample}
 \title{Generic function for sampling.}
 \usage{
-genSample(UMobject, varcov, cross_crm, n, samplemethod, p = 0,
-  asList = TRUE, ...)
+genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 }
 \arguments{
-\item{UMobject}{}
+\item{UMobject}{uncertain object}
 
-\item{n}{}
+\item{n}{number of Monte Carlo simulations}
 
-\item{samplemethod}{}
+\item{samplemethod}{sampling method}
 
-\item{p}{}
+\item{p}{number of strata}
 
-\item{...}{}
+\item{...}{other parameters}
 }
 \value{
 Monte Carlo sample
