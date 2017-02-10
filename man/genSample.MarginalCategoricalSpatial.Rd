@@ -29,6 +29,7 @@ houseUM <- defineUM(uncertain = TRUE, categories = c(100,200), cat_prob = houses
 h_sample <- genSample(houseUM, n = 10)
 str(h_sample)
 
+# load data
 data(Rotterdam)
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
 # woon_sample <- genSample(woonUM, 10, asList=FALSE)
@@ -37,6 +38,33 @@ woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
 # spplot(woon_sample)
 woon_sample <- genSample(woonUM, 10)
 class(woon_sample)
+
+# analyse probability of having snow
+# load data
+data(DEM)
+
+# generate dummy probabilities for categories "snow" and "no snow"
+dem30m$snow_prob <- NA
+dem30m$snow_prob[dem30m$Elevation > 1000] <- 0.75
+dem30m$snow_prob[dem30m$Elevation <= 1000] <- 0.25
+dem30m$no_snow_prob <- 1 - dem30m$snow_prob
+summary(dem30m@data)
+snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem30m[2:3])
+class(snowUM)
+snow_sample <- genSample(snowUM, 10, asList=F)
+head(snow_sample@data)
+
+# case with raster
+# load data
+data(DEM)
+dem30m$snow_prob <- NA
+dem30m$snow_prob[dem30m$Elevation > 1000] <- 0.75
+dem30m$snow_prob[dem30m$Elevation <= 1000] <- 0.25
+dem30m$no_snow_prob <- 1 - dem30m$snow_prob
+summary(dem30m@data)
+dem_stack <- raster::stack(dem30m)
+snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem_stack[[2:3]])
+snow_sample <- genSample(snowUM, 10, asList=F)
 
 }
 \author{
