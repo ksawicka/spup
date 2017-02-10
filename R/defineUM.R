@@ -50,7 +50,7 @@
 #' @param crm a correlogram model, object of a class "SpatialCorrelogramModel",
 #' output of makecormodel(). Can only be specified for numerical variables.
 #' @param categories a vector of categories
-#' @param cat_prob data frame or spatial data frame; A list of probabilities for the vector of categories. 
+#' @param cat_prob spatial data frame or raster stack; A list of probabilities for the vector of categories. 
 #' Number of columns in the data frame cannot be smaller than number of categories.
 #' @param ... additional parameters
 #'
@@ -153,7 +153,7 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
     # assign class
     if (check_if_Spatial(cat_prob)) 
       class(um) <- "MarginalCategoricalSpatial"
-    else if (is(cat_prob, "RasterLayer"))
+    else if (is(cat_prob, "RasterStack"))
       class(um) <- "MarginalCategoricalSpatial"
     else
       class(um) <- "MarginalCategoricalDataFrame" 

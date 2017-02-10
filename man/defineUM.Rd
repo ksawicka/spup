@@ -24,7 +24,7 @@ output of makecormodel(). Can only be specified for numerical variables.}
 
 \item{categories}{a vector of categories}
 
-\item{cat_prob}{data frame or spatial data frame; A list of probabilities for the vector of categories. 
+\item{cat_prob}{spatial data frame or raster stack; A list of probabilities for the vector of categories. 
 Number of columns in the data frame cannot be smaller than number of categories.}
 
 \item{id}{identifier of the variable; only in ude if the UM defined here 
