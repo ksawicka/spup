@@ -1,6 +1,6 @@
 /*
    Simple model in C for testing error propagation in R
-   Dennis Walvoort, July 2016
+   Kasia Sawicka, January 2017
 */
 
 
