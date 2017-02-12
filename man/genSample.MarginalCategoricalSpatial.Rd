@@ -65,6 +65,7 @@ summary(dem30m@data)
 dem_stack <- raster::stack(dem30m)
 snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem_stack[[2:3]])
 snow_sample <- genSample(snowUM, 10, asList=F)
+plot(snow_sample)
 
 }
 \author{
