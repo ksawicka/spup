@@ -2,8 +2,8 @@
 title: "Spatial uncertainty propagation analysis"
 author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
-# output: rmarkdown::html_vignette
-output: rmarkdown::word_document
+output: rmarkdown::html_vignette
+# output: rmarkdown::word_document
 # output: rmarkdown::pdf_document
 subtitle: Case study with spatially variable standard deviation - slope calculations
   with a digital elevation model (DEM)

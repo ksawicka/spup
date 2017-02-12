@@ -12,7 +12,9 @@ VignetteBuilder: knitr
 Depends:
     magrittr,
     purrr,
-    whisker
+    whisker,
+    readr,
+    dplyr
 Imports:
     gstat,
     mvtnorm,
