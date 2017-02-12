@@ -12,12 +12,50 @@
 
 <meta name="author" content="Kasia Sawicka and Gerard Heuvelink" />
 
-<meta name="date" content="2017-02-07" />
+<meta name="date" content="2017-02-12" />
 
 <title>Spatial uncertainty propagation analysis</title>
 
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 
 
@@ -33,7 +71,7 @@
 <h1 class="title toc-ignore">Spatial uncertainty propagation analysis</h1>
 <h3 class="subtitle"><em>Case study with calling external model.</em></h3>
 <h4 class="author"><em>Kasia Sawicka and Gerard Heuvelink</em></h4>
-<h4 class="date"><em>2017-02-07</em></h4>
+<h4 class="date"><em>2017-02-12</em></h4>
 
 
 
@@ -55,11 +93,214 @@
 </div>
 <div id="uncertainty-propagation-analysis-with-spup" class="section level3">
 <h3>Uncertainty propagation analysis with ‘spup’</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr) <span class="co"># piping</span>
+<span class="kw">library</span>(whisker)  <span class="co"># templating</span>
+<span class="kw">library</span>(readr)    <span class="co"># fast I/O (huge files)</span>
+<span class="kw">library</span>(purrr)    <span class="co"># functional programming tools</span>
+<span class="kw">library</span>(dplyr)    <span class="co"># a grammar of data manipulation</span>
+
+<span class="kw">setwd</span>(<span class="st">&quot;D:/GD/Wageningen/QUICS/RPackage/spup/vignettes&quot;</span>)</code></pre></div>
+<p>When using external models we need additional code to</p>
+<ol style="list-style-type: decimal">
+<li>modify ASCII input files</li>
+<li>run the external model</li>
+</ol>
 </div>
+<div id="modify-ascii-input-files-rendering" class="section level2">
+<h2>Modify ASCII input files (rendering)</h2>
+<p>For rendering ASCII input files, we use the mustache templating framework (<a href="https://mustache.github.io" class="uri">https://mustache.github.io</a>). In R this is implemented in the package <code>whisker</code>.</p>
+<p>First we define a ‘container’ class to store all templates with model inputs. The aim of this class is to</p>
+<ol style="list-style-type: decimal">
+<li>organise model input files;</li>
+<li>perform some checks</li>
+</ol>
+<p>The constructor of this class is given below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">template &lt;-<span class="st"> </span>function(filenames) {
+    filenames %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">walk</span>(
+            function(x) {
+                if (!<span class="kw">grepl</span>(<span class="dt">pattern =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.template$&quot;</span>, <span class="dt">x =</span> x)) {
+                    <span class="kw">stop</span>(
+                        <span class="st">&quot;File %s does not have extension 'template'&quot;</span> %&gt;%<span class="st"> </span>
+<span class="st">                            </span><span class="kw">sprintf</span>(x %&gt;%<span class="st"> </span>sQuote), 
+                        <span class="dt">call. =</span> <span class="ot">FALSE</span>
+                    )
+                }
+            }
+        )
+    filenames %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">walk</span>(
+            function(x) {
+                if (!<span class="kw">file.exists</span>(x)) {
+                    <span class="kw">stop</span>(
+                        <span class="st">&quot;File %s not found&quot;</span> %&gt;%<span class="st"> </span>
+<span class="st">                            </span><span class="kw">sprintf</span>(x %&gt;%<span class="st"> </span>sQuote), 
+                        <span class="dt">call. =</span> <span class="ot">FALSE</span>
+                    )
+                }
+            }
+        )
+    <span class="kw">class</span>(filenames) &lt;-<span class="st"> &quot;template&quot;</span>
+    filenames
+}
+
+print.template &lt;-<span class="st"> </span>function(x, ...) {
+    <span class="kw">cat</span>(<span class="st">&quot;container containing the following template(s):</span><span class="ch">\n</span><span class="st">&quot;</span>)
+    <span class="kw">print</span>(<span class="kw">as.character</span>(x))
+}</code></pre></div>
+<p>A template is simply a model input file with:</p>
+<ol style="list-style-type: decimal">
+<li>the additional extension <code>.template</code>.</li>
+<li>input that needs to be modified is replaced by mustache-style tags.</li>
+</ol>
+<p>For example, suppose a model needs the input file: <code>input.txt</code>. Suppose further that this input file contains two parameters b0 and b1. The contents of the original file may look like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read_lines</span>(<span class="st">&quot;examples/input.txt&quot;</span>)</code></pre></div>
+<pre><code>[1] &quot;-0.0340880123641575 0.292569018201903&quot;</code></pre>
+<p>where the first number is <code>b0</code> and the second number is <code>b1</code>.</p>
+<p>Then, the corresponding template file should have filename <code>input.txt.template</code>. It contains:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read_lines</span>(<span class="st">&quot;examples/input.txt.template&quot;</span>)</code></pre></div>
+<pre><code>[1] &quot;{{b0}} {{b1}}&quot;</code></pre>
+<p>So, the original numbers are replaced by symbols b0 and b1 placed in moustaches <code>{{</code> and <code>}}</code>.</p>
+<p>Rendering is the process of replacing the tags in moustaches by text. For this, we provide a set of render-methods.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">render &lt;-<span class="st"> </span>function(x, ...) {
+    <span class="kw">UseMethod</span>(<span class="st">&quot;render&quot;</span>)
+}
+
+render.character &lt;-<span class="st"> </span>function(x, ...) {
+    dots &lt;-<span class="st"> </span><span class="kw">list</span>(...)
+    if (<span class="kw">length</span>(dots) ==<span class="st"> </span>0L) {
+        <span class="kw">return</span>(x)
+    }
+    x %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">whisker.render</span>(dots)
+}
+
+render.template &lt;-<span class="st"> </span>function(x, ...) {
+    <span class="kw">sub</span>(<span class="dt">pattern =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">.template$&quot;</span>, <span class="dt">replacement =</span> <span class="st">&quot;&quot;</span>, <span class="dt">x =</span> x) %T&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">walk</span>(function(x) {
+            <span class="kw">readLines</span>(<span class="kw">paste</span>(x, <span class="st">&quot;template&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>), <span class="dt">warn =</span> <span class="ot">FALSE</span>) %&gt;%<span class="st"> </span>
+<span class="st">            </span><span class="kw">render</span>(...) %&gt;%
+<span class="st">            </span><span class="kw">writeLines</span>(x)
+        }) %&gt;%
+<span class="st">        </span>as.character
+}</code></pre></div>
+<p>For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template &lt;-<span class="st"> &quot;Hello {{name}}. How are you doing?&quot;</span>
+
+my_template %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">render</span>(<span class="dt">name =</span> <span class="st">&quot;Kasia&quot;</span>)</code></pre></div>
+<pre><code>[1] &quot;Hello Kasia. How are you doing?&quot;</code></pre>
+<p>This example calls <code>render.character</code>. It is also possible to fill out an entire table:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template &lt;-<span class="st"> </span><span class="kw">c</span>(
+    <span class="st">&quot;| x | y |&quot;</span>,
+    <span class="st">&quot;|---|---|&quot;</span>,
+    <span class="st">&quot;{{#MY_TABLE}}&quot;</span>,
+    <span class="st">&quot;| {{X}} | {{Y}} |&quot;</span>,
+    <span class="st">&quot;{{/MY_TABLE}}&quot;</span>
+)
+
+my_table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">X =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">Y =</span> letters[<span class="dv">1</span>:<span class="dv">5</span>])
+my_table</code></pre></div>
+<pre><code>  X Y
+1 1 a
+2 2 b
+3 3 c
+4 4 d
+5 5 e</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">render</span>(<span class="dt">MY_TABLE =</span> <span class="kw">unname</span>(<span class="kw">rowSplit</span>(my_table))) %&gt;%
+<span class="st">    </span>cat</code></pre></div>
+<pre><code>| x | y |
+|---|---|
+| 1 | a |
+| 2 | b |
+| 3 | c |
+| 4 | d |
+| 5 | e |</code></pre>
+<p>See the <code>whisker</code>-package (or <a href="https://mustache.github.io" class="uri">https://mustache.github.io</a>) for more information on the syntax.</p>
+<p>A template stored as a file will always be rendered on disk. Let’s return to our template:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template &lt;-<span class="st"> </span><span class="kw">template</span>(<span class="st">&quot;examples/input.txt.template&quot;</span>)</code></pre></div>
+<p>with contents</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template %&gt;%<span class="st"> </span>
+<span class="st">    </span>read_lines</code></pre></div>
+<pre><code>[1] &quot;{{b0}} {{b1}}&quot;</code></pre>
+<p>Rendering will create a new file, called <code>input.txt</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">render</span>(<span class="dt">b0 =</span> <span class="dv">3</span>, <span class="dt">b1 =</span> <span class="dv">4</span>)</code></pre></div>
+<pre><code>[1] &quot;examples/input.txt&quot;</code></pre>
+<p>As can be seen above, the path of this file is also the return value of the render method. This facilitates further processing by means of the pipe-operator:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_template %&gt;%<span class="st"> </span>
+<span class="st">    </span><span class="kw">render</span>(<span class="dt">b0 =</span> <span class="dv">3</span>, <span class="dt">b1 =</span> <span class="dv">4</span>) %&gt;%
+<span class="st">    </span>read_lines</code></pre></div>
+<pre><code>[1] &quot;3 4&quot;</code></pre>
+</div>
+<div id="running-external-models" class="section level2">
+<h2>Running external models</h2>
+<p>An external model can always be called from R by means of the <code>system</code> or <code>system2</code> function. To facilitate this, the following wrapper function comes in handy:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">executable &lt;-
+function(filename) {
+    if (!<span class="kw">file.exists</span>(filename)) {
+        <span class="kw">stop</span>(
+            <span class="st">&quot;%s not found&quot;</span> %&gt;%<span class="st"> </span><span class="kw">sprintf</span>(<span class="kw">sQuote</span>(filename)), 
+            <span class="dt">call. =</span> <span class="ot">FALSE</span>
+        )
+    }
+    function() {
+        root &lt;-<span class="st"> </span><span class="kw">dirname</span>(filename)
+        owd &lt;-<span class="st"> </span><span class="kw">setwd</span>(root)
+        <span class="kw">on.exit</span>(<span class="kw">setwd</span>(owd))
+        <span class="kw">system2</span>(<span class="kw">basename</span>(filename), <span class="dt">wait =</span> <span class="ot">TRUE</span>)
+    }
+}</code></pre></div>
+<p>Suppose we got an external model written in the C language: <code>dummy_model.C</code>. The executable on MS-Windows is called <code>dummy_model.exe</code>. We can now wrap this model as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dummy_model &lt;-<span class="st"> </span><span class="kw">executable</span>(<span class="st">&quot;examples/dummy_model.exe&quot;</span>)</code></pre></div>
+<p>Running this model gives</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create template</span>
+my_template &lt;-<span class="st"> </span><span class="kw">template</span>(<span class="st">&quot;examples/input.txt.template&quot;</span>)
+
+<span class="co"># render the template</span>
+<span class="kw">render</span>(my_template, <span class="dt">b0 =</span> <span class="fl">3.1</span>, <span class="dt">b1 =</span> <span class="fl">4.2</span>)</code></pre></div>
+<pre><code>[1] &quot;examples/input.txt&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run external model</span>
+<span class="kw">dummy_model</span>()
+
+<span class="co"># read output (output file of kasia-model is &quot;output.txt&quot;)</span>
+<span class="kw">scan</span>(<span class="dt">file =</span> <span class="st">&quot;examples/output.txt&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>[1]  7.3 11.5 15.7 19.9 24.1 28.3 32.5 36.7 40.9</code></pre>
+<p>An example of multiple realizations:</p>
+<ol style="list-style-type: decimal">
+<li>render template</li>
+<li>run model</li>
+<li>read results</li>
+<li>process results</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_realizations &lt;-<span class="st"> </span><span class="dv">100</span>
+
+n_realizations %&gt;%
+<span class="st">    </span><span class="kw">rerun</span>({
+        <span class="co"># render template</span>
+        <span class="kw">render</span>(my_template, <span class="dt">b0 =</span> <span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">1</span>), <span class="dt">b1 =</span> <span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">1</span>))
+        
+        <span class="co"># run model</span>
+        <span class="kw">dummy_model</span>()
+
+        <span class="co"># read output</span>
+        <span class="kw">scan</span>(<span class="st">&quot;examples/output.txt&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)
+    }) %&gt;%
+<span class="st">    </span><span class="kw">set_names</span>(<span class="kw">paste0</span>(<span class="st">&quot;r&quot;</span>, <span class="dv">1</span>:n_realizations)) %&gt;%<span class="st"> </span>
+<span class="st">    </span>as_data_frame %&gt;%
+<span class="st">    </span><span class="kw">apply</span>(<span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="dt">FUN =</span> quantile)    </code></pre></div>
+<pre><code>        [,1]    [,2]    [,3]    [,4]   [,5]    [,6]   [,7]    [,8]   [,9]
+0%   -2.5000 -2.3300 -2.1600 -1.9900 -1.820 -1.6500 -1.480 -1.3100 -1.130
+25%  -0.0825  0.3700  0.8375  1.1375  1.455  1.7350  2.015  2.2725  2.510
+50%   0.7700  1.2550  1.8050  2.4300  3.085  3.5100  3.945  4.3600  4.785
+75%   1.5625  2.2225  2.7950  3.5100  4.300  5.0825  5.830  6.4775  7.225
+100%  3.1900  4.1600  5.1200  6.0800  7.050  8.0100  8.970  9.9400 10.900</code></pre>
 <div id="acknowledgements" class="section level3">
 <h3>Acknowledgements</h3>
 <p>We thank Dennis Walvoort for his valuable contribution to the development of this package.</p>
 <p>This project has received funding from the European Union’s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 607000.</p>
+</div>
 </div>
 
 
