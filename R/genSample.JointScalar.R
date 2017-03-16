@@ -67,5 +67,3 @@ genSample.JointScalar <- function(UMobject, n, samplemethod, p = 0, asList = TRU
   
   Cross_sample
 }
-
-
