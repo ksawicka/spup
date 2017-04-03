@@ -33,5 +33,5 @@ render.character <- function(x, ...) {
     return(x)
   }
   x %>% 
-    whisker.render(dots)
+    whisker::whisker.render(dots)
 }
