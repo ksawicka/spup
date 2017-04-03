@@ -18,7 +18,7 @@
 #' @export
 template <- function(filenames) {
   filenames %>% 
-    walk(
+    purrr::walk(
       function(x) {
         if (!grepl(pattern = "\\.template$", x = x)) {
           stop(
@@ -30,7 +30,7 @@ template <- function(filenames) {
       }
     )
   filenames %>% 
-    walk(
+    purrr::walk(
       function(x) {
         if (!file.exists(x)) {
           stop(
