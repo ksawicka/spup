@@ -11,14 +11,12 @@ License: GPL-2
 VignetteBuilder: knitr
 Depends:
     magrittr,
-    purrr,
-    whisker,
-    readr,
-    dplyr
+    whisker
 Imports:
     gstat,
     mvtnorm,
-    raster,
+    purrr,
+    raster
 Suggests:
     knitr
 RoxygenNote: 5.0.1
