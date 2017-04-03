@@ -10,7 +10,7 @@
 #' @export
 render.template <- function(x, ...) {
   sub(pattern = "\\.template$", replacement = "", x = x) %T>% 
-    walk(function(x) {
+    purrr::walk(function(x) {
       readLines(paste(x, "template", sep = "."), warn = FALSE) %>% 
         render(...) %>%
         writeLines(x)
