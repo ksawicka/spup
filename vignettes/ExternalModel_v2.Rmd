@@ -1,0 +1,218 @@
+---
+title: "Uncertainty propagation analysis"
+author: "Kasia Sawicka"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+# output: rmarkdown::pdf_document
+# output: rmarkdown::word_document
+subtitle: Case study with calling external model.
+vignette: >
+  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+    comment = NA,
+    quiet = TRUE,
+    progress = FALSE,
+    tidy = FALSE,
+    cache = FALSE,
+    message = FALSE,
+    error = FALSE, # FALSE: always stop execution.
+    warning = TRUE,
+    dpi = 100
+)
+```
+
+```{r, echo = FALSE}
+knitr::opts_knit$set(global.par = TRUE)
+```
+
+```{r, echo = FALSE}
+par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2, cex.axis = 0.8,
+    cex.lab = 0.8)
+```
+
+
+### Introduction
+
+Often, environmental models are developed in other languages than R, for example C or FROTRAN. It significanly speeds up processing. In this simple example, it is shown how to perform uncertainty analysis with a model developed in a different language than R. We use an example with a basic model written in C.
+
+<br>
+
+### Monte Carlo methodology for uncertainty analysis
+
+The adapted uncertainty propagation analysis approach is based on the Monte Carlo method that computes the output of the model repeatedly, with input values that are randomly sampled from their pdfs. The set of model outputs forms a random sample from the output pdf. The method thus consists of the following steps:
+
+1.	Characterise uncertain model inputs/parameters with pdfs.
+1.	Repeatedly sample from the pdfs of uncertain inputs/parameters.
+1.	Run model with sampled inputs and store model outputs.
+1. 	Compute summary statistics of model outputs.
+
+<br>
+
+### Uncertainty propagation analysis with 'spup'
+
+```{r}
+# the 'spup' library contains functions described below
+# and it loads all the dependencies
+library(spup)
+library(dplyr) # a grammar of data manipulation
+library(readr) # fast I/O
+```
+
+Spatial (or other) inputs to the models are often stored in ASCII files. In that case, when using external models in R we need additional code to:
+
+1. Modify ASCII input files.
+1. Run the external model.
+
+
+## Modify ASCII input files - rendering
+
+For rendering ASCII input files, the mustache templating framework is implemented (https://mustache.github.io). In R this is implemented in the package `whisker`.
+
+Function `template()` allow user to define a 'container' class to store all templates with model inputs. The aim of this class is to organise model input files and perform necessary checks. A `print()` method is also provided for the class "template".
+
+A template is simply a model input file with:
+
+1. The additional extension `.template`. 
+2. Input that needs to be modified is replaced by mustache-style tags. 
+
+For example, lets have a model that needs the input file: `input.txt`. This input file contains two parameters "b0" and "b1". The contents of the original file may look like:
+
+```{r}
+read_lines("examples/input.txt")
+```
+
+The corresponding template file should be named as `input.txt.template`. It contains:
+
+```{r}
+read_lines("examples/input.txt.template")
+```
+
+We can see that the original numbers are replaced by symbols b0 and b1 placed in moustaches `{{` and `}}`.
+
+Rendering is the process of replacing the tags in moustaches by text. For this, render-methods for class "character" and "template" are provided. For example:
+
+```{r}
+my_template <- "Hello {{name}}. How are you doing?"
+
+my_template %>% 
+    render(name = "Winnie the Pooh")
+
+```
+
+The example above calls method `render()` for the class "character". It is also possible to fill in an entire table:
+
+```{r}
+my_template <- c(
+    "| x | y |",
+    "|---|---|",
+    "{{#MY_TABLE}}",
+    "| {{X}} | {{Y}} |",
+    "{{/MY_TABLE}}"
+)
+
+my_table <- data.frame(X = 1:5, Y = letters[1:5])
+my_table
+
+my_template %>% 
+    render(MY_TABLE = unname(rowSplit(my_table))) %>%
+    cat
+```
+
+A template stored as a file will always be rendered on disk. Let's return to our template on disk:
+
+```{r}
+my_template <- template("examples/input.txt.template")
+```
+
+with contents:
+
+```{r}
+my_template %>% 
+    read_lines
+```
+
+Rendering will create a new file, called `input.txt`.
+
+```{r}
+my_template %>% 
+    render(b0 = 3, b1 = 4)
+```
+
+As can be seen above, the path of this file is also the return value of the `render` method. This facilitates further processing by means of the pipe-operator:
+
+```{r}
+my_template %>% 
+    render(b0 = 3, b1 = 4) %>%
+    read_lines
+```
+
+## Running external models
+
+An external model can be called from R by means of the `system` or `system2` function. To facilitate this, _spup_ includes the wrapper function `executable()`.
+
+_spup_ includes an example external model written in the C language: `dummy_model.C`. To compile this code to a MS-Windows executable you can use a free C compiler GCC running comman `gcc dummy_model.c -o dummy_model`. This will create a file `dummy_model.exe`. 
+
+We can now wrap this model in R as follows:
+
+```{r}
+dummy_model <- executable("examples/dummy_model.exe")
+```
+
+Running the rendering procedure allows to pass any values for b0 ad b1 and the model gives:
+
+```{r}
+# create template
+my_template <- template("examples/input.txt.template")
+
+# render the template
+render(my_template, b0 = 3.1, b1 = 4.2)
+
+# run external model
+dummy_model()
+
+# read output (output file of dummy_model is "output.txt")
+scan(file = "examples/output.txt", quiet = TRUE)
+```
+
+To perform the uncertainty propagation analysis we need to create multiple realizations of the model output in steps as follows:
+ 
+ 1. Render the template.
+ 2. Run the model.
+ 1. Read the results.
+ 1. Process the results.
+
+For example:
+```{r}
+# number of Monte Carlo runs
+n_realizations <- 100
+
+n_realizations %>%
+    purrr::rerun({
+        # render template
+        render(my_template, b0 = rnorm(n = 1), b1 = runif(n = 1))
+        
+        # run model
+        dummy_model()
+
+        # read output
+        scan("examples/output.txt", quiet = TRUE)
+    }) %>%
+    set_names(paste0("r", 1:n_realizations)) %>% 
+    as_data_frame %>%
+    apply(MARGIN = 1, FUN = quantile)    
+```
+
+
+
+### Acknowledgements
+
+Thanks to Dennis Walvoort for his valuable contribution to the development of the 'spup' package.
+
+This project has received funding from the European Union’s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 607000.
+
