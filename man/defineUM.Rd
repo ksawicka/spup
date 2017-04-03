@@ -2,7 +2,7 @@
 % Please edit documentation in R/defineUM.R
 \name{defineUM}
 \alias{defineUM}
-\title{Define an uncertainty model for a single input.}
+\title{Define an uncertainty model for a single variable.}
 \usage{
 defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
                  categories = NULL, cat_prob = NULL, crm = NULL,
@@ -27,13 +27,13 @@ output of makecormodel(). Can only be specified for numerical variables.}
 \item{cat_prob}{spatial data frame or raster stack; A list of probabilities for the vector of categories. 
 Number of columns in the data frame cannot be smaller than number of categories.}
 
-\item{id}{identifier of the variable; only in ude if the UM defined here 
+\item{id}{identifier of the variable; only in use if the UM defined here 
 is going to be used in defineUM() to construct joint UM for numerical variables.}
 
 \item{...}{additional parameters}
 }
 \value{
-Object of a class "Marginal"A list of all necessary information for creating realizations of
+Object of a class "MarginalXxx" including listed all necessary information for creating realizations of
 the uncertain variable.
 }
 \description{

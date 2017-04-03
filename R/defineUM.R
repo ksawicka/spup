@@ -1,4 +1,4 @@
-#' Define an uncertainty model for a single input.
+#' Define an uncertainty model for a single variable.
 #'
 #' Function that allows user to define marginal uncertainty distributions 
 #' for model inputs and subsequent Monte Carlo analysis.
@@ -40,7 +40,7 @@
 #'
 #' @param uncertain "TRUE" or "FALSE", determines if specification of
 #' Uncertainty Model (UM) is needed.
-#' @param id identifier of the variable; only in ude if the UM defined here 
+#' @param id identifier of the variable; only in use if the UM defined here 
 #' is going to be used in defineUM() to construct joint UM for numerical variables.
 #' @param distribution a string specified which distribution to sample from.
 #' See Details for a list of supported distributions.
@@ -54,7 +54,7 @@
 #' Number of columns in the data frame cannot be smaller than number of categories.
 #' @param ... additional parameters
 #'
-#' @return Object of a class "Marginal"A list of all necessary information for creating realizations of
+#' @return Object of a class "MarginalXxx" including listed all necessary information for creating realizations of
 #' the uncertain variable.
 #' 
 #' @author Kasia Sawicka, Gerard Heuvelink
