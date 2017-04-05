@@ -1,9 +1,11 @@
-#' Title depth
+#' Function to find the level of list nesting
 #'
-#' @param List an object of class 'list'
+#' @param List an object of class 'list'.
 #'
 #' @return an integer; level of list nesting
 #'
+#' @author Kasia Sawicka
+#' 
 #' @examples
 #' 
 #' a <- list(1,2)

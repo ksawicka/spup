@@ -1,16 +1,24 @@
-#' Title Propagation function
+#' Propagation function
+#' 
+#' A function that runs a model repeatedly with Monte Carlo samples
+#' of uncertain inputs.
 #'
-#' @param realizations a list or a list of lists; max one nesting is allowed.
+#' @param realizations a list where each element is a single Monte Carlo realizations 
+#' if only one parameter/variable is considered uncertain; a list of such lists if more
+#' than one parameter/variable is considered uncertain.
 #' @param model a model that is written as a function in R.
-#' @param n number of Monte Carlo Runs.
+#' @param n a number of Monte Carlo Runs.
 #' @param ... any arguments that the model takes on top of realizations.
 #'
-#' @return model output realizations
+#' @return Model output Monte Carlo realizations.
 #'
+#' @author Kasia Sawicka
+#' 
 #' @examples
 #' 
 #' # continuous spatial data example with a single variable
-#' data(DEM)
+#' source("vignettes/examples/Slope.R")
+#' data(dem30m, dem30m_sd)
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
@@ -18,7 +26,8 @@
 #' slope_sample <- propagate(dem_sample, model = Slope, n = 5, projection = CRS("+init=epsg:3857"))
 #' 
 #' # categorical spatial data example
-#' data(Rotterdam)
+#' source("vignettes/examples/tax.R")
+#' data(woon)
 #' woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
 #' woon_sample <- genSample(woonUM, 10)
 #' class(woon_sample)
@@ -29,8 +38,9 @@
 #' summary(tax_uncert)
 #' 
 #' # cross-correlated example
+#' source("vignettes/examples/C_N_model_raster.R")
 #' # load data
-#' data(Madagascar)
+#' data(OC, OC_sd, TN, TN_sd)
 #' 
 #' # define marginal UMs
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")

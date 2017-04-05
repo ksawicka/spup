@@ -39,7 +39,7 @@
 #' @examples
 #'
 #' # load data
-#' data(DEM)
+#' data(dem30m, dem30m_sd)
 #' 
 #' # "ugs" method example
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
@@ -53,7 +53,8 @@
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList=F)
 #' str(dem_sample)
 #' 
-#' demUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(dem30m, dem30m_sd, dem30m))
+#' demUM <- defineUM(uncertain = TRUE, distribution = "beta",
+#'                   distr_param = c(dem30m, dem30m_sd, dem30m))
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 #' str(dem_sample)
 #'
@@ -62,26 +63,12 @@
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
 #' 
-#' demUM <- defineUM(uncertain = TRUE, distribution = "exp", distr_param = c(dem30m), lower.tail = FALSE)
+#' demUM <- defineUM(uncertain = TRUE, distribution = "exp",
+#'                   distr_param = c(dem30m), lower.tail = FALSE)
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
 #' 
 #' # Examples with rasters
-#' # load data
-#' data(dummyraster)
-#' 
-#' # random sampling
-#' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
-#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "randomSampling", asList=F)
-#' str(rast_sample)
-#' class(rast_sample)
-#' 
-#' # stratified sampling
-#' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd))
-#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
-#' str(rast_sample)
-#' class(rast_sample)
-#' 
 #' # ugs (raster with auto-correlation)
 #' rast_crm <- makecrm(acf0 = 0.6, range = 6, model = "Sph")
 #' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd),
@@ -93,10 +80,13 @@
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)
-#' dupa <- genSample(OC_UM, 5, "ugs", nmax=20)
-#' dupa
+#' some_sample <- genSample(OC_UM, 5, "ugs", nmax=20)
+#' some_sample
 #' 
-#' 
+#' @importFrom gstat gstat
+#' @importFrom raster stack
+#' @importFrom purrr map
+#' @importFrom methods as
 #'
 #' @export
 genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
@@ -156,10 +146,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {
-        X_sample <- map(1:n, function(x){X_sample[[x]]})
+        X_sample <- purrr::map(1:n, function(x){X_sample[[x]]})
       }
     } else if (asList == TRUE) {
-      X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
+      X_sample <- purrr::map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
     }
   } # end sampling with "ugs"
   
@@ -194,7 +184,7 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       
       # if asList = T converst sample to a list
       if (asList == TRUE) {
-        X_sample <- map(1:n, function(x){X_sample[x]})
+        X_sample <- purrr::map(1:n, function(x){X_sample[x]})
       }
       
     # sampling from raster
@@ -217,7 +207,7 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       } else {
         names(X_sample) <- paste("sim", c(1:n), sep = "")}
       if (asList == TRUE) {
-        X_sample <- map(1:n, function(x){X_sample[[x]]})
+        X_sample <- purrr::map(1:n, function(x){X_sample[[x]]})
       }
     }
   }
@@ -264,10 +254,10 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     if (original_class == "RasterLayer") {
       X_sample <- raster::stack(X_sample)
       if (asList == TRUE) {
-        X_sample <- map(1:n, function(x){X_sample[[x]]})
+        X_sample <- purrr::map(1:n, function(x){X_sample[[x]]})
       }
     } else if (asList == TRUE) {
-      X_sample <- map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
+      X_sample <- purrr::map(1:n, function(x){X_sample[x]}) # convert SpGridDF to list
     }
   }
   X_sample

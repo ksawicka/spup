@@ -1,24 +1,30 @@
 #' Plots correlogram model.
 #'
-#' @param crm Object of class "crm" as created by makecrm()
-#' @param distance 
-#' @param ylim 
-#' @param ... Additional parameters.
+#' @param x Object of class "crm" as created by makecrm().
+#' @param distance minimum distance between locations (unit should correspond
+#' with the unit of the range parameter in makecrm()).
+#' @param ylim the y limits of the plot.
+#' @param ... additional parameters.
 #'
 #' @return plot of correlogram model
 #'
+#' @author Kasia Sawicka, Gerard Heuvelink
+#' 
 #' @examples
 #' 
 #' mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
 #' plot(mycormodel, distance = 1)
-#'  
+#' 
+#' @importFrom gstat variogramLine
+#' @importFrom graphics plot abline
+#' 
 #' @export
-plot.crm <- function(crm, distance = 1, ylim = c(0,1), ...) {
+plot.crm <- function(x, distance = 1, ylim = c(0,1), ...) {
   
   stopifnot(distance >= 0)
-  acf0 <- as.numeric(crm[[1]])
-  a <- as.numeric(crm[[2]])  # range
-  crm_shape <- crm[[3]]
+  acf0 <- as.numeric(x[[1]])
+  a <- as.numeric(x[[2]])  # range
+  crm_shape <- x[[3]]
   if (crm_shape=="Nug") a <- 0  # default, only used in case of "Nug"
   n <- a/distance
   

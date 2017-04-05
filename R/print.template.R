@@ -1,11 +1,11 @@
 #' Print method for class "template."
 #'
-#' @param x 
-#' @param ... 
+#' @param x Object of class "template".
+#' @param ... additional parameters.
 #'
-#' @return what template the the template file contains.
+#' @return Template file content.
 #'
-#' @examples
+#' @author Dennis Walvoort
 #' 
 #' @export
 print.template <- function(x, ...) {

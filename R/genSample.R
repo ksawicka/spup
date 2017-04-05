@@ -9,7 +9,7 @@
 #' @return Monte Carlo sample
 #'
 #' @examples
-#' 
+#' # examples here
 #' 
 #' @export
 genSample <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
