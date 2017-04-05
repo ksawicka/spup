@@ -1,11 +1,9 @@
-#' sd as generic
+#' Standard Deviation
 #'
-#' @param x 
-#' @param ... 
+#' @param x as for stats::sd
+#' @param ... additional parameters.
 #'
-#' @return sd
-#'
-#' @examples
+#' @return Standard Deviation
 #' 
 #' @export
 sd <- function(realizations, ...) {

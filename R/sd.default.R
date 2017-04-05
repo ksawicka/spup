@@ -1,11 +1,11 @@
-#' sd default
+#' Standard Deviation as in stats::sd
 #'
-#' @param realizations 
-#' @param ... 
+#' @param realizations a numeric vector or an R object which is coercible to one by as.double(x).
+#' @param ... additional parameters.
 #'
-#' @return stats::sd
-#'
-#' @examples
+#' @return Standard Deviation
+#' 
+#' @importFrom stats sd
 #' 
 #' @export
 sd.default <- function(realizations, ...) {

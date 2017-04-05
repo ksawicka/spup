@@ -1,11 +1,9 @@
-#' var as generic
+#' Variance
 #'
-#' @param x 
-#' @param ... 
+#' @param x as for stats::var
+#' @param ... additional parameters.
 #'
-#' @return var
-#'
-#' @examples
+#' @return Variance
 #' 
 #' @export
 var <- function(realizations, ...) {

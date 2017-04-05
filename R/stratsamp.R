@@ -1,11 +1,13 @@
 #' Stratified sampling for spatial variables
 #'
-#' @param mu mean of normal distribution to be sampled
-#' @param sigma sd of normal distribution to be sampled
-#' @param n sample size per stratum
-#' @param p vector of probs
+#' @param distribution a string, distribution type to sample from.
+#' @param parameters given distribution parameters.
+#' @param n sample size per stratum.
+#' @param p a vector of quantiles.
 #'
 #' @return Sample of spatial variable. Matrix with n rows and length(p)-1 columns.
+#' 
+#' @author Stefan van Dam, Kasia Sawicka
 #' 
 stratsamp <- function(n, distribution, parameters, p) {
   

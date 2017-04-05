@@ -1,17 +1,20 @@
-#' Render method for "character class".
+#' Render method for "character" class.
 #'
-#' @param x 
-#' @param ... 
+#' Rendering is the process of replacing the tags in moustaches by text.
+#' 
+#' @param x an object of class "character".
+#' @param ... additional parameters.
 #'
-#' @return cos
-#' @export
+#' @return Rendered character template.
 #'
+#' @author Dennis Walvoort
+#' 
 #' @examples
 #' 
 #' # render character string
 #' my_template <- "Hello {{name}}. How are you doing?"
 #' my_template %>% 
-#'   render(name = "Kasia")
+#'   render(name = "Winnie the Pooh")
 #' 
 #' # render table      
 #' my_template <- c(
@@ -26,7 +29,10 @@
 #' render(MY_TABLE = unname(rowSplit(my_table))) %>%
 #' cat
 #'   
+#' @importFrom whisker whisker.render
+#' @importFrom magrittr %>%
 #' 
+#' @export
 render.character <- function(x, ...) {
   dots <- list(...)
   if (length(dots) == 0L) {

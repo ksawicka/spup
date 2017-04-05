@@ -1,11 +1,11 @@
-#' var default
+#' Variance as in stats::var
 #'
-#' @param realizations 
-#' @param ... 
+#' @param realizations a numeric vector, matrix or data frame.
+#' @param ... additional parameters.
 #'
-#' @return stats::var
-#'
-#' @examples
+#' @return Variance
+#' 
+#' @importFrom stats var
 #' 
 #' @export
 var.default <- function(realizations, ...) {

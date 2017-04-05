@@ -6,24 +6,24 @@
 #' @param range See ?vgm
 #' @param model See ?vgm
 #'
-#' @return Standardised parameters of spatial correlogram model
-#'
+#' @return Standardised parameters of spatial variogram model.
+#' 
+#' @author Kasia Sawicka
+#' 
 #' @examples
 #' 
 #' # Examples here
 #' 
-#' @export
 vgm2crm <- function(vgm, psill, nugget, range, model) {
 
-  stopifnot(lenght(psill) == 1) # Copied from vgm
-
-  # Add option? if vgm created by gstat is provided
-  # then extract elements from appropraite slots.
+  stopifnot(length(psill) == 1) 
 
   acf0 <- psill/(psill + nugget)
   crm <- list(acf0 = acf0,
              range = range,
              model = model)
+  
+  class(crm) <- "crm"
   crm
 }
 
