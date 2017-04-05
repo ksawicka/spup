@@ -62,6 +62,7 @@ The adapted uncertainty propagation analysis approach is based on the Monte Carl
 library(spup)
 library(dplyr) # a grammar of data manipulation
 library(readr) # fast I/O
+library(whisker) # rendering methods
 ```
 
 Spatial (or other) inputs to the models are often stored in ASCII files. In that case, when using external models in R we need additional code to:
@@ -160,13 +161,13 @@ _spup_ includes an example external model written in the C language: `dummy_mode
 
 We can now wrap this model in R as follows:
 
-```{r}
+```{r, eval = FALSE}
 dummy_model <- executable("examples/dummy_model.exe")
 ```
 
 Running the rendering procedure allows to pass any values for b0 ad b1 and the model gives:
 
-```{r}
+```{r, eval = FALSE}
 # create template
 my_template <- template("examples/input.txt.template")
 
@@ -188,7 +189,7 @@ To perform the uncertainty propagation analysis we need to create multiple reali
  1. Process the results.
 
 For example:
-```{r}
+```{r, eval = FALSE}
 # number of Monte Carlo runs
 n_realizations <- 100
 

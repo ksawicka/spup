@@ -73,7 +73,7 @@ where x is geographic location,  μ is the (deterministic) mean of Z, σ is its 
 
 The example data for slope calculations are a 30m resolution mean DEM and standard deviation from the Zlatibor region in Serbia.
 
-The 'DEM' data contains two spatial objects: a mean and the standard deviation map. It also has a saved function that calculates slope from elevation that will be used later.
+The data contains two spatial objects: a mean (dem30m) and the standard deviation (dem30m_sd) map. A function that calculates slope from elevation that will be used later is also provided.
 
 
 ```{r, fig.width = 5, fig.height = 6} 
@@ -82,8 +82,11 @@ library(sp)
 library(spup)
 library(gridExtra)
 
+# source code for Slope model
+source("examples/Slope.R")
+
 # load and view the data
-data(DEM)
+data(dem30m, dem30m_sd)
 str(dem30m)
 str(dem30m_sd)
 grid.arrange(spplot(dem30m, main = list(label = "Mean DEM [m]", cex = 1)),

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kasia Sawicka and Gerard Heuvelink" />
 
-<meta name="date" content="2017-02-10" />
+<meta name="date" content="2017-04-05" />
 
 <title>Spatial uncertainty propagation analysis</title>
 
@@ -71,7 +71,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 class="title toc-ignore">Spatial uncertainty propagation analysis</h1>
 <h3 class="subtitle"><em>Case study with cross-correlated variables</em></h3>
 <h4 class="author"><em>Kasia Sawicka and Gerard Heuvelink</em></h4>
-<h4 class="date"><em>2017-02-10</em></h4>
+<h4 class="date"><em>2017-04-05</em></h4>
 
 
 
@@ -106,9 +106,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages</span>
 <span class="kw">library</span>(spup)
 <span class="kw">library</span>(raster)
+<span class="kw">library</span>(purrr)
 
 <span class="co"># load and view the data</span>
-<span class="kw">data</span>(Madagascar)
+<span class="kw">data</span>(OC, OC_sd, TN, TN_sd)
 <span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
 <span class="kw">class</span>(OC)</code></pre></div>
 <pre><code>[1] &quot;RasterLayer&quot;
@@ -231,11 +232,13 @@ Warning: Removed 1545 rows containing non-finite values (stat_density).</code></
 </div>
 <div id="uncertainty-propagation-through-the-model-that-calculates-cn-ratio" class="section level4">
 <h4>Uncertainty propagation through the model that calculates C/N ratio</h4>
-<p>In order to perform uncertainty propagation analysis using ‘spup’, the model through which uncertainty is propagated needs to be defined as an R function. The ‘Madagascar’ data object includes an example of a pre-defined model that calculates C/N using OC and TN as input.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># view the model</span>
+<p>In order to perform uncertainty propagation analysis using ‘spup’, the model through which uncertainty is propagated needs to be defined as an R function. A pre-defined model that calculates C/N using OC and TN as input is provided.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># source code for the C/N model</span>
+<span class="kw">source</span>(<span class="st">&quot;examples/C_N_model_raster.R&quot;</span>)
 C_N_model_raster</code></pre></div>
-<pre><code>function(OC, TN) {
-  OC/TN
+<pre><code>function (OC, TN) 
+{
+    OC/TN
 }</code></pre>
 <p>The propagation of uncertainty occurs when the model is run with the uncertain inputs. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the C/N ratio model with the OC and TN realizations we use the <code>propagate()</code> function. The <code>propagate()</code> function takes as arguments:</p>
 <ul>

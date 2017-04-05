@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kasia Sawicka" />
 
-<meta name="date" content="2017-04-03" />
+<meta name="date" content="2017-04-05" />
 
 <title>Uncertainty propagation analysis</title>
 
@@ -71,7 +71,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 class="title toc-ignore">Uncertainty propagation analysis</h1>
 <h3 class="subtitle"><em>Case study with calling external model.</em></h3>
 <h4 class="author"><em>Kasia Sawicka</em></h4>
-<h4 class="date"><em>2017-04-03</em></h4>
+<h4 class="date"><em>2017-04-05</em></h4>
 
 
 
@@ -97,7 +97,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co"># and it loads all the dependencies</span>
 <span class="kw">library</span>(spup)
 <span class="kw">library</span>(dplyr) <span class="co"># a grammar of data manipulation</span>
-<span class="kw">library</span>(readr) <span class="co"># fast I/O</span></code></pre></div>
+<span class="kw">library</span>(readr) <span class="co"># fast I/O</span>
+<span class="kw">library</span>(whisker) <span class="co"># rendering methods</span></code></pre></div>
 <p>Spatial (or other) inputs to the models are often stored in ASCII files. In that case, when using external models in R we need additional code to:</p>
 <ol style="list-style-type: decimal">
 <li>Modify ASCII input files.</li>
@@ -115,7 +116,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 <p>For example, lets have a model that needs the input file: <code>input.txt</code>. This input file contains two parameters “b0” and “b1”. The contents of the original file may look like:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read_lines</span>(<span class="st">&quot;examples/input.txt&quot;</span>)</code></pre></div>
-<pre><code>[1] &quot;3.1 4.2&quot;</code></pre>
+<pre><code>[1] &quot;3 4&quot;</code></pre>
 <p>The corresponding template file should be named as <code>input.txt.template</code>. It contains:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read_lines</span>(<span class="st">&quot;examples/input.txt.template&quot;</span>)</code></pre></div>
 <pre><code>[1] &quot;{{b0}} {{b1}}&quot;</code></pre>
@@ -180,14 +181,13 @@ my_table</code></pre></div>
 my_template &lt;-<span class="st"> </span><span class="kw">template</span>(<span class="st">&quot;examples/input.txt.template&quot;</span>)
 
 <span class="co"># render the template</span>
-<span class="kw">render</span>(my_template, <span class="dt">b0 =</span> <span class="fl">3.1</span>, <span class="dt">b1 =</span> <span class="fl">4.2</span>)</code></pre></div>
-<pre><code>[1] &quot;examples/input.txt&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run external model</span>
+<span class="kw">render</span>(my_template, <span class="dt">b0 =</span> <span class="fl">3.1</span>, <span class="dt">b1 =</span> <span class="fl">4.2</span>)
+
+<span class="co"># run external model</span>
 <span class="kw">dummy_model</span>()
 
 <span class="co"># read output (output file of dummy_model is &quot;output.txt&quot;)</span>
 <span class="kw">scan</span>(<span class="dt">file =</span> <span class="st">&quot;examples/output.txt&quot;</span>, <span class="dt">quiet =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>[1]  7.3 11.5 15.7 19.9 24.1 28.3 32.5 36.7 40.9</code></pre>
 <p>To perform the uncertainty propagation analysis we need to create multiple realizations of the model output in steps as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Render the template.</li>
@@ -213,12 +213,6 @@ n_realizations %&gt;%
 <span class="st">    </span><span class="kw">set_names</span>(<span class="kw">paste0</span>(<span class="st">&quot;r&quot;</span>, <span class="dv">1</span>:n_realizations)) %&gt;%<span class="st"> </span>
 <span class="st">    </span>as_data_frame %&gt;%
 <span class="st">    </span><span class="kw">apply</span>(<span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="dt">FUN =</span> quantile)    </code></pre></div>
-<pre><code>       [,1]    [,2]   [,3]    [,4]    [,5]    [,6]    [,7]    [,8]    [,9]
-0%   -1.670 -1.6500 -1.640 -1.6200 -1.6000 -1.5800 -1.5600 -1.5400 -1.5200
-25%  -0.075  0.2650  0.585  0.8475  1.1375  1.4425  1.6800  1.9625  2.2250
-50%   0.585  1.1550  1.685  2.2600  2.7950  3.1850  3.6950  4.1400  4.4950
-75%   1.260  1.7975  2.360  2.8625  3.4775  4.0825  4.7425  5.5425  6.2225
-100%  2.540  3.1400  4.060  4.9700  5.8900  6.8100  7.7200  8.6400  9.5500</code></pre>
 <div id="acknowledgements" class="section level3">
 <h3>Acknowledgements</h3>
 <p>Thanks to Dennis Walvoort for his valuable contribution to the development of the ‘spup’ package.</p>

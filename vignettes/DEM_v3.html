@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kasia Sawicka and Gerard Heuvelink" />
 
-<meta name="date" content="2017-02-12" />
+<meta name="date" content="2017-04-05" />
 
 <title>Spatial uncertainty propagation analysis</title>
 
@@ -71,7 +71,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1 class="title toc-ignore">Spatial uncertainty propagation analysis</h1>
 <h3 class="subtitle"><em>Case study with spatially variable standard deviation - slope calculations with a digital elevation model (DEM)</em></h3>
 <h4 class="author"><em>Kasia Sawicka and Gerard Heuvelink</em></h4>
-<h4 class="date"><em>2017-02-12</em></h4>
+<h4 class="date"><em>2017-04-05</em></h4>
 
 
 
@@ -102,14 +102,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="preliminaries---load-and-view-the-data" class="section level4">
 <h4>Preliminaries - load and view the data</h4>
 <p>The example data for slope calculations are a 30m resolution mean DEM and standard deviation from the Zlatibor region in Serbia.</p>
-<p>The ‘DEM’ data contains two spatial objects: a mean and the standard deviation map. It also has a saved function that calculates slope from elevation that will be used later.</p>
+<p>The data contains two spatial objects: a mean (dem30m) and the standard deviation (dem30m_sd) map. A function that calculates slope from elevation that will be used later is also provided.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load packages</span>
 <span class="kw">library</span>(sp)
 <span class="kw">library</span>(spup)
 <span class="kw">library</span>(gridExtra)
 
+<span class="co"># source code for Slope model</span>
+<span class="kw">source</span>(<span class="st">&quot;examples/Slope.R&quot;</span>)
+
 <span class="co"># load and view the data</span>
-<span class="kw">data</span>(DEM)
+<span class="kw">data</span>(dem30m, dem30m_sd)
 <span class="kw">str</span>(dem30m)</code></pre></div>
 <pre><code>Formal class 'SpatialGridDataFrame' [package &quot;sp&quot;] with 4 slots
   ..@ data       :'data.frame': 15000 obs. of  1 variable:
@@ -220,15 +223,11 @@ dem_sample2 &lt;-<span class="st"> </span><span class="kw">genSample</span>(<spa
 <p>In order to perform uncertainty propagation analysis using ‘spup’, the model through which uncertainty is propagated needs to be defined as an R function. The ‘DEM’ data object includes an example of a pre-defined model that calculates slope using elevation as input. In this case the function is based on the <code>terrain()</code> function from the <strong>raster</strong> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># view the model</span>
 Slope</code></pre></div>
-<pre><code>function(DEM, ...) {
-  require(raster)
-  demraster &lt;- 
-    DEM %&gt;%
-    raster()
-  
-  demraster %&gt;%
-    terrain(opt = 'slope', ...) %&gt;%
-    as(&quot;SpatialGridDataFrame&quot;)
+<pre><code>function (DEM, ...) 
+{
+    require(raster)
+    demraster &lt;- DEM %&gt;% raster()
+    demraster %&gt;% terrain(opt = &quot;slope&quot;, ...) %&gt;% as(&quot;SpatialGridDataFrame&quot;)
 }</code></pre>
 <p>The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analysed. To run the Slope model with the elevations realizations we use the <code>propagate()</code> function. The <code>propagate()</code> function takes as arguments:</p>
 <ul>

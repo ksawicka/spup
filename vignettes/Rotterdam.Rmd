@@ -68,9 +68,13 @@ The example data for tax calculation contain spatial distribution of buildings i
 # load packages
 library(sp)
 library(spup)
+library(purrr)
+
+# tax model script
+source("examples/tax.R")
 
 # load and view the data
-data(Rotterdam)
+data(woon)
 plot(woon, main = "Neighbourhood", cex.main = 1)
 head(woon@data)
 ```

@@ -22,9 +22,10 @@ par(mar = c(3, 4, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
 # load packages
 library(spup)
 library(raster)
+library(purrr)
 
 # load and view the data
-data(Madagascar)
+data(OC, OC_sd, TN, TN_sd)
 par(mfrow = c(1,2))
 class(OC)
 class(TN)
@@ -94,7 +95,8 @@ ggscatmat(data = octn, alpha=0.15)
 
 
 ## ------------------------------------------------------------------------
-# view the model
+# source code for the C/N model
+source("examples/C_N_model_raster.R")
 C_N_model_raster
 
 ## ------------------------------------------------------------------------

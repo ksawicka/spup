@@ -22,9 +22,13 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
 # load packages
 library(sp)
 library(spup)
+library(purrr)
+
+# tax model script
+source("examples/tax.R")
 
 # load and view the data
-data(Rotterdam)
+data(woon)
 plot(woon, main = "Neighbourhood", cex.main = 1)
 head(woon@data)
 

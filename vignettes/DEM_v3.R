@@ -24,8 +24,11 @@ library(sp)
 library(spup)
 library(gridExtra)
 
+# source code for Slope model
+source("examples/Slope.R")
+
 # load and view the data
-data(DEM)
+data(dem30m, dem30m_sd)
 str(dem30m)
 str(dem30m_sd)
 grid.arrange(spplot(dem30m, main = list(label = "Mean DEM [m]", cex = 1)),

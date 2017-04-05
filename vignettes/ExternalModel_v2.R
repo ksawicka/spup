@@ -24,6 +24,7 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
 library(spup)
 library(dplyr) # a grammar of data manipulation
 library(readr) # fast I/O
+library(whisker) # rendering methods
 
 ## ------------------------------------------------------------------------
 read_lines("examples/input.txt")
@@ -70,38 +71,38 @@ my_template %>%
     render(b0 = 3, b1 = 4) %>%
     read_lines
 
-## ------------------------------------------------------------------------
-dummy_model <- executable("examples/dummy_model.exe")
+## ---- eval = FALSE-------------------------------------------------------
+#  dummy_model <- executable("examples/dummy_model.exe")
 
-## ------------------------------------------------------------------------
-# create template
-my_template <- template("examples/input.txt.template")
+## ---- eval = FALSE-------------------------------------------------------
+#  # create template
+#  my_template <- template("examples/input.txt.template")
+#  
+#  # render the template
+#  render(my_template, b0 = 3.1, b1 = 4.2)
+#  
+#  # run external model
+#  dummy_model()
+#  
+#  # read output (output file of dummy_model is "output.txt")
+#  scan(file = "examples/output.txt", quiet = TRUE)
 
-# render the template
-render(my_template, b0 = 3.1, b1 = 4.2)
-
-# run external model
-dummy_model()
-
-# read output (output file of dummy_model is "output.txt")
-scan(file = "examples/output.txt", quiet = TRUE)
-
-## ------------------------------------------------------------------------
-# number of Monte Carlo runs
-n_realizations <- 100
-
-n_realizations %>%
-    purrr::rerun({
-        # render template
-        render(my_template, b0 = rnorm(n = 1), b1 = runif(n = 1))
-        
-        # run model
-        dummy_model()
-
-        # read output
-        scan("examples/output.txt", quiet = TRUE)
-    }) %>%
-    set_names(paste0("r", 1:n_realizations)) %>% 
-    as_data_frame %>%
-    apply(MARGIN = 1, FUN = quantile)    
+## ---- eval = FALSE-------------------------------------------------------
+#  # number of Monte Carlo runs
+#  n_realizations <- 100
+#  
+#  n_realizations %>%
+#      purrr::rerun({
+#          # render template
+#          render(my_template, b0 = rnorm(n = 1), b1 = runif(n = 1))
+#  
+#          # run model
+#          dummy_model()
+#  
+#          # read output
+#          scan("examples/output.txt", quiet = TRUE)
+#      }) %>%
+#      set_names(paste0("r", 1:n_realizations)) %>%
+#      as_data_frame %>%
+#      apply(MARGIN = 1, FUN = quantile)
 
