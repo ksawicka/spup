@@ -2,30 +2,33 @@
 % Please edit documentation in R/mean.SpatialGridDataFrame.R
 \name{mean.SpatialGridDataFrame}
 \alias{mean.SpatialGridDataFrame}
-\title{Calculate mean of the MC sample that is saved in a SpatialGridDataFrame}
+\title{mean() function for MC sample saved in a SpatialGridDataFrame}
 \usage{
-\method{mean}{SpatialGridDataFrame}(realizations, ...)
+\method{mean}{SpatialGridDataFrame}(x, ...)
 }
 \arguments{
-\item{realizations}{MC sample}
+\item{x}{MC sample saved in SpatialGridDataFrame.}
 
-\item{...}{additional parameters}
+\item{...}{additional parameters.}
 }
 \value{
-mean and sd of MC sample
+SpatialGridDataFrame; a mean of a MC sample.
 }
 \description{
-Calculate mean of the MC sample that is saved in a SpatialGridDataFrame
+Calculates mean from MC realizations for each location in a map.
 }
 \examples{
 
-data(DEM)
+data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
-slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sample <- propagate(realizations = dem_sample, model = Slope, n = 50)
 slope_mean <- mean(slope_sample, na.rm = TRUE)
 
+}
+\author{
+Kasia Sawicka
 }
 

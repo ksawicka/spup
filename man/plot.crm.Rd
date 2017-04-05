@@ -4,16 +4,17 @@
 \alias{plot.crm}
 \title{Plots correlogram model.}
 \usage{
-\method{plot}{crm}(crm, distance = 1, ylim = c(0, 1), ...)
+\method{plot}{crm}(x, distance = 1, ylim = c(0, 1), ...)
 }
 \arguments{
-\item{crm}{Object of class "crm" as created by makecrm()}
+\item{x}{Object of class "crm" as created by makecrm().}
 
-\item{distance}{}
+\item{distance}{minimum distance between locations (unit should correspond
+with the unit of the range parameter in makecrm()).}
 
-\item{ylim}{}
+\item{ylim}{the y limits of the plot.}
 
-\item{...}{Additional parameters.}
+\item{...}{additional parameters.}
 }
 \value{
 plot of correlogram model
@@ -25,6 +26,9 @@ Plots correlogram model.
 
 mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
 plot(mycormodel, distance = 1)
- 
+
+}
+\author{
+Kasia Sawicka, Gerard Heuvelink
 }
 

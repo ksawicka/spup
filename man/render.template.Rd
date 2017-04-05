@@ -7,17 +7,23 @@
 \method{render}{template}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{an object of class "template", a model input file with additional
+extension ".template".}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-cos
+Rendered template file.
 }
 \description{
-Render method for "template" class.
+Rendering is the process of replacing the tags in moustaches by text.
 }
 \examples{
 
+# examples here
+
+}
+\author{
+Dennis Walvoort
 }
 

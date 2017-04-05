@@ -2,22 +2,19 @@
 % Please edit documentation in R/sd.default.R
 \name{sd.default}
 \alias{sd.default}
-\title{sd default}
+\title{Standard Deviation as in stats::sd}
 \usage{
 \method{sd}{default}(realizations, ...)
 }
 \arguments{
-\item{realizations}{}
+\item{realizations}{a numeric vector or an R object which is coercible to one by as.double(x).}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-stats::sd
+Standard Deviation
 }
 \description{
-sd default
-}
-\examples{
-
+Standard Deviation as in stats::sd
 }
 

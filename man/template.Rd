@@ -2,22 +2,22 @@
 % Please edit documentation in R/template.R
 \name{template}
 \alias{template}
-\title{Construct class "template".}
+\title{Constructor for class "template".}
 \usage{
 template(filenames)
 }
 \arguments{
-\item{filenames}{Name on the model input file.}
+\item{filenames}{a string, a name of the model input file.}
 }
 \value{
-An obejct of a class "template".
+An obeject of a class "template".
 }
 \description{
 Class that stores all templates with model inputs. The aim of this class is to: 1. organise model input files;
 2. perform some checks.
 }
 \details{
-A template is simply a model input file with: 1. the additional extension `.template`. 
+A template is a model input file with: 1. the additional extension `.template`. 
 2. input that needs to be modified is replaced by mustache-style tags.
 }
 \examples{

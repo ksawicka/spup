@@ -7,7 +7,7 @@
 crm2vgm(crm, ...)
 }
 \arguments{
-\item{crm}{Spatial correlogram model, output of makecrm(). Hellow}
+\item{crm}{Spatial correlogram model, output of makecrm().}
 
 \item{...}{Parameters that can be passed to vgm().}
 }

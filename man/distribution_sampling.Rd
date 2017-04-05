@@ -7,7 +7,7 @@
 distribution_sampling(n, distribution, parameters)
 }
 \arguments{
-\item{n}{number of observations}
+\item{n}{number of sampling runs}
 
 \item{distribution}{A string describing selected distribution. The same as a part of
 the string following the "r" in each random variate generation function in ?distributions.}
@@ -16,9 +16,12 @@ the string following the "r" in each random variate generation function in ?dist
 number of observations.}
 }
 \value{
-sample of random deviates
+Sample of random deviates.
 }
 \description{
 Sampling from a given distribution
+}
+\author{
+Kasia Sawicka
 }
 

@@ -7,16 +7,21 @@
 find_strata(p, distribution, parameters, ...)
 }
 \arguments{
-\item{p}{}
+\item{p}{a vector of quantiles.}
 
-\item{distribution}{}
+\item{distribution}{a string indicating which distribution to sample from.
+See ?defineUM() for Details.}
 
-\item{parameters}{}
+\item{parameters}{parameters to pass to the appropriate sampling funtion, e.g.
+mean and sd for "norm" distribution.}
 }
 \value{
-quantiles
+Strata of the distribution defined by given quantiles.
 }
 \description{
 Sampling from a given distribution
+}
+\author{
+Kasia Sawicka, Stefan van Dam
 }
 

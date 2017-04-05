@@ -2,29 +2,33 @@
 % Please edit documentation in R/propagate.R
 \name{propagate}
 \alias{propagate}
-\title{Title Propagation function}
+\title{Propagation function}
 \usage{
 propagate(realizations, model, n, ...)
 }
 \arguments{
-\item{realizations}{a list or a list of lists; max one nesting is allowed.}
+\item{realizations}{a list where each element is a single Monte Carlo realizations 
+if only one parameter/variable is considered uncertain; a list of such lists if more
+than one parameter/variable is considered uncertain.}
 
 \item{model}{a model that is written as a function in R.}
 
-\item{n}{number of Monte Carlo Runs.}
+\item{n}{a number of Monte Carlo Runs.}
 
 \item{...}{any arguments that the model takes on top of realizations.}
 }
 \value{
-model output realizations
+Model output Monte Carlo realizations.
 }
 \description{
-Title Propagation function
+A function that runs a model repeatedly with Monte Carlo samples
+of uncertain inputs.
 }
 \examples{
 
 # continuous spatial data example with a single variable
-data(DEM)
+source("vignettes/examples/Slope.R")
+data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
@@ -32,7 +36,8 @@ dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20
 slope_sample <- propagate(dem_sample, model = Slope, n = 5, projection = CRS("+init=epsg:3857"))
 
 # categorical spatial data example
-data(Rotterdam)
+source("vignettes/examples/tax.R")
+data(woon)
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
 woon_sample <- genSample(woonUM, 10)
 class(woon_sample)
@@ -43,8 +48,9 @@ tax_uncert <- unlist(tax_uncert)
 summary(tax_uncert)
 
 # cross-correlated example
+source("vignettes/examples/C_N_model_raster.R")
 # load data
-data(Madagascar)
+data(OC, OC_sd, TN, TN_sd)
 
 # define marginal UMs
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
@@ -64,5 +70,8 @@ CN_sample <- propagate(realizations = my_cross_sample, model = C_N_model_raster,
 CN_sample
 
 
+}
+\author{
+Kasia Sawicka
 }
 

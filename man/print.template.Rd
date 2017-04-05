@@ -7,17 +7,17 @@
 \method{print}{template}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{Object of class "template".}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-what template the the template file contains.
+Template file content.
 }
 \description{
 Print method for class "template."
 }
-\examples{
-
+\author{
+Dennis Walvoort
 }
 

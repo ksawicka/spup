@@ -2,30 +2,33 @@
 % Please edit documentation in R/var.SpatialGridDataFrame.R
 \name{var.SpatialGridDataFrame}
 \alias{var.SpatialGridDataFrame}
-\title{Calculate variance of the MC sample that is saved in a SpatialGridDataFrame}
+\title{var() function for MC sample saved in a SpatialGridDataFrame}
 \usage{
 \method{var}{SpatialGridDataFrame}(realizations, na.rm = FALSE, ...)
 }
 \arguments{
-\item{realizations}{MC sample}
+\item{realizations}{MC sample saved in SpatialGridDataFrame.}
 
-\item{...}{additional parameters}
+\item{...}{additional parameters.}
 }
 \value{
-mean and sd of MC sample
+SpatialGridDataFrame; a variance of a MC sample.
 }
 \description{
-Calculate variance of the MC sample that is saved in a SpatialGridDataFrame
+Calculates var from MC realizations for each location in a map.
 }
 \examples{
 
-data(DEM)
+data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
-slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sample <- propagate(realizations = dem_sample, model = Slope, n = 50)
 slope_var <- var(slope_sample, na.rm = TRUE)
 
+}
+\author{
+Kasia Sawicka
 }
 

@@ -2,27 +2,27 @@
 % Please edit documentation in R/render.character.R
 \name{render.character}
 \alias{render.character}
-\title{Render method for "character class".}
+\title{Render method for "character" class.}
 \usage{
 \method{render}{character}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{an object of class "character".}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-cos
+Rendered character template.
 }
 \description{
-Render method for "character class".
+Rendering is the process of replacing the tags in moustaches by text.
 }
 \examples{
 
 # render character string
 my_template <- "Hello {{name}}. How are you doing?"
 my_template \%>\% 
-  render(name = "Kasia")
+  render(name = "Winnie the Pooh")
 
 # render table      
 my_template <- c(
@@ -37,6 +37,8 @@ my_template \%>\%
 render(MY_TABLE = unname(rowSplit(my_table))) \%>\%
 cat
   
-
+}
+\author{
+Dennis Walvoort
 }
 

@@ -2,22 +2,19 @@
 % Please edit documentation in R/var.R
 \name{var}
 \alias{var}
-\title{var as generic}
+\title{Variance}
 \usage{
 var(realizations, ...)
 }
 \arguments{
-\item{...}{}
+\item{...}{additional parameters.}
 
-\item{x}{}
+\item{x}{as for stats::var}
 }
 \value{
-var
+Variance
 }
 \description{
-var as generic
-}
-\examples{
-
+Variance
 }
 

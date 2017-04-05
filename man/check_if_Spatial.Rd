@@ -16,4 +16,7 @@ TRUE or FALSE.
 \description{
 Simple check if class of provided object is Spatial
 }
+\author{
+Kasia Sawicka
+}
 

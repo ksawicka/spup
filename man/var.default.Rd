@@ -2,22 +2,19 @@
 % Please edit documentation in R/var.default.R
 \name{var.default}
 \alias{var.default}
-\title{var default}
+\title{Variance as in stats::var}
 \usage{
 \method{var}{default}(realizations, ...)
 }
 \arguments{
-\item{realizations}{}
+\item{realizations}{a numeric vector, matrix or data frame.}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-stats::var
+Variance
 }
 \description{
-var default
-}
-\examples{
-
+Variance as in stats::var
 }
 

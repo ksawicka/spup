@@ -7,7 +7,7 @@
 executable(filename)
 }
 \arguments{
-\item{filename}{}
+\item{filename}{a path with a name to the .exe file to wrapped here.}
 }
 \value{
 Executable output.
@@ -32,5 +32,8 @@ dummy_model()
 # read output (output file of dummy_model is "output.txt")
 scan(file = "./vignettes/examples/output.txt", quiet = TRUE)
 
+}
+\author{
+Dennis Walvoort
 }
 

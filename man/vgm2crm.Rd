@@ -18,7 +18,7 @@ vgm2crm(vgm, psill, nugget, range, model)
 \item{model}{See ?vgm}
 }
 \value{
-Standardised parameters of spatial correlogram model
+Standardised parameters of spatial variogram model.
 }
 \description{
 Convert vgm to crm
@@ -27,5 +27,8 @@ Convert vgm to crm
 
 # Examples here
 
+}
+\author{
+Kasia Sawicka
 }
 

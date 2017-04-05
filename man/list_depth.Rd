@@ -2,18 +2,18 @@
 % Please edit documentation in R/list_depth.R
 \name{list_depth}
 \alias{list_depth}
-\title{Title depth}
+\title{Function to find the level of list nesting}
 \usage{
 list_depth(List)
 }
 \arguments{
-\item{List}{an object of class 'list'}
+\item{List}{an object of class 'list'.}
 }
 \value{
 an integer; level of list nesting
 }
 \description{
-Title depth
+Function to find the level of list nesting
 }
 \examples{
 
@@ -23,5 +23,8 @@ list_depth(a)
 a <- list(list(1, 2), 3)
 list_depth(a)
 
+}
+\author{
+Kasia Sawicka
 }
 

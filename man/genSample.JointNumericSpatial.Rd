@@ -2,9 +2,9 @@
 % Please edit documentation in R/genSample.JointNumericSpatial.R
 \name{genSample.JointNumericSpatial}
 \alias{genSample.JointNumericSpatial}
-\title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated}
+\title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated.}
 \usage{
-genSample(UMobject, varcov, n, samplemethod, p = 0, ...)
+genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{object of a class JointNumericSpatial. Output of defineMUM().}
@@ -27,7 +27,8 @@ A Monte Carlo sample of the variables of interest. If asList = TRUE returns
 list of all samples as lists.
 }
 \description{
-Uncertain objects are described by joint PDF or a list from independent objects using random sampling or LHS method.
+Uncertain objects are described by joint PDF or a list from independent objects. Sampling can be done
+via three different sampling methods:
 }
 \details{
 \strong{"ugs"} Unconditional gaussian simulation of spatially
@@ -36,7 +37,7 @@ cross-correlated errors.
 \strong{"randomSampling"} Sampling multivariate distribution using eigenvalue decomposition
 (based on 'mvtnorm' package).
 
-\strong{"lhs"} Sampling method for at least two uncertain inputs. The
+\strong{"lhs"} Not implemented yet. Sampling method for at least two uncertain inputs. The
 uncertain.object is then a list of two or more. It uses startified sampling
 method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 must be dividable by the number of quantiles to assure each quantile is evenly represented.
@@ -45,7 +46,7 @@ must be dividable by the number of quantiles to assure each quantile is evenly r
 
 # "ugs" method example
 # load data
-data(Madagascar)
+data(OC, OC_sd, TN, TN_sd)
 
  # # Temporarily - convert to spatial grid data frames as raster not supported yet
  # OC <- as(OC, 'SpatialGridDataFrame')
@@ -83,8 +84,6 @@ class(my_cross_sample)
 
 # sample - "randomSampling"
 my_cross_sample <- genSample(mySpatialMUM, 5, "randomSampling")
- 
-"lhs" method example
 
 }
 \author{

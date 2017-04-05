@@ -2,31 +2,33 @@
 % Please edit documentation in R/quantile.SpatialGridDataFrame.R
 \name{quantile.SpatialGridDataFrame}
 \alias{quantile.SpatialGridDataFrame}
-\title{quantile function for MC sample saved in SpatialGridDataFrame}
+\title{quantile() function for MC sample saved in a SpatialGridDataFrame}
 \usage{
-\method{quantile}{SpatialGridDataFrame}(realizations, ...)
+\method{quantile}{SpatialGridDataFrame}(x, ...)
 }
 \arguments{
-\item{realizations}{}
+\item{x}{MC sample saved in SpatialGridDataFrame.}
 
-\item{...}{}
+\item{...}{additional parameters.}
 }
 \value{
-quantile of MC sample
+SpatialGridDataFrame; quantiles of a MC sample
 }
 \description{
-quantile function for MC sample saved in SpatialGridDataFrame
+Calculates mean from MC realizations for each location in a map.
 }
 \examples{
 
-data(DEM)
+data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
-slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sample <- propagate(realizations = dem_sample, model = Slope, n = 50)
 slope_q <- quantile(slope_sample, probs = c(0.1, 0.9), na.rm = TRUE)
 
-
+}
+\author{
+Kasia Sawicka
 }
 

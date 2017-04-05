@@ -2,22 +2,19 @@
 % Please edit documentation in R/sd.R
 \name{sd}
 \alias{sd}
-\title{sd as generic}
+\title{Standard Deviation}
 \usage{
 sd(realizations, ...)
 }
 \arguments{
-\item{...}{}
+\item{...}{additional parameters.}
 
-\item{x}{}
+\item{x}{as for stats::sd}
 }
 \value{
-sd
+Standard Deviation
 }
 \description{
-sd as generic
-}
-\examples{
-
+Standard Deviation
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/genSample.JointScalar.R
 \name{genSample.JointScalar}
 \alias{genSample.JointScalar}
-\title{Generating sample from cross-correlated variables described by skalar.}
+\title{Generating sample from cross-correlated variables described by a scalar.}
 \usage{
 genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 }
@@ -21,16 +21,19 @@ If asList = FALSE returns samples in a format of}
 \item{...}{Additional parameters.}
 }
 \value{
-Monte Carlo sample of cross-correlated scalar variables
+Monte Carlo sample of cross-correlated scalar variables.
 }
 \description{
-Generating sample from cross-correlated variables described by skalar.
+Generating sample from cross-correlated variables described by a scalar.
 }
 \examples{
 
-scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(1, 2), id="Var1")                
-scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(3, 2), id="Var2")
-scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 2.5), id="Var3")                
+scalarUM <- defineUM(uncertain = TRUE, distribution = "norm",
+                     distr_param = c(1, 2), id="Var1")                
+scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm",
+                      distr_param = c(3, 2), id="Var2")
+scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm",
+                      distr_param = c(10, 2.5), id="Var3")                
 myMUM <- defineMUM(UMlist = list(scalarUM, scalarUM2, scalarUM3), 
                matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
 my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList=F)

@@ -7,18 +7,21 @@
 stratsamp(n, distribution, parameters, p)
 }
 \arguments{
-\item{n}{sample size per stratum}
+\item{n}{sample size per stratum.}
 
-\item{p}{vector of probs}
+\item{distribution}{a string, distribution type to sample from.}
 
-\item{mu}{mean of normal distribution to be sampled}
+\item{parameters}{given distribution parameters.}
 
-\item{sigma}{sd of normal distribution to be sampled}
+\item{p}{a vector of quantiles.}
 }
 \value{
 Sample of spatial variable. Matrix with n rows and length(p)-1 columns.
 }
 \description{
 Stratified sampling for spatial variables
+}
+\author{
+Stefan van Dam, Kasia Sawicka
 }
 

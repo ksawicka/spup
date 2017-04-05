@@ -10,15 +10,18 @@ distribution_sampling_raster(distribution, parameters_stack)
 \item{distribution}{A string describing selected distribution. The same as a part of
 the string following the "r" in each random variate generation function in ?distributions.}
 
-\item{n}{number of observations}
+\item{n}{number of sampling runs.}
 
 \item{parameters}{parameters to pass to the random variate generation function after
 number of observations.}
 }
 \value{
-sample of random deviates
+Sample of random deviates.
 }
 \description{
 Only used in samplemethod "randomSampling" for MarginalNumericSpatial.
+}
+\author{
+Kasia Sawicka
 }
 

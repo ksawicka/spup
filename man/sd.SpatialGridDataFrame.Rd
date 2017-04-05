@@ -2,30 +2,33 @@
 % Please edit documentation in R/sd.SpatialGridDataFrame.R
 \name{sd.SpatialGridDataFrame}
 \alias{sd.SpatialGridDataFrame}
-\title{Calculate standard deviation of the MC sample that is saved in a SpatialGridDataFrame}
+\title{sd() function for MC sample saved in a SpatialGridDataFrame}
 \usage{
 \method{sd}{SpatialGridDataFrame}(realizations, ...)
 }
 \arguments{
-\item{realizations}{MC sample}
+\item{realizations}{MC sample saved in SpatialGridDataFrame.}
 
-\item{...}{additional parameters}
+\item{...}{additional parameters.}
 }
 \value{
-sd of MC sample
+SpatialGridDataFrame; a sd of a MC sample.
 }
 \description{
-Calculate standard deviation of the MC sample that is saved in a SpatialGridDataFrame
+Calculates sd from MC realizations for each location in a map.
 }
 \examples{
 
-data(DEM)
+data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20)
-slope_sample <- propagate1(realizations = dem_sample, model = Slope, n = 50)
+slope_sample <- propagate(realizations = dem_sample, model = Slope, n = 50)
 slope_sd <- sd(slope_sample, na.rm = TRUE)
 
+}
+\author{
+Kasia Sawicka
 }
 

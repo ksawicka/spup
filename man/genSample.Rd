@@ -24,7 +24,7 @@ Monte Carlo sample
 Generic function for sampling.
 }
 \examples{
-
+# examples here
 
 }
 

@@ -18,4 +18,7 @@ TRUE or FALSE.
 Simple check if distribution provided in defineUM() belongs
 to a list of supported distributions.
 }
+\author{
+Kasia Sawicka
+}
 
