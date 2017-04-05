@@ -1,10 +1,16 @@
 #' Sampling from a given distribution
 #'
-#' @param p 
-#' @param distribution 
-#' @param parameters 
+#' @param p a vector of quantiles.
+#' @param distribution a string indicating which distribution to sample from.
+#' See ?defineUM() for Details.
+#' @param parameters parameters to pass to the appropriate sampling funtion, e.g.
+#' mean and sd for "norm" distribution.
 #'
-#' @return quantiles 
+#' @return Strata of the distribution defined by given quantiles. 
+#' 
+#' @author Kasia Sawicka, Stefan van Dam
+#' 
+#' @import stats
 #'
 find_strata <- function(p, distribution, parameters, ...) {
   if (distribution == "beta") {

@@ -8,11 +8,14 @@
 #'
 #' @usage crm2vgm(crm, ...)
 #'
-#' @param crm Spatial correlogram model, output of makecrm(). Hellow
+#' @param crm Spatial correlogram model, output of makecrm(). 
 #' @param ...  Parameters that can be passed to vgm().
 #'
 #' @return An object of a class "variogramModel" extending data.frame.
+#' 
 #' @author Kasia Sawicka, Gerard Heuvelink
+#' 
+#' @importFrom gstat vgm
 #'
 crm2vgm <- function(crm, ...) {
   nugget <- 1 - as.numeric(crm[[1]])
@@ -26,4 +29,4 @@ crm2vgm <- function(crm, ...) {
                     model = model,
                     ...)
   vgm
-} # test3
+}

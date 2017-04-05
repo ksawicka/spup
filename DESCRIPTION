@@ -1,22 +1,32 @@
 Package: spup
 Type: Package
-Title: Uncertainty propagation
-Version: 0.1
+Title: Uncertainty propagation analysis
+Version: 0.1-0
 Date: 2016-02-18
-Authors: Kasia Sawicka <kasia.sawicka@wur.nl>, Stefan van Dam <>, Damiano Luzzi
-    <>, Gerard Heuvelink <>, Dennis Walvoort <>
-Maintainer: Kasia Sawicka <kasia.sawicka@wur.nl>
-Description: Uncertainty propagation analysis in spatial environmental modelling
-License: GPL-2
-VignetteBuilder: knitr
-Depends:
-    magrittr,
-    whisker
-Imports:
-    gstat,
-    mvtnorm,
-    purrr,
-    raster
+Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@wur.nl",
+                  role = c("aut", "cre")),
+             person("Gerard", "Heuvelink", email = "gerard.heuvelink@wur.nl",
+                  role = c("aut")),
+             person("Dennis", "Walvoort", email = "dennis.walvoort@wur.nl",
+                  role = c("ctb")),
+             person("Stefan", "van Dam", email = "stefan.vandam@wur.nl",
+                  role = c("ctb"))
+             )
+Description: Uncertainty propagation analysis in spatial environmental modelling.
+Depends: R (>= 3.3.3)
+Imports: graphics,
+         gstat,
+         magrittr,
+         methods,
+         mvtnorm,
+         purrr,
+         raster,
+         whisker
 Suggests:
-    knitr
+        knitr,
+        dplyr,
+        readr
+License: GPL-2
+LazyData: true
+VignetteBuilder: knitr
 RoxygenNote: 5.0.1

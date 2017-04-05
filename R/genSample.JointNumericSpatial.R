@@ -1,6 +1,7 @@
-#' Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated
+#' Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated.
 #' 
-#' Uncertain objects are described by joint PDF or a list from independent objects using random sampling or LHS method.
+#' Uncertain objects are described by joint PDF or a list from independent objects. Sampling can be done
+#' via three different sampling methods:
 #'
 #' \strong{"ugs"} Unconditional gaussian simulation of spatially
 #' cross-correlated errors.
@@ -8,12 +9,12 @@
 #' \strong{"randomSampling"} Sampling multivariate distribution using eigenvalue decomposition
 #' (based on 'mvtnorm' package).
 #'
-#' \strong{"lhs"} Sampling method for at least two uncertain inputs. The
+#' \strong{"lhs"} Not implemented yet. Sampling method for at least two uncertain inputs. The
 #' uncertain.object is then a list of two or more. It uses startified sampling
 #' method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 #' must be dividable by the number of quantiles to assure each quantile is evenly represented.
 #'
-#' @usage genSample(UMobject, varcov, n, samplemethod, p = 0, ...)
+#' @usage genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 #'
 #' @param UMobject object of a class JointNumericSpatial. Output of defineMUM().
 #' @param n Integer. Number of Monte Carlo realizations.
@@ -34,7 +35,7 @@
 #' 
 #' # "ugs" method example
 #' # load data
-#' data(Madagascar)
+#' data(OC, OC_sd, TN, TN_sd)
 #' 
 #'  # # Temporarily - convert to spatial grid data frames as raster not supported yet
 #'  # OC <- as(OC, 'SpatialGridDataFrame')
@@ -72,8 +73,10 @@
 #' 
 #' # sample - "randomSampling"
 #' my_cross_sample <- genSample(mySpatialMUM, 5, "randomSampling")
-#'  
-#'"lhs" method example
+#' 
+#' @importFrom gstat gstat
+#' @importFrom purrr map
+#' @importFrom raster stack
 #' 
 #' @export
 genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
@@ -232,7 +235,7 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
   
   # LHS --------------------------------------------------------------------------
   if (samplemethod == "lhs") { 
-    print("lhs")
+    print("lhs sampling method is not implemented yet")
   } # end sampling with "lhs"   
   
   
@@ -250,21 +253,21 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
    if (asList == TRUE) {
      l <- list()
      # split raster stack into a list of separate raster for the first object
-     l[[1]] <- map(1:n, function(x){Cross_sample[[x]]})
+     l[[1]] <- purrr::map(1:n, function(x){Cross_sample[[x]]})
      # repeat for the rest of the objects
      for (i in 1:n_vars-1) {
-       l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[[x]]})
+       l[[i+1]] <- purrr::map((i*n+1):(i*n+n), function(x){Cross_sample[[x]]})
      }
      Cross_sample <- l
    }
   # if the original class was spatial data frame only check argument
   # asList and if TRUE do as above. The difference is in number of square
-  # brackets when mapping the object
+  # brackets when purrr::mapping the object
   } else if (asList == TRUE) {
    l <- list()
-   l[[1]] <- map(1:n, function(x){Cross_sample[x]})
+   l[[1]] <- purrr::map(1:n, function(x){Cross_sample[x]})
    for (i in 1:n_vars-1) {
-     l[[i+1]] <- map((i*n+1):(i*n+n), function(x){Cross_sample[x]})
+     l[[i+1]] <- purrr::map((i*n+1):(i*n+n), function(x){Cross_sample[x]})
    }
    Cross_sample <- l
   }

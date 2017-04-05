@@ -1,15 +1,13 @@
 #' Define an uncertainty model for a single variable.
 #'
-#' Function that allows user to define marginal uncertainty distributions 
+#' Function that allows to define marginal uncertainty distributions 
 #' for model inputs and subsequent Monte Carlo analysis.
 #'
-#' \strong{uncertain} If "TRUE" the uncertainty model for the input has to be
-#' specified. If uncertain ="FALSE" the function requires a mean value of a
-#' distribution, e.g. a scalar, a vector, or a map.
-#'
-#' The spatial object must contain a map of mean and standard deviation. If crm
-#' is provided and spatial correlation between the residuals is assumed only
-#' the normal distribution of residuals is allowed.
+#' If the uncertain object is a spatial object, the distribution parameters 
+#' or the probabilities for categories must be provided by means of maps, for example
+#' if a spatial variable has a normal distribution, a map of mean and standard deviation
+#' must be provided. If crm is provided and spatial correlation between the residuals
+#' is assumed only the normal distribution of residuals is allowed.
 #'
 #' If no spatial correlations between residuals is assumed, allowed
 #' distributions for marginal uncertainty models are listed in Table 1.
@@ -36,49 +34,58 @@
 #'
 #' @usage defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
 #'                  categories = NULL, cat_prob = NULL, crm = NULL,
-#'                  id = NULL, cross_ids = NULL, ...)
+#'                  id = NULL, ...)
 #'
 #' @param uncertain "TRUE" or "FALSE", determines if specification of
-#' Uncertainty Model (UM) is needed.
-#' @param id identifier of the variable; only in use if the UM defined here 
-#' is going to be used in defineUM() to construct joint UM for numerical variables.
-#' @param distribution a string specified which distribution to sample from.
-#' See Details for a list of supported distributions.
+#' Uncertainty Model (UM) is needed. Currently not in use, but provided for 
+#' furture implementation of contributions analysis. 
+#' @param distribution a string specified which distribution to sample from. Only in use 
+#' for continuos or discrete numvariables. See Details for a list of supported distributions.
 #' @param distr_param a vector or a list with distribution parameters. For example, for 
 #' normal distribution in spatial variable this must be a map of means and a map
-#' of standard deviations.
+#' of standard deviations for each location. Only in use for continuos or discrete numvariables.
 #' @param crm a correlogram model, object of a class "SpatialCorrelogramModel",
 #' output of makecormodel(). Can only be specified for numerical variables.
-#' @param categories a vector of categories
-#' @param cat_prob spatial data frame or raster stack; A list of probabilities for the vector of categories. 
-#' Number of columns in the data frame cannot be smaller than number of categories.
-#' @param ... additional parameters
+#' @param categories a vector of categories. Only in use for categorical (e.g. saved as character)
+#' or discrete numerical variables.
+#' @param cat_prob spatial data frame or raster stack; A list of probabilities for the vector of categories.
+#' Number of columns in the data frame cannot be smaller than number of categories. Only in use
+#' for categorical (e.g. saved as character) or discrete numerical variables.
+#' @param id identifier of the variable; only in use if the UM defined here 
+#' is going to be used in defineUM() to construct joint UM for numerical variables.
+#' @param ... additional parameters.
 #'
 #' @return Object of a class "MarginalXxx" including listed all necessary information for creating realizations of
-#' the uncertain variable.
+#' the uncertain variable. If provided arguments are: type of the distribution and corresponding parameters,
+#' and corresponding parameters are spatial objects - an object of class "MarginalNumericSpatial".
+#' If provided arguments are: type of the distribution and corresponding parameters, and corresponding
+#' parameters are non-spatial objects - an object of class "MarginalNumericSpatial".
+#' If provided arguments are: categories and probabilities, and probabilities are saved in spatial object
+#'  - an object of class "MarginalCategoricalSpatial". If provided arguments are: categories and probabilities,
+#'   and probabilities are saved in non-spatial object - an object of class "MarginalCategoricalDataFrame".
 #' 
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' 
 #' @examples
 #' 
 #' # define uncertainty model for spatial numerical variable
-#' data(DEM)
+#' data(dem30m, dem30m_sd)
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm",
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 #' class(demUM)
 #'                    
 #' # define uncertainty model for spatial categorical variable
-#' data(house)
-#' houseUM <- defineUM(uncertain = TRUE, categories = c(0.19, 0), cat_prob = houses_DF)
-#' class(houseUM)
+#' data(woon)
+#' woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
+#' class(woonUM)
 #' 
 #' # define uncertainty model for a variable desribed by a scalar
 #' scalarUM <- defineUM(uncertain = TRUE, distribution = "gamma", distr_param = c(1,2))
 #' class(scalarUM)
 #' 
 #' # define uncertainty model for two spatial cross-correlated variables
-#' data(Madagascar)
+#' data(OC, OC_sd, TN, TN_sd)
 #'
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
@@ -87,7 +94,9 @@
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' class(TN_UM)
-#'   
+#' 
+#' @importFrom methods is
+#' 
 #' @export
 defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
                       crm = NULL, categories = NULL, cat_prob = NULL,
@@ -103,7 +112,7 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
   # recognise if it is a continuous or categorical variable
   # if it is continuous:
   
-  # distribution parameters cannot be missing for cintinuaous variable and all must be of the same class
+  # distribution parameters cannot be missing for continuous variable and all must be of the same class
   if(!is.null(distr_param)) {
     a <- class(distr_param[[1]])
     if (length(distr_param) > 1) {

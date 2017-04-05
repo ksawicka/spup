@@ -5,6 +5,9 @@
 #' examine if selected distribution is in supported list of ditributions.
 #'
 #' @return TRUE or FALSE.
+#' 
+#' @author Kasia Sawicka
+#' 
 #'
 check_distribution <- function(object) {
   Supported_ditributions <- c("beta",        

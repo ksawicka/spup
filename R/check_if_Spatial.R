@@ -4,6 +4,8 @@
 #' examine what type of data are delt with.
 #'
 #' @return TRUE or FALSE.
+#' 
+#' @author Kasia Sawicka
 #'
 check_if_Spatial <- function(object) {
   Spatial_classes <- c("SpatialPointsDataFrame",

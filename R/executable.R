@@ -1,6 +1,6 @@
 #' Wrapper function for calling executables in R.
 #'
-#' @param filename 
+#' @param filename a path with a name to the .exe file to wrapped here.
 #'
 #' @return Executable output.
 #' 
@@ -20,6 +20,10 @@
 #' 
 #' # read output (output file of dummy_model is "output.txt")
 #' scan(file = "./vignettes/examples/output.txt", quiet = TRUE)
+#' 
+#' @author Dennis Walvoort
+#' 
+#' @importFrom magrittr %>%
 #' 
 #' @export
 executable <- function(filename) {
