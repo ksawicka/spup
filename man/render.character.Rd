@@ -19,6 +19,8 @@ Rendering is the process of replacing the tags in moustaches by text.
 }
 \examples{
 
+require(magrittr)
+require(whisker)
 # render character string
 my_template <- "Hello {{name}}. How are you doing?"
 my_template \%>\% 

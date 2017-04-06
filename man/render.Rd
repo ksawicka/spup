@@ -21,6 +21,8 @@ For this, we provide a set of render-methods. See the `whisker`-package
 }
 \examples{
 
+require(magrittr)
+require(whisker)
 # render character string
 my_template <- "Hello {{name}}. How are you doing?"
 my_template \%>\% 

@@ -9,11 +9,6 @@
 #' @param filenames a string, a name of the model input file.
 #'
 #' @return An obeject of a class "template".
-#'
-#' @examples
-#' 
-#' my_template <- template("vignettes/examples/input.txt.template")
-#' readLines(my_template, warn = FALSE)
 #' 
 #' @importFrom purrr walk
 #' @importFrom magrittr %>%

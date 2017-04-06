@@ -11,6 +11,8 @@
 #' 
 #' @examples
 #' 
+#' require(magrittr)
+#' require(whisker)
 #' # render character string
 #' my_template <- "Hello {{name}}. How are you doing?"
 #' my_template %>% 
