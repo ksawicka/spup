@@ -15,6 +15,9 @@ genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 
 \item{p}{number of strata}
 
+\item{asList}{logical. If asList = TRUE returns list of all samples as a list. 
+If asList = FALSE returns samples in a format of distribution parameters in UMobject.}
+
 \item{...}{other parameters}
 }
 \value{

@@ -5,12 +5,20 @@
 \title{Generating Monte Carlo sample from an uncertain object of a class 
 'MarginalCategoricalSpatial'}
 \usage{
-genSample(UMobject, n, asList = TRUE, ...)
+\method{genSample}{MarginalCategoricalSpatial}(UMobject, n, samplemethod,
+  p = 0, asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{uncertain object defined using defineUM().}
 
 \item{n}{Integer. Number of Monte Carlo realizations.}
+
+\item{samplemethod}{not in use for categorical variables.}
+
+\item{p}{not in use for categorical variables.}
+
+\item{asList}{logical. If asList = TRUE returns list of all samples as a list. 
+If asList = FALSE returns samples in a format of distribution parameters in UMobject.}
 
 \item{...}{additional parameters}
 }
@@ -26,7 +34,7 @@ Generating Monte Carlo sample from an uncertain object of a class
 # load data
 data(woon)
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
-# woon_sample <- genSample(woonUM, 10, asList=FALSE)
+# woon_sample <- genSample(woonUM, 10, asList = FALSE)
 # class(woon_sample)
 # str(woon_sample@data)
 # spplot(woon_sample)
@@ -45,7 +53,7 @@ dem30m$no_snow_prob <- 1 - dem30m$snow_prob
 summary(dem30m@data)
 snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem30m[2:3])
 class(snowUM)
-snow_sample <- genSample(snowUM, 10, asList=F)
+snow_sample <- genSample(snowUM, 10, asList = FALSE)
 head(snow_sample@data)
 
 # case with raster
@@ -58,8 +66,9 @@ dem30m$no_snow_prob <- 1 - dem30m$snow_prob
 summary(dem30m@data)
 dem_stack <- raster::stack(dem30m)
 snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem_stack[[2:3]])
-snow_sample <- genSample(snowUM, 10, asList=F)
-plot(snow_sample)
+snow_sample <- genSample(snowUM, 10, asList = FALSE)
+require(sp)
+spplot(snow_sample)
 
 }
 \author{

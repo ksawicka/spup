@@ -5,7 +5,8 @@
 \title{Generating Monte Carlo sample from an uncertain object of a class 
 'MarginalScalar'}
 \usage{
-genSample(UMobject, n, samplemethod, p = 0, ...)
+\method{genSample}{MarginalScalar}(UMobject, n, samplemethod, p = 0,
+  asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{uncertain object defined using defineUM().}
@@ -16,6 +17,9 @@ genSample(UMobject, n, samplemethod, p = 0, ...)
 
 \item{p}{A vector of quantiles. Optional. Only required if sample method is
 "stratifiedSampling".}
+
+\item{asList}{logical. If asList = TRUE returns list of all samples as a list. 
+If asList = FALSE returns samples in a format of distribution parameters in UMobject.}
 
 \item{...}{Additional parameters.}
 }

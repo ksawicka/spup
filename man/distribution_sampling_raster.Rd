@@ -10,9 +10,7 @@ distribution_sampling_raster(distribution, parameters_stack)
 \item{distribution}{A string describing selected distribution. The same as a part of
 the string following the "r" in each random variate generation function in ?distributions.}
 
-\item{n}{number of sampling runs.}
-
-\item{parameters}{parameters to pass to the random variate generation function after
+\item{parameters_stack}{parameters to pass to the random variate generation function after
 number of observations.}
 }
 \value{

@@ -14,6 +14,8 @@ See ?defineUM() for Details.}
 
 \item{parameters}{parameters to pass to the appropriate sampling funtion, e.g.
 mean and sd for "norm" distribution.}
+
+\item{...}{additional parameters.}
 }
 \value{
 Strata of the distribution defined by given quantiles.

@@ -30,5 +30,6 @@ Suggests:
         readr,
         sp
 License: GPL-2
+LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

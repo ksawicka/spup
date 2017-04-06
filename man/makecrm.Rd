@@ -4,7 +4,7 @@
 \alias{makecrm}
 \title{Defining a spatial correlogram model}
 \usage{
-makecrm(acf0 = 1, range, model, ...)
+makecrm(acf0, range, model, ...)
 }
 \arguments{
 \item{acf0}{Aurocorrelation function value at range = 0. Default is 1. Must

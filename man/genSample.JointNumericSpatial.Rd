@@ -4,7 +4,8 @@
 \alias{genSample.JointNumericSpatial}
 \title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated.}
 \usage{
-genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
+\method{genSample}{JointNumericSpatial}(UMobject, n, samplemethod, p = 0,
+  asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{object of a class JointNumericSpatial. Output of defineMUM().}
@@ -69,7 +70,7 @@ TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm =
 # names(dummy_sd) <- "dummy_sd"
 # dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
 # dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
-                     crm = dummy_crm, id = "dummy")
+#                     crm = dummy_crm, id = "dummy")
 
 # define joint UM
 soil_prop <- list(OC_UM, TN_UM)
@@ -79,7 +80,7 @@ mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
 class(mySpatialMUM)
 
 # sample - "ugs" method
-my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = T)
+my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = TRUE)
 class(my_cross_sample)
 
 # sample - "randomSampling"

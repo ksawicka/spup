@@ -4,19 +4,20 @@
 \alias{genSample.JointScalar}
 \title{Generating sample from cross-correlated variables described by a scalar.}
 \usage{
-genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
+\method{genSample}{JointScalar}(UMobject, n, samplemethod, p = 0,
+  asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{object of a class JointScalar created using defineMUM.R}
 
-\item{n}{Integer; number of Monte Carlo runs}
+\item{n}{integer; number of Monte Carlo runs}
 
 \item{samplemethod}{"randomSampling" or "lhs".}
 
-\item{p}{A vector of quantiles. Optional. Only required if sample method is "lhs".}
+\item{p}{a vector of quantiles. Optional. Only required if sample method is "lhs".}
 
-\item{asList}{Logical. If asList = TRUE returns list of all samples as a list. 
-If asList = FALSE returns samples in a format of}
+\item{asList}{logical. If asList = TRUE returns list of all samples as a list. 
+If asList = FALSE returns samples in a format of distribution parameters in UMobject.}
 
 \item{...}{Additional parameters.}
 }
@@ -36,7 +37,7 @@ scalarUM3 <- defineUM(uncertain = TRUE, distribution = "norm",
                       distr_param = c(10, 2.5), id="Var3")                
 myMUM <- defineMUM(UMlist = list(scalarUM, scalarUM2, scalarUM3), 
                matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
-my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList=F)
+my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList = FALSE)
 my_sample  
 
 }
