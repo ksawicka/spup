@@ -32,10 +32,6 @@
 #' \cr \tab Weibull            \tab "weibull" \tab \eqn{shape}, \eqn{scale} 
 #' }
 #'
-#' @usage defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
-#'                  categories = NULL, cat_prob = NULL, crm = NULL,
-#'                  id = NULL, ...)
-#'
 #' @param uncertain "TRUE" or "FALSE", determines if specification of
 #' Uncertainty Model (UM) is needed. Currently not in use, but provided for 
 #' furture implementation of contributions analysis. 

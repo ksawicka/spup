@@ -23,10 +23,12 @@ Imports: graphics,
          raster,
          whisker
 Suggests:
-        knitr,
         dplyr,
-        readr
+        GGally,
+        gridExtra,
+        knitr,
+        readr,
+        sp
 License: GPL-2
-LazyData: true
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

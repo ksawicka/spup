@@ -6,13 +6,13 @@
 #' \strong{"stratifiedSampling"} Number of samples (n) must be dividable by the
 #' number of quantiles to assure each quantile is evenly represented.
 #'
-#' @usage genSample(UMobject, n, samplemethod, p = 0, ...)
-#'
 #' @param UMobject uncertain object defined using defineUM().
 #' @param n Integer. Number of Monte Carlo realizations.
 #' @param samplemethod "randomSampling" or "stratifiedSampling".
 #' @param p A vector of quantiles. Optional. Only required if sample method is
 #' "stratifiedSampling".
+#' @param asList logical. If asList = TRUE returns list of all samples as a list. 
+#' If asList = FALSE returns samples in a format of distribution parameters in UMobject.
 #' @param ...  Additional parameters. 
 #' 
 #' @return A Monte Carlo sample of uncertain input of a class of distribution

@@ -18,8 +18,6 @@
 #' method to generate the inputs for the latin hypercude algorithm, hence the p
 #' is restricted as above.
 #'
-#' @usage genSample(UMobject, n, samplemethod, p = 0, ...)
-#'
 #' @param UMobject uncertain object defined using defineUM().
 #' @param n Integer. Number of Monte Carlo realizations.
 #' @param samplemethod "ugs" for spatially correlated errors, "randomSampling" and
@@ -27,7 +25,8 @@
 #' considered.
 #' @param p A vector of quantiles. Optional. Only required if sample method is
 #' "stratifiedSampling" or "lhs".
-#' @param var Logical. Specifies if variance for X realizations should be also returned.
+#' @param asList logical. If asList = TRUE returns list of all samples as a list. 
+#' If asList = FALSE returns samples in a format of distribution parameters in UMobject.
 #' @param ...  Additional parameters that may be passed, e.g. in
 #' the "ugs" method. See examples.
 #' 
@@ -45,12 +44,12 @@
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
-#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = F)
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = FALSE)
 #' str(dem_sample)
 #'
 #' # "randomSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
-#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList=F)
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList = FALSE)
 #' str(dem_sample)
 #' 
 #' demUM <- defineUM(uncertain = TRUE, distribution = "beta",
@@ -70,13 +69,7 @@
 #' 
 #' # Examples with rasters
 #' # ugs (raster with auto-correlation)
-#' rast_crm <- makecrm(acf0 = 0.6, range = 6, model = "Sph")
-#' rastUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(rast_mean, rast_sd),
-#' crm = rast_crm)
-#' rast_sample <- genSample(UMobject = rastUM, n = 5, samplemethod = "ugs")
-#' str(rast_sample)
-#' class(rast_sample)
-#' 
+#' data(OC, OC_sd)
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)

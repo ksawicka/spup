@@ -1,10 +1,13 @@
 #' Digital Elevation Model of Zlatibor region in Serbia.
 #'
-#' A dataset containing the mean and sd of an example Digital Elevation Model.
+#' A dataset containing the mean an example Digital Elevation Model.
 #'
 #' @docType data
 #' 
-#' @format SpatialGridDataFrames
+#' @format a SpatialGridDataFrame with 15000 rows and 1 variable:
+#' \describe{
+#' \item{Elevation}{Digital Elevation Model, in meters}
+#' }
 #' 
 #' @usage data(dem30m)
 #' 

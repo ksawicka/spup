@@ -14,8 +14,6 @@
 #' method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 #' must be dividable by the number of quantiles to assure each quantile is evenly represented.
 #'
-#' @usage genSample(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
-#'
 #' @param UMobject object of a class JointNumericSpatial. Output of defineMUM().
 #' @param n Integer. Number of Monte Carlo realizations.
 #' @param samplemethod "ugs" for spatially cross-correlated errors, "randomSampling" for joint PDF of 
@@ -58,7 +56,7 @@
 #' # names(dummy_sd) <- "dummy_sd"
 #' # dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
 #' # dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
-#'                      crm = dummy_crm, id = "dummy")
+#' #                     crm = dummy_crm, id = "dummy")
 #' 
 #' # define joint UM
 #' soil_prop <- list(OC_UM, TN_UM)
@@ -68,7 +66,7 @@
 #' class(mySpatialMUM)
 #' 
 #' # sample - "ugs" method
-#' my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = T)
+#' my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = TRUE)
 #' class(my_cross_sample)
 #' 
 #' # sample - "randomSampling"

@@ -4,23 +4,6 @@
 #'
 #' @return Executable output.
 #' 
-#' @examples
-#' # save executable as a function in R
-#' # note: dummy_model.exe needs to be created first by compiling dummy_model.c
-#' dummy_model <- executable("./vignettes/examples/dummy_model.exe")
-#' 
-#' # create template
-#' my_template <- template("./vignettes/examples/input.txt.template")
-#' 
-#' # render the template
-#' render(my_template, b0 = 3.1, b1 = 4.2)
-#' 
-#' # run external model
-#' dummy_model()
-#' 
-#' # read output (output file of dummy_model is "output.txt")
-#' scan(file = "./vignettes/examples/output.txt", quiet = TRUE)
-#' 
 #' @author Dennis Walvoort
 #' 
 #' @importFrom magrittr %>%
