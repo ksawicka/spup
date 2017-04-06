@@ -13,11 +13,8 @@
 #' "JointScalar"
 #' 
 #' Sampling methods:
-#' \strong {Details for class "JointNumericSpatial"}
-#' Uncertain objects are described by joint PDF or a list from independent objects. Sampling can be done
-#' via three different sampling methods:
 #'
-#' \strong{"ugs"} Unconditional gaussian simulation of spatially
+#' \strong{"ugs"} Unconditional gaussian simulation of spatially auto-correlated and/or
 #' cross-correlated errors.
 #'
 #' \strong{"randomSampling"} Sampling multivariate distribution using eigenvalue decomposition
@@ -40,6 +37,7 @@
 #' @param asList logical. If asList = TRUE returns list of all samples as a list. 
 #' If asList = FALSE returns samples in a format of distribution parameters in UMobject.
 #' @param ... Additional parameters that may be passed, e.g. in the "ugs" method. See examples.
+#' 
 #'
 #' @return A Monte Carlo sample of the variables of interest. If asList = TRUE returns
 #' list of all samples as lists.
@@ -62,7 +60,7 @@
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = FALSE)
 #' str(dem_sample)
 #' }
-#'
+#' 
 #' # "randomSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 #' \dontrun{
@@ -76,7 +74,7 @@
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 #' str(dem_sample)
 #' }
-#'
+#' 
 #' # "startifiedSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 #' \dontrun{
@@ -153,7 +151,7 @@
 #' require(sp)
 #' spplot(snow_sample)
 #' 
-#'
+#' 
 #' ### -------------------- "JoinNumericSpatial" ----------------------
 #' # "ugs" method example
 #' # load data
