@@ -148,7 +148,7 @@ hist(CN_sample[which.max(OC)], main = paste("C/N at highiest OC,", "\n",
 ## ---- fig.width = 7, fig.height = 7--------------------------------------
 # calculate quantiles
 CN_sample_df <- as(CN_sample, "SpatialGridDataFrame")
-CN_q <- quantile(CN_sample_df, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+CN_q <- quantile_MC_sgdf(CN_sample_df, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
 spplot(CN_q[c(3,4,1,2)], main = list(label = "Quantiles of C/N realizations", cex = 1))
 
 ## ---- fig.width = 7, fig.height = 7--------------------------------------

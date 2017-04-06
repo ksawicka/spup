@@ -68,8 +68,8 @@ spplot(dem_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the DEM real
 ## ---- fig.width = 5, fig.height = 6--------------------------------------
 # compute and plot the slope sample statistics
 # e.g. mean and standard deviation
-dem_sample_mean <- mean(dem_sample)
-dem_sample_sd <- sd(dem_sample)
+dem_sample_mean <- mean_MC_sgdf(dem_sample)
+dem_sample_sd <- sd_MC_sgdf(dem_sample)
 grid.arrange(spplot(dem_sample_mean, main = list(label = "Mean of the DEM realizations", cex = 1)),
              spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realizations", cex = 1)))
 
@@ -111,8 +111,8 @@ spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope 
 ## ---- fig.width = 5, fig.height = 6--------------------------------------
 # compute and plot slope sample statistics
 # e.g. mean and standard deviation
-slope_mean <- mean(slope_sample)
-slope_sd <- sd(slope_sample, na.rm = TRUE) # na.rm = TRUE is necessary, because slope cannot be calculated at the border
+slope_mean <- mean_MC_sgdf(slope_sample)
+slope_sd <- sd_MC_sgdf(slope_sample, na.rm = TRUE) # na.rm = TRUE is necessary, because slope cannot be calculated at the border
 grid.arrange(spplot(slope_mean, main = list(label = "Mean of the slope realizations", cex = 1)),
              spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations", cex = 1)))
 
@@ -149,7 +149,7 @@ ggscatmat(data = df, alpha=0.15)
 
 ## ---- fig.width = 7, fig.height = 5--------------------------------------
 # or quantiles
-slope_q <- quantile(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+slope_q <- quantile_MC_sgdf(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
 spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
 
 ## ---- fig.width = 5, fig.height = 3--------------------------------------

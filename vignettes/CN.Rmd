@@ -283,7 +283,7 @@ plot(CN_mean, main = "C/N mean")
 plot(CN_sd, main = "C/N sd")
 ```
 
-We can also view example of C/N realizations at specific locations, for example where is highiest and lowest:
+We can also view example of C/N realizations at specific locations, for example where it is highiest and lowest:
 
 ```{r, fig.width = 7, fig.height = 3}
 l_mean <- mean(CN_sample[which.min(OC)])
@@ -303,7 +303,7 @@ We can also look at specific quantiles of the C/N ratio sample. The method for S
 ```{r, fig.width = 7, fig.height = 7}
 # calculate quantiles
 CN_sample_df <- as(CN_sample, "SpatialGridDataFrame")
-CN_q <- quantile(CN_sample_df, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
+CN_q <- quantile_MC_sgdf(CN_sample_df, probs = c(0.1, 0.25, 0.75, 0.9), na.rm = TRUE)
 spplot(CN_q[c(3,4,1,2)], main = list(label = "Quantiles of C/N realizations", cex = 1))
 ```
 
@@ -348,10 +348,12 @@ plot(TN_contribution, main = "TN contribution to total C/N var [%]")
 
 ### Acknowledgements
 
-The dataset was derived from ISRIC soilgrid information. 
+The dataset was derived from ISRIC soilgrid information (Hengl et al., 2017). 
 
 This project has received funding from the European Union’s Seventh Framework Programme for research, technological development and demonstration under grant agreement no 607000.
 
 ### References
+
+HENGL, T., MENDES DE JESUS, J., HEUVELINK, G. B. M., RUIPEREZ GONZALEZ, M., KILIBARDA, M., BLAGOTIĆ, A., SHANGGUAN, W., WRIGHT, M. N., GENG, X., BAUER-MARSCHALLINGER, B., GUEVARA, M. A., VARGAS, R., MACMILLAN, R. A., BATJES, N. H., LEENAARS, J. G. B., RIBEIRO, E., WHEELER, I., MANTEL, S. & KEMPEN, B. 2017. SoilGrids250m: Global gridded soil information based on machine learning. PLOS ONE, 12, e0169748.
 
 WACKERNAGEL,  H.  2003.  Multivariate  Geostatistics:  An  Introduction  with  Applications, Springer. 
