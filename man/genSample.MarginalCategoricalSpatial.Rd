@@ -31,6 +31,7 @@ Generating Monte Carlo sample from an uncertain object of a class
 }
 \examples{
 
+set.seed(12345)
 # load data
 data(woon)
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])

@@ -6,8 +6,6 @@
 #' To assure equalfinality the sill parameter for spatially correlated random
 #' residuals is fixed and standardized to 1.
 #'
-#' @usage crm2vgm(crm, ...)
-#'
 #' @param crm Spatial correlogram model, output of makecrm(). 
 #' @param ...  Parameters that can be passed to vgm().
 #'

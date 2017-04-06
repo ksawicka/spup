@@ -28,6 +28,7 @@ Generic function for sampling.
 }
 \examples{
 # examples here
+1+1
 
 }
 

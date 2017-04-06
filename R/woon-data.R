@@ -16,7 +16,7 @@
 #' \item{check}{check if probabilities sum to 1}
 #' }
 #' 
-#' @usage data(dem30m_sd)
+#' @usage data(woon)
 #' 
 #' @source Kadaster, NL.
 #'  

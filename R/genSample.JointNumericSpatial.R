@@ -31,6 +31,7 @@
 #' 
 #' @examples
 #' 
+#' set.seed(12345)
 #' # "ugs" method example
 #' # load data
 #' data(OC, OC_sd, TN, TN_sd)
@@ -66,11 +67,16 @@
 #' class(mySpatialMUM)
 #' 
 #' # sample - "ugs" method
-#' my_cross_sample <- genSample(mySpatialMUM, 5, "ugs", nmax = 24, asList = TRUE)
+#' \dontrun{
+#' my_cross_sample <- genSample(mySpatialMUM, n = 5, "ugs", nmax = 24, asList = TRUE)
 #' class(my_cross_sample)
+#' }
 #' 
 #' # sample - "randomSampling"
-#' my_cross_sample <- genSample(mySpatialMUM, 5, "randomSampling")
+#' \dontrun{
+#' my_cross_sample <- genSample(mySpatialMUM, n = 5, "randomSampling")
+#' }
+#' 
 #' 
 #' @importFrom gstat gstat
 #' @importFrom purrr map

@@ -19,6 +19,7 @@ Calculates mean from MC realizations for each location in a map.
 }
 \examples{
 
+set.seed(12345)
 # load data
 data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")

@@ -36,6 +36,7 @@ number of quantiles to assure each quantile is evenly represented.
 }
 \examples{
 
+set.seed(12345)
 # Example 1
 scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
 scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "randomSampling")

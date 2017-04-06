@@ -12,6 +12,7 @@
 #'
 #' @examples
 #' # examples here
+#' 1+1
 #' 
 #' @export
 genSample <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {

@@ -29,6 +29,7 @@ Generating sample from cross-correlated variables described by a scalar.
 }
 \examples{
 
+set.seed(12345)
 scalarUM <- defineUM(uncertain = TRUE, distribution = "norm",
                      distr_param = c(1, 2), id="Var1")                
 scalarUM2 <- defineUM(uncertain = TRUE, distribution = "norm",

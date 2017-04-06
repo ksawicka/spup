@@ -36,7 +36,8 @@
 #' @author Kasia Sawicka, Stefan van Dam, Gerard Heuvelink
 #' 
 #' @examples
-#'
+#' 
+#' set.seed(12345)
 #' # load data
 #' data(dem30m, dem30m_sd)
 #' 
@@ -44,28 +45,38 @@
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+#' \dontrun{
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = FALSE)
 #' str(dem_sample)
+#' }
 #'
 #' # "randomSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+#' \dontrun{
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList = FALSE)
 #' str(dem_sample)
+#' }
 #' 
 #' demUM <- defineUM(uncertain = TRUE, distribution = "beta",
 #'                   distr_param = c(dem30m, dem30m_sd, dem30m))
+#' \dontrun{
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 #' str(dem_sample)
+#' }
 #'
 #' # "startifiedSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+#' \dontrun{
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
+#' }
 #' 
 #' demUM <- defineUM(uncertain = TRUE, distribution = "exp",
 #'                   distr_param = c(dem30m), lower.tail = FALSE)
+#' \dontrun{
 #' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
+#' }
 #' 
 #' # Examples with rasters
 #' # ugs (raster with auto-correlation)
@@ -73,8 +84,10 @@
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)
-#' some_sample <- genSample(OC_UM, 5, "ugs", nmax=20)
+#' \dontrun{
+#' some_sample <- genSample(OC_UM, n = 5, "ugs", nmax=20)
 #' some_sample
+#' }
 #' 
 #' @importFrom gstat gstat
 #' @importFrom raster stack
@@ -110,12 +123,13 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
       distr_param[[2]] <- as(distr_param[[2]], "SpatialGridDataFrame")
     } else {original_class <- "SpatialDF"}
     
-    # split dustr_param into separate objects to ease code below
-    for (i in 1:2) {
-      assign(paste0("distr_param", i), distr_param[[i]])
-    }
+    # n_param <- length(distr_param)
+    # # split distr_param into separate objects to ease code below
+    # for (i in 1:n_param) {
+    #   assign(paste0("distr_param", i), distr_param[[i]])
+    # }
     
-    mask <- distr_param1 # assign geometry 
+    mask <- distr_param[[1]] # assign geometry 
     
     # create gstat object
     g <- gstat::gstat(formula = z~1, dummy = TRUE, beta = 0, model = crm2vgm(crm), ...)
@@ -126,7 +140,7 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     # calculate Z = m + sd*epsilon
     X_sample <- epsilon_sample # assign geometry
     X_sample@data <- as.data.frame(apply(as.matrix(epsilon_sample@data), MARGIN = 2,
-                                  function(x) distr_param1@data + distr_param2@data*x))
+                                  function(x) distr_param[[1]]@data + distr_param[[2]]@data*x))
     
     # sort out names
     if (!is.null(UMobject$id)) {

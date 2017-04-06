@@ -50,6 +50,7 @@ is restricted as above.
 }
 \examples{
 
+set.seed(12345)
 # load data
 data(dem30m, dem30m_sd)
 
@@ -57,28 +58,38 @@ data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+\dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = FALSE)
 str(dem_sample)
+}
 
 # "randomSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+\dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList = FALSE)
 str(dem_sample)
+}
 
 demUM <- defineUM(uncertain = TRUE, distribution = "beta",
                   distr_param = c(dem30m, dem30m_sd, dem30m))
+\dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
 str(dem_sample)
+}
 
 # "startifiedSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+\dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
+}
 
 demUM <- defineUM(uncertain = TRUE, distribution = "exp",
                   distr_param = c(dem30m), lower.tail = FALSE)
+\dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
+}
 
 # Examples with rasters
 # ugs (raster with auto-correlation)
@@ -86,8 +97,10 @@ data(OC, OC_sd)
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 class(OC_UM)
-some_sample <- genSample(OC_UM, 5, "ugs", nmax=20)
+\dontrun{
+some_sample <- genSample(OC_UM, n = 5, "ugs", nmax=20)
 some_sample
+}
 
 }
 \author{

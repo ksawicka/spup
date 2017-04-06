@@ -11,6 +11,7 @@
 #' 
 #' @examples
 #' 
+#' set.seed(12345)
 #' data(dem30m, dem30m_sd)
 #' dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", 

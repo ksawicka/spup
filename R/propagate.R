@@ -16,6 +16,7 @@
 #' 
 #' @examples
 #' 
+#' set.seed(12345)
 #' ## continuous spatial data example with a single variable
 #' # load data
 #' data(dem30m, dem30m_sd)

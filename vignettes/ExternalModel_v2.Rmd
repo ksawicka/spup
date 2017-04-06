@@ -1,6 +1,6 @@
 ---
 title: "Uncertainty propagation analysis"
-author: "Kasia Sawicka"
+author: "Kasia Sawicka and Dennis Walvoort"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 # output: rmarkdown::pdf_document

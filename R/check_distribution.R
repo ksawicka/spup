@@ -10,7 +10,8 @@
 #' 
 #'
 check_distribution <- function(object) {
-  Supported_ditributions <- c("beta",        
+  object %in% c(beta,
+  # Supported_ditributions <- c("beta",        
                               "cauchy",      
                               "chisq",
                               "contuni",
@@ -26,7 +27,7 @@ check_distribution <- function(object) {
                               "discruni",
                               "geom",
                               "poiss")
-  object %in% Supported_distributions
+  # object %in% Supported_distributions
 }
 
 
