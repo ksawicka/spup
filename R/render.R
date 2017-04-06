@@ -24,7 +24,7 @@
 #'      "|---|---|",
 #'      "{{#MY_TABLE}}",
 #'      "| {{X}} | {{Y}} |",
-#'      "{{/MY_TABLE}}"
+#'      "{{/MY_TABLE}}")
 #' my_table <- data.frame(X = 1:5, Y = letters[1:5])  
 #' my_table
 #' my_template %>% 

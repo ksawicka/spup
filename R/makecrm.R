@@ -8,7 +8,6 @@
 #' distance. Anisotropy is allowed (http://www.gstat.org/gstat.pdf). No nested
 #' models are allowed in the current version.
 #'
-#' @usage makecrm(acf0 = 1, range, model, ...)
 #' 
 #' @param acf0 Aurocorrelation function value at range = 0. Default is 1. Must
 #' fall into interval <0,1>.

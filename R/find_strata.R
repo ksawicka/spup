@@ -5,6 +5,7 @@
 #' See ?defineUM() for Details.
 #' @param parameters parameters to pass to the appropriate sampling funtion, e.g.
 #' mean and sd for "norm" distribution.
+#' @param ... additional parameters.
 #'
 #' @return Strata of the distribution defined by given quantiles. 
 #' 

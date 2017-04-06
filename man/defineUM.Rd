@@ -4,9 +4,8 @@
 \alias{defineUM}
 \title{Define an uncertainty model for a single variable.}
 \usage{
-defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL, 
-                 categories = NULL, cat_prob = NULL, crm = NULL,
-                 id = NULL, ...)
+defineUM(uncertain = TRUE, distribution = NULL, distr_param = NULL,
+  crm = NULL, categories = NULL, cat_prob = NULL, id = NULL, ...)
 }
 \arguments{
 \item{uncertain}{"TRUE" or "FALSE", determines if specification of
