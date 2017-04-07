@@ -36,7 +36,7 @@
 #' # load data
 #' data(OC, OC_sd, TN, TN_sd)
 #' 
-#'  # # Temporarily - convert to spatial grid data frames as raster not supported yet
+#'  # # Test for SpatialGridDataFrames
 #'  # OC <- as(OC, 'SpatialGridDataFrame')
 #'  # TN <- as(TN, 'SpatialGridDataFrame')
 #'  # OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
@@ -48,7 +48,7 @@
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' 
-#' # # some dummy variable to test code on more than two variables
+#' # # add some dummy third  variable to test code on more than two variables
 #' # dummy <- OC
 #' # dummy@data <- OC@data*TN@data/2
 #' # names(dummy) <- "dummy"
