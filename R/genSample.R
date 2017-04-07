@@ -1,6 +1,6 @@
 #' Methods for generating Monte Carlo realizations from uncertain inputs.
 #' 
-#' #' Methods for classes: "MarginalNumericSpatial", "MarginalScalar",
+#' Methods for classes: "MarginalNumericSpatial", "MarginalScalar",
 #' "MarginalCategoricalSpatial", "JoinNumericSpatial", "JointScalar".
 #' Function that runs Monte Carlo simulations depending on the type of
 #' uncertain object. Facilitates unconditional gausian simulation of errors for
