@@ -26,19 +26,14 @@ A Monte Carlo sample of the variables of interest. If asList = TRUE returns
 list of all samples as lists.
 }
 \description{
+Methods for classes: "MarginalNumericSpatial", "MarginalScalar",
+"MarginalCategoricalSpatial", "JoinNumericSpatial", "JointScalar".
 Function that runs Monte Carlo simulations depending on the type of
 uncertain object. Facilitates unconditional gausian simulation of errors for
 spatially auto-correlated residulas, and random sampling, stratified
 sampling if no spatial auto-correlation is included.
 }
 \details{
-Methods for classes:
-"MarginalNumericSpatial"
-"MarginalScalar"
-"MarginalCategoricalSpatial"
-"JoinNumericSpatial"
-"JointScalar"
-
 Sampling methods:
 
 \strong{"ugs"} Unconditional gaussian simulation of spatially auto-correlated and/or

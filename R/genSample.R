@@ -7,7 +7,6 @@
 #' spatially auto-correlated residulas, and random sampling, stratified
 #' sampling if no spatial auto-correlation is included.
 #' 
-#' 
 #' Sampling methods:
 #'
 #' \strong{"ugs"} Unconditional gaussian simulation of spatially auto-correlated and/or
