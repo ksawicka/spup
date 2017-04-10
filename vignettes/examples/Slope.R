@@ -5,6 +5,6 @@ Slope <- function(DEM, ...) {
     raster()
   
   demraster %>%
-    terrain(opt = 'slope', ...) %>%
+    terrain(opt = 'slope', unit = 'degrees', ...) %>%
     as("SpatialGridDataFrame")
 }
