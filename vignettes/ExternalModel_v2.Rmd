@@ -1,5 +1,5 @@
 ---
-title: "Uncertainty propagation analysis"
+title: "Spatial Uncertainty Propagation Analysis"
 author: "Kasia Sawicka and Dennis Walvoort"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -39,7 +39,7 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
 
 ### Introduction
 
-Often, environmental models are developed in other languages than R, for example C or FROTRAN. It significanly speeds up processing. In this simple example, it is shown how to perform uncertainty analysis with a model developed in a different language than R. We use an example with a basic model written in C.
+Often, environmental models are developed in other languages than R, for example C or FORTRAN. It can significantly speed up processing. In this simple example, it is shown how to perform uncertainty analysis with a model developed in a different language than R. We use an example with a basic model written in C.
 
 <br>
 
@@ -63,6 +63,9 @@ library(spup)
 library(dplyr) # a grammar of data manipulation
 library(readr) # fast I/O
 library(whisker) # rendering methods
+
+# set seed
+set.seed(12345)
 ```
 
 Spatial (or other) inputs to the models are often stored in ASCII files. In that case, when using external models in R we need additional code to:
@@ -82,7 +85,7 @@ A template is simply a model input file with:
 1. The additional extension `.template`. 
 2. Input that needs to be modified is replaced by mustache-style tags. 
 
-For example, lets have a model that needs the input file: `input.txt`. This input file contains two parameters "b0" and "b1". The contents of the original file may look like:
+For example, suppose we have a model that needs the input file: `input.txt`. This input file contains two parameters "b0" and "b1". The contents of the original file may look like:
 
 ```{r}
 read_lines("examples/input.txt")
@@ -106,7 +109,7 @@ my_template %>%
 
 ```
 
-The example above calls method `render()` for the class "character". It is also possible to fill in an entire table:
+The example above calls method `render()` for the class "character". It is also possible to fill an entire table:
 
 ```{r}
 my_template <- c(
@@ -157,7 +160,7 @@ my_template %>%
 
 An external model can be called from R by means of the `system` or `system2` function. To facilitate this, _spup_ includes the wrapper function `executable()`.
 
-_spup_ includes an example external model written in the C language: `dummy_model.C`. To compile this code to a MS-Windows executable you can use a free C compiler GCC running comman `gcc dummy_model.c -o dummy_model`. This will create a file `dummy_model.exe`. 
+_spup_ includes an example external model written in the C language: `dummy_model.C` that calculates a value of a simple simple linear regression model. To compile this code to a MS-Windows executable you can use a free C compiler GCC running command `gcc dummy_model.c -o dummy_model`. This will create a file `dummy_model.exe`. 
 
 We can now wrap this model in R as follows:
 
@@ -181,7 +184,7 @@ dummy_model()
 scan(file = "examples/output.txt", quiet = TRUE)
 ```
 
-To perform the uncertainty propagation analysis we need to create multiple realizations of the model output in steps as follows:
+To perform the uncertainty propagation analysis we need to derive multiple realizations of the model output in steps as follows:
  
  1. Render the template.
  2. Run the model.
@@ -208,7 +211,6 @@ n_realizations %>%
     as_data_frame %>%
     apply(MARGIN = 1, FUN = quantile)    
 ```
-
 
 
 ### Acknowledgements
