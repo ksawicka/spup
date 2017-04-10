@@ -31,6 +31,8 @@
 #' @param p A vector of quantiles. Optional. Only required if sample method is "stratifiedSampling" or "lhs".
 #' @param asList logical. If asList = TRUE returns list of all samples as a list. 
 #' If asList = FALSE returns samples in a format of distribution parameters in UMobject.
+#' @param debug.level integer; set gstat internal debug level, see below for useful values. 
+#' If set to -1 (or any negative value), a progress counter is printed.
 #' @param ... Additional parameters that may be passed, e.g. in the "ugs" method. See examples.
 #' 
 #'
@@ -209,6 +211,6 @@
 #' 
 #' 
 #' @export
-genSample <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
+genSample <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, debug.level = 1, ...) {
   UseMethod("genSample")
 } 

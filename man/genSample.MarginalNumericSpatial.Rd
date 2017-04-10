@@ -6,7 +6,7 @@
 'MarginalNumericSpatial'}
 \usage{
 \method{genSample}{MarginalNumericSpatial}(UMobject, n, samplemethod, p = 0,
-  asList = TRUE, ...)
+  asList = TRUE, debug.level = 1, ...)
 }
 \arguments{
 \item{UMobject}{uncertain object defined using defineUM().}
@@ -22,6 +22,9 @@ considered.}
 
 \item{asList}{logical. If asList = TRUE returns list of all samples as a list. 
 If asList = FALSE returns samples in a format of distribution parameters in UMobject.}
+
+\item{debug.level}{integer; set gstat internal debug level, see below for useful values. 
+If set to -1 (or any negative value), a progress counter is printed.}
 
 \item{...}{Additional parameters that may be passed, e.g. in
 the "ugs" method. See examples.}

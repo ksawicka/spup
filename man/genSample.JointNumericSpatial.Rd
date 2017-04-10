@@ -5,7 +5,7 @@
 \title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated.}
 \usage{
 \method{genSample}{JointNumericSpatial}(UMobject, n, samplemethod, p = 0,
-  asList = TRUE, ...)
+  asList = TRUE, debug.level = 1, ...)
 }
 \arguments{
 \item{UMobject}{object of a class JointNumericSpatial. Output of defineMUM().}
@@ -19,6 +19,9 @@ non-spatial variables, "lhs" if no correlation of errors is considered.}
 
 \item{asList}{Logical. If TRUE return sample in a form of a list, if FALSE returnsample in a format
 of distribution parameters.}
+
+\item{debug.level}{integer; set gstat internal debug level, see below for useful values. 
+If set to -1 (or any negative value), a progress counter is printed.}
 
 \item{...}{Additional parameters that may be passed, e.g. in
 the "ugs" method. See examples.}
@@ -50,7 +53,7 @@ set.seed(12345)
 # load data
 data(OC, OC_sd, TN, TN_sd)
 
- # # Temporarily - convert to spatial grid data frames as raster not supported yet
+ # # Test for SpatialGridDataFrames
  # OC <- as(OC, 'SpatialGridDataFrame')
  # TN <- as(TN, 'SpatialGridDataFrame')
  # OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
@@ -62,7 +65,7 @@ OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm =
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 
-# # some dummy variable to test code on more than two variables
+# # add some dummy third  variable to test code on more than two variables
 # dummy <- OC
 # dummy@data <- OC@data*TN@data/2
 # names(dummy) <- "dummy"

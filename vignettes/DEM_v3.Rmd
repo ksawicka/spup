@@ -1,5 +1,5 @@
 ---
-title: "Spatial uncertainty propagation analysis"
+title: "Spatial Uncertainty Propagation Analysis"
 author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -61,7 +61,7 @@ For uncertain spatially distributed continuous variables, such as elevation, we 
 
 	Z(x)= μ(x)+ σ(x)∙ε(x)
 
-where x is geographic location,  μ is the (deterministic) mean of Z, σ is its standard deviation and ε is a standard normal (hence zero mean and unit variance), second-order stationary stochastic residual, whose spatial autocorrelation is  modelled with a semivariogram or correlogram. Both μ and σ may vary in space so that spatial trends and spatially variable uncertainty can be taken into account. In the case of elevation, it makes sense to let μ be equal to the DEM while σ may have greater values in mountainous areas than in flat terrain (e.g. Beekhuizen, et al., 2011). The random sample is drawn from the pdf of ε to further calculate a sample from Z.
+where x is geographic location,  μ is the (deterministic) mean of Z, σ is its standard deviation and ε is a standard normal (hence zero mean and unit variance), second-order stationary stochastic residual, whose spatial autocorrelation is  modelled with a semivariogram or correlogram. Both μ and σ may vary in space so that spatial trends and spatially variable uncertainty can be taken into account. In the case of elevation, it makes sense to let μ be equal to the DEM while σ may have greater values in mountainous areas than in flat terrain (e.g. Beekhuizen, et al., 2011). In the example below both maps have been prepared. The random sample is drawn from the pdf of ε to further calculate a sample from Z.
 
 <br>
 
@@ -73,7 +73,7 @@ where x is geographic location,  μ is the (deterministic) mean of Z, σ is its 
 
 The example data for slope calculations are a 30m resolution mean DEM and standard deviation from the Zlatibor region in Serbia.
 
-The data contains two spatial objects: a mean (dem30m) and the standard deviation (dem30m_sd) map. A function that calculates slope from elevation that will be used later is also provided.
+The data contain two spatial objects: a mean (dem30m) and the standard deviation (dem30m_sd) map. A function that calculates slope from elevation that will be used later is also provided.
 
 
 ```{r, fig.width = 5, fig.height = 6} 
@@ -81,9 +81,14 @@ The data contains two spatial objects: a mean (dem30m) and the standard deviatio
 library(sp)
 library(spup)
 library(gridExtra)
+library(purrr)
+library(magrittr)
 
 # source code for Slope model
 source("examples/Slope.R")
+
+# set seed
+set.seed(12345)
 
 # load and view the data
 data(dem30m, dem30m_sd)
@@ -134,7 +139,7 @@ plot(crm, main = "'Gaussian', acf0 = 0.8, range = 200")
 In order to complete the description of the uncertain variable we use the `defineUM()` function that collates all information about the DEM uncertainty into one object. The minimum information required is:
 
 * logical value that indicates if the object is uncertain.
-* distribution type to sample from. In case of variables with spatially correlated errors only the normal distribution is supported. For details on supported distributions and required parameters see `?defineUM`.
+* distribution type to sample from. In case of variables with spatially correlated errors only the normal distribution is supported. For details on supported distributions and required parameters see `?defineUM()`.
 * list of distribution parameters, for example a mean and a standard deviation (sd) for the normal distribution. In the case presented here, these are maps of the mean DEM and standard deviation of the DEM error. 
 * correlogram model.
 
@@ -146,17 +151,19 @@ demUM <- defineUM(uncertain = TRUE, distribution = "norm",
 class(demUM)
 ```
 
+The output of the function `defineUM()` has a class "MarginalNumericSpatial", becasue we are defining the uncertainty model for our example DEM - a single variable (hence Marginal) which has numerical values (Numeric) and is spatially distributed (Spatial). The assigned class depends on the arguments provided to the `defineUM()` function. The other classes include "MarginalCategoricalSpatial" and "MarginalScalar". Similarly function `defineMUM()` creates objects of classes "JointNumericSpatial" and "JointScalar" if we want to define multivariate uncertainty model (MUM).
+
 <br>
 
 #### Generate possible realities of DEM
 
-Generating possible realities of the elevation can be completed by using the genSample() function. The required information to pass to the function includes:
+Generating possible realities of the elevation can be completed by using the `genSample()` function. `genSample()` is a S3 method for all the classes listed above.  The required information to pass to the function includes:
 
 * uncertain object (as defined above).
 * number of realizations to return.
 * sampling method. In case of spatially correlated variables, the method "ugs" (method based on unconditional Gaussian simulation) is recommended, otherwise spatial correlation will not be taken into account. Other sampling methods include "randomSampling" and "stratifiedSampling". See `?genSample` for more details.
 
-Additional parameters may be also specified. For example, sampling of spatially correlated variable is based on the 'gstat' package that allows for limiting the number of nearest observations that should be used for simulation.
+Additional parameters may be also specified. For example, sampling of spatially correlated variables is based on the 'gstat' package that allows for limiting the number of nearest observations to be used for simulation.
 
 The sample must be large to obtain stable results. Let us run the sampling to obtain 100 realizations. Note that the argument 'asList' has been set to FALSE. This indicates that the sampling function will return an object of the same class as maps of the elevation mean and sd. This is useful if you want to visualize the sample or compute summary statistics quickly.
 
@@ -179,7 +186,7 @@ grid.arrange(spplot(dem_sample_mean, main = list(label = "Mean of the DEM realiz
              spplot(dem_sample_sd, main = list(label = "Standard dev. of the DEM realizations", cex = 1)))
 ```
 
-The spatial pattern of the generated realizations depends on the degree of spatial auto-correlation. For instance, notice that the realizations become more ‘noisy’ if we assume less spatial-autocorrelation:
+The spatial pattern of the generated realizations depends on the degree of spatial autocorrelation. For instance, notice that the realizations become more ‘noisy’ if we assume less spatial autocorrelation:
 
 ```{r, fig.width = 5, fig.height = 6} 
 dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
@@ -200,7 +207,7 @@ In order to perform uncertainty propagation analysis using 'spup', the model thr
 Slope
 ```
 
-The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analysed. To run the Slope model with the elevations realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
+The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analysed. To run the Slope model with the elevation realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
 
 * a sample from the uncertain model inputs and any other remaining model inputs and parameters as a list.
 * the model as a function in R.
@@ -254,9 +261,9 @@ grid.arrange(spplot(slope_mean, main = list(label = "Mean of the slope realizati
 We can view example of slope realizations at locations:
 
 ```{r, fig.width = 5, fig.height = 3}
-# selec a couple of locations and plot points on the slope map
-loc1 <- 2200
-loc2 <- 6200
+# select a couple of locations and plot points on the slope map
+loc1 <- 2200  # the numbers correspond to rows number in SpatialGridDataFrame 'dem30m'
+loc2 <- 6200  # with an example location of high and low DEM
 points <- data.frame(t(coordinates(slope_sample)[loc1,]))
 points[2,] <- t(coordinates(slope_sample)[loc2,])
 coordinates(points) <- ~ s1 + s2
@@ -278,7 +285,7 @@ hist(as.numeric(slope_sample@data[loc2,]), main = paste("Slope at low DEM sd,", 
      "mean = ", round(h_mean, 2), ", sd = ", round(h_sd, 2), sep = ""), xlab = "Slope")
 ```
 
-Since slope is a nearly linear combination of elevation differences, the slope sd has a similar spatial pattern as elevation sd. Therefore at locations with high elevation sd we get much higher uncertainty in slope predictions.
+Since slope is a nearly linear combination of elevation differences, the slope sd has a similar spatial pattern as elevation sd. Therefore at locations with high elevation sd we get high uncertainty in slope predictions.
 
 
 ```{r, fig.width = 5, fig.height = 5}
@@ -298,15 +305,15 @@ slope_q <- quantile_MC_sgdf(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm
 spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
 ```
 
-For example, let us identify locations with slopes that are possible (slope > 0.2) safe (slope < 0.5) for tourist skiing with probability 90%.
+For example, let us identify locations with slopes that are possible (slope > 0.2) and safe (slope < 0.5) for tourist skiing.
 
 ```{r, fig.width = 5, fig.height = 3}
 # identify areas of slope > 0.2 and < 0.5
-slope_q$safep90 <- NA
-slope_q$safep90[slope_q$prob90perc < 0.5 & slope_q$prob90perc > 0.2] <- "good"
-slope_q$safep90[is.na(slope_q$safep90)] <- "bad"
-slope_q$safep90 <- as.factor(slope_q$safep90)
-spplot(slope_q, "safep90", col.regions = c("red","green"), main = "90% certain suitable for skiing")
+slope_q$skiing <- NA
+slope_q$skiing[slope_q$prob10perc < 0.5 & slope_q$prob10perc > 0.2] <- "good"
+slope_q$skiing[is.na(slope_q$skiing)] <- "bad"
+slope_q$skiing <- as.factor(slope_q$skiing)
+spplot(slope_q, "skiing", col.regions = c("red","green"), main = "Areas suitable for skiing")
 ```
 
 Additionally to guarantee snow we can select areas with elevation > 1000m.
@@ -325,7 +332,7 @@ snow_poly <- aggregate(snow_poly, by = "Elev1000")
 transparent_grey <- rgb(0,0,0, alpha = 0.35)
 spl <- list("sp.grid", slope_q[5], col = c("red","green"))
 spplot(snow_poly, col.regions = c(transparent_grey, "transparent"),  
-       main = "90% certain suitable for skiing and snow presence",
+       main = "Sufficiently certain that suitable for skiing and snow presence",
        sp.layout = spl)
 ```
 

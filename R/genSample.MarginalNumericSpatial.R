@@ -27,6 +27,8 @@
 #' "stratifiedSampling" or "lhs".
 #' @param asList logical. If asList = TRUE returns list of all samples as a list. 
 #' If asList = FALSE returns samples in a format of distribution parameters in UMobject.
+#' @param debug.level integer; set gstat internal debug level, see below for useful values. 
+#' If set to -1 (or any negative value), a progress counter is printed.
 #' @param ...  Additional parameters that may be passed, e.g. in
 #' the "ugs" method. See examples.
 #' 
@@ -95,7 +97,7 @@
 #' @importFrom methods as
 #'
 #' @export
-genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
+genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, debug.level = 1, ...) {
   
   # PRELIMINARIES -------------------------------------------------------------------
   # ---------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
     g <- gstat::gstat(formula = z~1, dummy = TRUE, beta = 0, model = crm2vgm(crm), ...)
     
     # simulate epsilon
-    epsilon_sample <- predict(object = g, newdata = mask, nsim = n)
+    epsilon_sample <- predict(object = g, newdata = mask, nsim = n, debug.level = debug.level)
     
     # calculate Z = m + sd*epsilon
     X_sample <- epsilon_sample # assign geometry

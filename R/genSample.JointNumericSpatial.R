@@ -19,10 +19,12 @@
 #' @param samplemethod "ugs" for spatially cross-correlated errors, "randomSampling" for joint PDF of 
 #' non-spatial variables, "lhs" if no correlation of errors is considered.
 #' @param p A vector of quantiles. Optional. Only required if sample method is "lhs".
-#' @param ...  Additional parameters that may be passed, e.g. in
-#' the "ugs" method. See examples.
 #' @param asList Logical. If TRUE return sample in a form of a list, if FALSE returnsample in a format
 #' of distribution parameters.
+#' @param debug.level integer; set gstat internal debug level, see below for useful values. 
+#' If set to -1 (or any negative value), a progress counter is printed.
+#' @param ...  Additional parameters that may be passed, e.g. in
+#' the "ugs" method. See examples.
 #' 
 #' @return A Monte Carlo sample of the variables of interest. If asList = TRUE returns
 #' list of all samples as lists. 
@@ -83,7 +85,7 @@
 #' @importFrom raster stack
 #' 
 #' @export
-genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, ...) {
+genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asList = TRUE, debug.level = 1,  ...) {
   
   
   # PRELIMINARIES ----------------------------------------------------------------
@@ -165,7 +167,7 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
     
     # predict epsilon
     mask <- means[[1]] # assign geometry
-    epsilon_sample <- predict(object = g, newdata = mask, nsim = n)
+    epsilon_sample <- predict(object = g, newdata = mask, nsim = n, debug.level = debug.level)
     # calculate Z = m + sd*epsilon for each variable
     Cross_sample <- epsilon_sample # assing geometry and dimentions the same as for epsilons
     # first variable:
