@@ -1,5 +1,5 @@
 ---
-title: "Spatial uncertainty propagation analysis"
+title: "Spatial Uncertainty Propagation Analysis"
 author: "Kasia Sawicka and Gerard Heuvelink"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -40,11 +40,11 @@ par(mar = c(3, 3, 2, 2), mgp = c(1.7, 0.5, 0), las = 1, cex.main = 1, tcl = -0.2
 
 In many aspects of life information is available and required in a form of categorical data. For example, in a city neighbourhood or a district each building has assigned a function (housing, office, etc.). Depending on the building function the city council may impose different tax levels. 
 
-In this simple example, in a neighbourhood the function of the building is assigned depending on the building percentage of area inside the building that is used for living (woonareash) and number of addresses (units) inside each building (vbos). If the residential area is higher than 80% and has at least one address registered then the building is classified as "residential". If the residential area is less than 80% and at least one address is present the building is classified as "office". If no address is present the building function is assumed as "other". Depending of these categories the city council imposes the tax levels of €1000, €10000, €10 per year, accordingly. The 80% threshhold is approximate though and some buildings classified as "others" could have got the address assigned but not put on a system yet, therefore the council wants to calculate the variation in tax revenue depending on building classification. 
+In this simple example, in a neighbourhood the function of a building is assigned depending on the building percentage of area inside the building that is used for living and number of addresses inside each building. If the residential area is higher than 80% and has at least one address registered then the building is classified as "residential". If the residential area is less than 80% and at least one address is present the building is classified as "office". If no address is present the building function is assumed as "other". Depending of these categories the city council imposes tax levels of €1000, €10000, €10 per year, respectively. The 80% threshold is approximate though and some buildings classified as "others" could have got the address assigned but not put on a system yet, therefore the council wants to calculate the uncertainty in tax revenue depending on errors introduced by erroneous building classification. 
 
 <br>
 
-### Adapted Monte Carlo methodology for spatial uncertainty analysis with categorical variable
+### Adapted Monte Carlo methodology for spatial uncertainty analysis with a categorical variable
 
 The adapted uncertainty propagation analysis approach is based on the Monte Carlo method that computes the output of the model repeatedly, with input values that are randomly sampled from their non-parameteric pdfs. The set of model outputs forms a random sample from the output pdf. The method thus consists of the following steps:
 
@@ -53,15 +53,13 @@ The adapted uncertainty propagation analysis approach is based on the Monte Carl
 1.	Run model with sampled inputs and store model outputs.
 1. 	Compute summary statistics of model outputs.
 
-Note that the above ignores uncertainty in model parameters and model structure, but these can easily be included if available as probability distribution functions (pdfs).  
-
 <br>
 
 ### Building function uncertainty propagation analysis with 'spup'
 
 #### Preliminaries - load and view the data
 
-The example data for tax calculation contain spatial distribution of buildings in one of the neighbourhoods in Rotterdam, NL. 
+The example data for tax calculation contain the spatial distribution of buildings in a neighbourhood in Rotterdam, NL. 
 
 
 ```{r, fig.width = 5, fig.height = 5} 
@@ -73,6 +71,9 @@ library(purrr)
 # tax model script
 source("examples/tax.R")
 
+# set seed
+set.seed(12345)
+
 # load and view the data
 data(woon)
 plot(woon, main = "Neighbourhood", cex.main = 1)
@@ -80,34 +81,48 @@ head(woon@data)
 ```
 
 The 'woon' object is a SpatialPolygonDataFrame where each building is represented by one polygon. The attributes contain:
-- vbos - number of addresses present in the building,
-- woonareash - residential area [%],
-- Function - assigned category depending on vbos and woonareash - for residential is 1, for offcie is 2, for other is 3,
-- residential - probability that the building is residential,
-- office - probability that the building is an office,
-- other - probability that the building has other function.
 
-In the nexts section we explain how do we use the information about the probabilities.
+* vbos - number of addresses present in the building,
+* woonareash - residential area [%],
+* Function - assigned category depending on vbos and woonareash - for residential it is 1, for office it is 2, for other is 3,
+* residential - probability that the building is residential,
+* office - probability that the building is an office,
+* other - probability that the building has another function.
+
+In the next section we explain how we use the information about the probabilities.
 
 <br>
 
-#### Define uncertainty model (UM) for the bulding function
+#### Define uncertainty model (UM) for the building function
 
-In case of categorical variables the uncertainty is described by use of non-parameteric pdfs. In our case of the neighbourhood we describe it by a vector of probabilities that a building has a certain category. In case of spatially distributed variables we have to do this for each polygon, hence the dataset has maps of these probabilities saved in the same object. 
+In case of categorical variables the uncertainty is described by use of non-parameteric pdfs. In our case we describe it by a vector of probabilities that a building belongs to a certain category. In case of spatially distributed variables we have to do this for each polygon, hence the dataset has maps of these probabilities saved in the same object. 
 
-To collate all the information of the uncertainty model for the building function we use the `defineUM()` function that collates all information into one object. The minimum information required is:
+To unite all information of the uncertainty model for the building function we use the `defineUM()` function that collates all information into one object. The minimum information required is:
 
 * a logical value that indicates if the object is uncertain,
-* a vector of categories; character and numberic type is allowed, 
-* a data frame with probabilies for each category.
+* a vector of categories; character and numeric type is allowed, 
+* a data frame with probabilities for each category.
 
 ```{r} 
-
 # define uncertainty model for the bulding function
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
 class(woonUM)
-
 ```
+
+The argument `cat_prob` is the probabilities vector. In case of spatial vatiables for each polygon a vector of probabilities is collated into a data frame (as above). Foreach polygon, the probabilities vector should sum to one:
+
+```{r}
+woon$check <- woon$residential + woon$office + woon$other
+summary(woon$check)
+```
+
+We can have a look at how the probabilities for each polygon look like:
+
+```{r}
+spplot(woon[c(4,5,6)])
+```
+
+
 
 <br>
 
@@ -126,21 +141,21 @@ woon_sample <- genSample(woonUM, 10, asList = FALSE)
 class(woon_sample)
 
 # view several realizations
-spplot(woon_sample[c(3,4,1,2)], main = list(label = "Examples of the building function realizations", cex = 1))
+spplot(woon_sample[c(3,4,1,2)], main = list(label = "Examples of building function realizations", cex = 1))
 ```
 
 <br>
 
 #### Uncertainty propagation through the model that calculates tax revenue for the neighbourhood 
 
-In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'Rotterdam' data object includes an example of a pre-defined model that calculates slope using building function as input. Note that the model has a requirement that the building function is stored in a SpatialPolygonDataFrame and in a column named 'Function'.
+In order to perform uncertainty propagation analysis using 'spup', the model through which uncertainty is propagated needs to be defined as an R function. The 'Rotterdam' data object includes an example of a pre-defined model that calculates tax using building function as input. Note that the model has a requirement that the building function is stored in a SpatialPolygonDataFrame and in a column named 'Function'.
 
 ```{r} 
 # view the model
 tax
 ```
 
-The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the Slope model with the building function realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
+The propagation of uncertainty occurs when the model is run with an uncertain input. Running the model with a sample of realizations of uncertain input variable(s) yields an equally large sample of model outputs that can be further analyzed. To run the `tax` model with the building function realizations we use the `propagate()` function. The `propagate()` function takes as arguments:
 
 * a sample from the uncertain model inputs and any other remaining model inputs and parameters as a list.
 * the model as a function in R.
@@ -172,7 +187,7 @@ tax_sample
 summary(unlist(tax_sample))
 ```
 
-We can see that on average the city council should obtain the tax revenue of €2300000, but depending on the building classification this amount may vary by €120000. Basing on this cost estimation the policy makers may adapt more rigorous classification for the tax revenue.
+We can see that on average the city council should obtain the tax revenue of €2300000, but depending on the building classification this amount may vary by €120000. 
 
 <br>
 
