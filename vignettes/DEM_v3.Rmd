@@ -80,6 +80,7 @@ The data contain two spatial objects: a mean (dem30m) and the standard deviation
 # load packages
 library(sp)
 library(spup)
+library(GGally)
 library(gridExtra)
 library(purrr)
 library(magrittr)
@@ -191,7 +192,8 @@ The spatial pattern of the generated realizations depends on the degree of spati
 ```{r, fig.width = 5, fig.height = 6} 
 dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
 demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
-dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
+dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE,
+                         debug.level = -1)
 grid.arrange(spplot(dem_sample, c(1), main = list(label = "dem_sample, acf0 = 0.8, range = 300m", cex = 1)),
              spplot(dem_sample2, c(1), main = list(label = "dem_sample2, acf0 = 0.2, range = 300m", cex = 1)))
 ```
@@ -220,7 +222,8 @@ In order to run the propagation function it is necessary to save the sample of a
 dem_sample <- map(1:ncol(dem_sample), function(x){dem_sample[x]})
 
 # or sample from uncertain input and save it in a list
-dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE)
+dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = TRUE,
+                        debug.level = -1)
 ```
 
 ```{r} 
@@ -253,9 +256,10 @@ spplot(slope_sample[c(5,6,3,4,1,2)], main = list(label = "Examples of the slope 
 # compute and plot slope sample statistics
 # e.g. mean and standard deviation
 slope_mean <- mean_MC_sgdf(slope_sample)
+summary(slope_mean)
 slope_sd <- sd_MC_sgdf(slope_sample, na.rm = TRUE) # na.rm = TRUE is necessary, because slope cannot be calculated at the border
-grid.arrange(spplot(slope_mean, main = list(label = "Mean of the slope realizations", cex = 1)),
-             spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations", cex = 1)))
+grid.arrange(spplot(slope_mean, main = list(label = "Mean of the slope realizations [deg]", cex = 1)),
+             spplot(slope_sd, main = list(label = "Standard dev. of the slope realizations [deg]", cex = 1)))
 ```
 
 We can view example of slope realizations at locations:
@@ -263,7 +267,7 @@ We can view example of slope realizations at locations:
 ```{r, fig.width = 5, fig.height = 3}
 # select a couple of locations and plot points on the slope map
 loc1 <- 2200  # the numbers correspond to rows number in SpatialGridDataFrame 'dem30m'
-loc2 <- 6200  # with an example location of high and low DEM
+loc2 <- 6200  # with an example location of high and low DEM sd
 points <- data.frame(t(coordinates(slope_sample)[loc1,]))
 points[2,] <- t(coordinates(slope_sample)[loc2,])
 coordinates(points) <- ~ s1 + s2
@@ -290,7 +294,6 @@ Since slope is a nearly linear combination of elevation differences, the slope s
 
 ```{r, fig.width = 5, fig.height = 5}
 # scatter plot of slope against elevation
-library(GGally)
 slope1 <- Slope(dem30m)
 names(slope1@grid@ cellcentre.offset) <- c("x", "y")
 df <- cbind(dem30m_sd@data, slope1@data)
@@ -305,13 +308,12 @@ slope_q <- quantile_MC_sgdf(slope_sample, probs = c(0.1, 0.25, 0.75, 0.9), na.rm
 spplot(slope_q[c(3,4,1,2)], mail = list(label = "Quantiles of slope realizations", cex = 1))
 ```
 
-For example, let us identify locations with slopes that are possible (slope > 0.2) and safe (slope < 0.5) for tourist skiing.
+For example, let us identify locations with slopes that we are 90% sure that are possible (slope > 5 deg.) for tourist skiing.
 
 ```{r, fig.width = 5, fig.height = 3}
-# identify areas of slope > 0.2 and < 0.5
+# identify areas of slope > 10 deg with 90% certainty.
 slope_q$skiing <- NA
-slope_q$skiing[slope_q$prob10perc < 0.5 & slope_q$prob10perc > 0.2] <- "good"
-slope_q$skiing[is.na(slope_q$skiing)] <- "bad"
+slope_q$skiing <- ifelse(slope_q$prob10perc > 5, ">90%certain", "<90%certain")
 slope_q$skiing <- as.factor(slope_q$skiing)
 spplot(slope_q, "skiing", col.regions = c("red","green"), main = "Areas suitable for skiing")
 ```
@@ -332,7 +334,7 @@ snow_poly <- aggregate(snow_poly, by = "Elev1000")
 transparent_grey <- rgb(0,0,0, alpha = 0.35)
 spl <- list("sp.grid", slope_q[5], col = c("red","green"))
 spplot(snow_poly, col.regions = c(transparent_grey, "transparent"),  
-       main = "Sufficiently certain that suitable for skiing and snow presence",
+       main = paste("Sufficiently certain that suitable", "\n", "for skiing and snow presence") ,
        sp.layout = spl)
 ```
 
