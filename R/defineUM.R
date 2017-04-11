@@ -3,7 +3,12 @@
 #' Function that allows to define marginal uncertainty distributions 
 #' for model inputs and subsequent Monte Carlo analysis.
 #'
-#' If the uncertain object is a spatial object, the distribution parameters or the probabilities for categories must be provided by means of maps, for example if a spatial variable has a normal distribution, a map of means and standard deviations must be provided. If crm is provided and spatial correlation between the residuals is assumed only the normal distribution for residuals is allowed.
+#' If the uncertain object is a spatial object, the distribution parameters
+#' or the probabilities for categories must be provided by means of maps,
+#' for example if a spatial variable has a normal distribution, a map of means
+#' and standard deviations must be provided. 
+#' If crm is provided and spatial correlation between the residuals is assumed
+#' only the normal distribution for residuals is allowed.
 #'
 #' If no spatial correlations between residuals is assumed, allowed
 #' distributions for marginal uncertainty models are listed in Table 1.
