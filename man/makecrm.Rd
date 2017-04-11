@@ -7,8 +7,8 @@
 makecrm(acf0, range, model, ...)
 }
 \arguments{
-\item{acf0}{Aurocorrelation function value at range = 0. Default is 1. Must
-fall into interval <0,1>.}
+\item{acf0}{Aurocorrelation function value at distance near 0. Default is 1. Must
+fall in interval [0,1].}
 
 \item{range}{Range parameter of the correlogram model component.}
 
@@ -27,8 +27,8 @@ Function that generates a spatial correlogram model, an object of class "crm".
 \details{
 For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
 gstat manual (\url{http://www.gstat.org/gstat.pdf}). Spatial correlation
-assumes stationarity, i.e. correlation depends only on points separation
-distance. Anisotropy is allowed (http://www.gstat.org/gstat.pdf). No nested
+assumes stationarity, i.e. correlation depends only on the separation
+distance between points in space. Anisotropy is allowed (http://www.gstat.org/gstat.pdf). No nested
 models are allowed in the current version.
 }
 \examples{

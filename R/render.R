@@ -1,11 +1,11 @@
-#' Generic function render.
+#' Rendering template
 #'
 #' Rendering is the process of replacing the tags in moustaches by text.
-#' For this, we provide a set of render-methods. See the `whisker`-package
+#' For this, we provide a set of render-methods. See the `whisker` package
 #' (or https://mustache.github.io) for more information.
 #'
 #' @param x an object of class "character" or "template".
-#' @param ... additional parametes.
+#' @param ... additional parameters.
 #'
 #' @return Rendered character template or a file on disk.
 #'

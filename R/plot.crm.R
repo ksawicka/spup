@@ -1,4 +1,4 @@
-#' Plots correlogram model.
+#' Plots correlogram model
 #'
 #' @param x Object of class "crm" as created by makecrm().
 #' @param distance minimum distance between locations (unit should correspond

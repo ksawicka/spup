@@ -6,9 +6,9 @@
 #' @param realizations a list where each element is a single Monte Carlo realizations 
 #' if only one parameter/variable is considered uncertain; a list of such lists if more
 #' than one parameter/variable is considered uncertain.
-#' @param model a model that is written as a function in R.
-#' @param n a number of Monte Carlo Runs.
-#' @param ... any arguments that the model takes on top of realizations.
+#' @param model model that is written as a function in R.
+#' @param n number of Monte Carlo Runs.
+#' @param ... any further arguments that the model takes.
 #'
 #' @return Model output Monte Carlo realizations.
 #'

@@ -1,6 +1,6 @@
-#' Wrapper function for calling executables in R.
+#' Wrapper function for calling executables in R
 #'
-#' @param filename a path with a name to the .exe file to wrapped here.
+#' @param filename a path with a name to the .exe file to be wrapped here.
 #'
 #' @return Executable output.
 #' 

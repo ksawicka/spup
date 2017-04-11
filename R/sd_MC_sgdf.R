@@ -2,7 +2,7 @@
 #' 
 #' Calculates sd from MC realizations for each location in a map.
 #'
-#' @param realizations MC sample saved in SpatialGridDataFrame.
+#' @param realizations MC sample saved in a SpatialGridDataFrame.
 #' @param ... additional parameters.
 #'
 #' @return SpatialGridDataFrame; a sd of a MC sample.

@@ -2,21 +2,21 @@
 % Please edit documentation in R/render.R
 \name{render}
 \alias{render}
-\title{Generic function render.}
+\title{Rendering template}
 \usage{
 render(x, ...)
 }
 \arguments{
 \item{x}{an object of class "character" or "template".}
 
-\item{...}{additional parametes.}
+\item{...}{additional parameters.}
 }
 \value{
 Rendered character template or a file on disk.
 }
 \description{
 Rendering is the process of replacing the tags in moustaches by text.
-For this, we provide a set of render-methods. See the `whisker`-package
+For this, we provide a set of render-methods. See the `whisker` package
 (or https://mustache.github.io) for more information.
 }
 \examples{

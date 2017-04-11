@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.crm.R
 \name{plot.crm}
 \alias{plot.crm}
-\title{Plots correlogram model.}
+\title{Plots correlogram model}
 \usage{
 \method{plot}{crm}(x, distance = 1, ylim = c(0, 1), ...)
 }
@@ -20,7 +20,7 @@ with the unit of the range parameter in makecrm()).}
 plot of correlogram model
 }
 \description{
-Plots correlogram model.
+Plots correlogram model
 }
 \examples{
 

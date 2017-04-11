@@ -7,7 +7,7 @@
 sd_MC_sgdf(realizations, ...)
 }
 \arguments{
-\item{realizations}{MC sample saved in SpatialGridDataFrame.}
+\item{realizations}{MC sample saved in a SpatialGridDataFrame.}
 
 \item{...}{additional parameters.}
 }

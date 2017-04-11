@@ -11,11 +11,11 @@ propagate(realizations, model, n, ...)
 if only one parameter/variable is considered uncertain; a list of such lists if more
 than one parameter/variable is considered uncertain.}
 
-\item{model}{a model that is written as a function in R.}
+\item{model}{model that is written as a function in R.}
 
-\item{n}{a number of Monte Carlo Runs.}
+\item{n}{number of Monte Carlo Runs.}
 
-\item{...}{any arguments that the model takes on top of realizations.}
+\item{...}{any further arguments that the model takes.}
 }
 \value{
 Model output Monte Carlo realizations.

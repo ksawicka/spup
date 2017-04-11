@@ -1,13 +1,9 @@
-#' Define an uncertainty model for a single variable.
+#' Define an uncertainty model for a single variable
 #'
 #' Function that allows to define marginal uncertainty distributions 
 #' for model inputs and subsequent Monte Carlo analysis.
 #'
-#' If the uncertain object is a spatial object, the distribution parameters 
-#' or the probabilities for categories must be provided by means of maps, for example
-#' if a spatial variable has a normal distribution, a map of mean and standard deviation
-#' must be provided. If crm is provided and spatial correlation between the residuals
-#' is assumed only the normal distribution of residuals is allowed.
+#' If the uncertain object is a spatial object, the distribution parameters or the probabilities for categories must be provided by means of maps, for example if a spatial variable has a normal distribution, a map of means and standard deviations must be provided. If crm is provided and spatial correlation between the residuals is assumed only the normal distribution for residuals is allowed.
 #'
 #' If no spatial correlations between residuals is assumed, allowed
 #' distributions for marginal uncertainty models are listed in Table 1.
@@ -35,30 +31,30 @@
 #' @param uncertain "TRUE" or "FALSE", determines if specification of
 #' Uncertainty Model (UM) is needed. Currently not in use, but provided for 
 #' furture implementation of contributions analysis. 
-#' @param distribution a string specified which distribution to sample from. Only in use 
-#' for continuos or discrete numvariables. See Details for a list of supported distributions.
-#' @param distr_param a vector or a list with distribution parameters. For example, for 
-#' normal distribution in spatial variable this must be a map of means and a map
-#' of standard deviations for each location. Only in use for continuos or discrete numvariables.
-#' @param crm a correlogram model, object of a class "SpatialCorrelogramModel",
-#' output of makecormodel(). Can only be specified for numerical variables.
-#' @param categories a vector of categories. Only in use for categorical (e.g. saved as character)
-#' or discrete numerical variables.
-#' @param cat_prob spatial data frame or raster stack; A list of probabilities for the vector of categories.
-#' Number of columns in the data frame cannot be smaller than number of categories. Only in use
-#' for categorical (e.g. saved as character) or discrete numerical variables.
-#' @param id identifier of the variable; only in use if the UM defined here 
-#' is going to be used in defineUM() to construct joint UM for numerical variables.
+#' @param distribution a string that specifies which distribution to sample from. Only in use 
+#' for continuos or discrete numerical variables. See Details for a list of supported distributions.
+#' @param distr_param a vector or a list with distribution parameters. For example,
+#' for the normal distribution in case of a spatial variable this must be a map
+#' of means and a map of standard deviations. Only in use for continuous or discrete numerical variables.
+#' @param crm a correlogram model, object of a class "SpatialCorrelogramModel", output of makecormodel().
+#' Can only be specified for numerical variables.
+#' @param categories a vector of categories. Only in use for categorical
+#' (e.g. saved as character) or discrete numerical variables.
+#' @param cat_prob spatial data frame or raster stack; a list of probabilities for the vector of categories.
+#' Number of columns in the data frame cannot be smaller than number of categories. 
+#' Only in use for categorical (e.g. saved as character) or discrete numerical variables.
+#' @param id identifier of the variable; only in use if the UM defined here is to be used in defineUM()
+#' to construct a joint UM for numerical variables.
 #' @param ... additional parameters.
 #'
-#' @return Object of a class "MarginalXxx" including listed all necessary information for creating realizations of
+#' @return Object of a class "MarginalXxx" that includes all necessary information for creating realizations of
 #' the uncertain variable. If provided arguments are: type of the distribution and corresponding parameters,
 #' and corresponding parameters are spatial objects - an object of class "MarginalNumericSpatial".
 #' If provided arguments are: type of the distribution and corresponding parameters, and corresponding
 #' parameters are non-spatial objects - an object of class "MarginalNumericSpatial".
-#' If provided arguments are: categories and probabilities, and probabilities are saved in spatial object
+#' If provided arguments are: categories and probabilities, and probabilities are saved in a spatial object
 #'  - an object of class "MarginalCategoricalSpatial". If provided arguments are: categories and probabilities,
-#'   and probabilities are saved in non-spatial object - an object of class "MarginalCategoricalDataFrame".
+#'   and probabilities are saved in a non-spatial object - an object of class "MarginalCategoricalDataFrame".
 #' 
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' 

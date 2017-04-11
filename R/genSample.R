@@ -1,27 +1,26 @@
 #' Methods for generating Monte Carlo realizations from uncertain inputs.
 #' 
-#' Methods for classes: "MarginalNumericSpatial", "MarginalScalar",
-#' "MarginalCategoricalSpatial", "JoinNumericSpatial", "JointScalar".
-#' Function that runs Monte Carlo simulations depending on the type of
-#' uncertain object. Facilitates unconditional gausian simulation of errors for
-#' spatially auto-correlated residulas, and random sampling, stratified
-#' sampling if no spatial auto-correlation is included.
+#' Methods for classes: "MarginalNumericSpatial", "MarginalScalar", 
+#' "MarginalCategoricalSpatial", "JointNumericSpatial", "JointScalar".
+#' Function that runs Monte Carlo simulations depending on the type of uncertain object.
+#' Facilitates unconditional Gaussian simulation of errors for spatially
+#' auto-correlated residuals, as well as random and stratified random sampling
+#' if no spatial auto-correlation is included.
 #' 
 #' Sampling methods:
 #'
-#' \strong{"ugs"} Unconditional gaussian simulation of spatially auto-correlated and/or
+#' \strong{"ugs"} Unconditional Gaussian simulation of spatially auto-correlated and/or
 #' cross-correlated errors.
 #'
 #' \strong{"randomSampling"} Sampling multivariate distribution using eigenvalue decomposition
 #' (based on 'mvtnorm' package).
 #' 
 #' \strong{"stratifiedSampling"} Number of samples (n) must be dividable by the
-#' number of quantiles to assure each quantile is evenly represented.
+#' number of quantiles to assure that each quantile is evenly represented.
 #'
 #' \strong{"lhs"} Not implemented yet. Sampling method for at least two uncertain inputs. The
-#' uncertain.object is then a list of two or more. It uses startified sampling
-#' method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
-#' must be dividable by the number of quantiles to assure each quantile is evenly represented.
+#' uncertain.object is then a list of two or more. It uses a stratified sampling
+#' method to generate inputs for the latin hypercube algorithm.
 #' 
 #'
 #' @param UMobject an uncertain object to sample from, output of defineUM() or defineMUM().
@@ -149,16 +148,9 @@
 #' spplot(snow_sample)
 #' 
 #' 
-#' ### -------------------- "JoinNumericSpatial" ----------------------
-#' # "ugs" method example
+#' ### -------------------- "JointNumericSpatial" ----------------------
 #' # load data
 #' data(OC, OC_sd, TN, TN_sd)
-#' 
-#'  # # Test for SpatialGridDataFrames
-#'  # OC <- as(OC, 'SpatialGridDataFrame')
-#'  # TN <- as(TN, 'SpatialGridDataFrame')
-#'  # OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
-#'  # TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
 #' 
 #' # define marginal UMs
 #' OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
@@ -166,22 +158,9 @@
 #' TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' 
-#' # # Add some dummy third variable to test code on more than two variables
-#' # dummy <- OC
-#' # dummy@data <- OC@data*TN@data/2
-#' # names(dummy) <- "dummy"
-#' # dummy_sd <- dummy
-#' # dummy_sd@data <- dummy@data * 0.3
-#' # names(dummy_sd) <- "dummy_sd"
-#' # dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
-#' # dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
-#' #                     crm = dummy_crm, id = "dummy")
-#' 
 #' # define joint UM
 #' soil_prop <- list(OC_UM, TN_UM)
 #' mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
-#' # soil_prop <- list(OC_UM, TN_UM, dummy_UM)
-#' #  mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
 #' class(mySpatialMUM)
 #' 
 #' # sample - "ugs" method
@@ -193,6 +172,7 @@
 #' # sample - "randomSampling"
 #' \dontrun{
 #' my_cross_sample <- genSample(mySpatialMUM, n = 5, "randomSampling")
+#' class(my_cross_sample)
 #' }
 #' 
 #' 
