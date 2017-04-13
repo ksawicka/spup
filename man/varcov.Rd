@@ -17,11 +17,12 @@ Variance-covariance matrix.
 \description{
 Calculate variance covariance matrix
 }
+\examples{
+vc <- varcov(c(1,2,3), matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
+vc
+
+}
 \author{
 Kasia Sawicka
-
-# @examples
-#
-# varcov(c(1,2,3), matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
 }
 

@@ -65,47 +65,66 @@ data(dem30m, dem30m_sd)
 dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
+                   
+# toy example
+dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "ugs", nmax = 20, asList = FALSE)
+str(dem_sample)               
 \dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "ugs", nmax = 20, asList = FALSE)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20, asList = FALSE)
 str(dem_sample)
 }
 
 # "randomSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+# toy example
+dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling",asList = FALSE)
+str(dem_sample)
 \dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling",asList = FALSE)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling",asList = FALSE)
 str(dem_sample)
 }
 
 demUM <- defineUM(uncertain = TRUE, distribution = "beta",
                   distr_param = c(dem30m, dem30m_sd, dem30m))
+# toy example
+dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling")
+str(dem_sample)                
 \dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "randomSampling")
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling")
 str(dem_sample)
 }
 
 # "startifiedSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
+# toy example
+dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
+str(dem_sample)
 \dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
 }
 
 demUM <- defineUM(uncertain = TRUE, distribution = "exp",
                   distr_param = c(dem30m), lower.tail = FALSE)
+# toy example
+dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
+str(dem_sample)               
 \dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
 }
 
 # Examples with rasters
-# ugs (raster with auto-correlation)
+# (raster with auto-correlation)
 data(OC, OC_sd)
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 class(OC_UM)
+# toy example
+some_sample <- genSample(OC_UM, n = 3, "ugs", nmax=20)
+some_sample
 \dontrun{
-some_sample <- genSample(OC_UM, n = 5, "ugs", nmax=20)
+some_sample <- genSample(OC_UM, n = 50, "ugs", nmax=20)
 some_sample
 }
 
@@ -124,10 +143,10 @@ scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "stratifiedSampling"
 # load data
 data(woon)
 woonUM <- defineUM(TRUE, categories = c(1,2,3), cat_prob = woon[, c(4:6)])
-# woon_sample <- genSample(woonUM, 10, asList = FALSE)
-# class(woon_sample)
-# str(woon_sample@data)
-# spplot(woon_sample)
+woon_sample <- genSample(woonUM, 10, asList = FALSE)
+class(woon_sample)
+str(woon_sample@data)
+spplot(woon_sample)
 woon_sample <- genSample(woonUM, 10)
 class(woon_sample)
 
@@ -177,14 +196,20 @@ mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
 class(mySpatialMUM)
 
 # sample - "ugs" method
+# toy example
+my_cross_sample <- genSample(mySpatialMUM, n = 3, "ugs", nmax = 24, asList = TRUE)
+class(my_cross_sample)
 \dontrun{
-my_cross_sample <- genSample(mySpatialMUM, n = 5, "ugs", nmax = 24, asList = TRUE)
+my_cross_sample <- genSample(mySpatialMUM, n = 50, "ugs", nmax = 24, asList = TRUE)
 class(my_cross_sample)
 }
 
 # sample - "randomSampling"
+# toy example
+my_cross_sample <- genSample(mySpatialMUM, n = 3, "randomSampling")
+class(my_cross_sample)
 \dontrun{
-my_cross_sample <- genSample(mySpatialMUM, n = 5, "randomSampling")
+my_cross_sample <- genSample(mySpatialMUM, n = 50, "randomSampling")
 class(my_cross_sample)
 }
 

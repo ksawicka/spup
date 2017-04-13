@@ -22,7 +22,6 @@
 #' woon_sample <- genSample(woonUM, 10, asList = FALSE)
 #' class(woon_sample)
 #' str(woon_sample@data)
-#' spplot(woon_sample)
 #' woon_sample <- genSample(woonUM, 10)
 #' class(woon_sample)
 #' 

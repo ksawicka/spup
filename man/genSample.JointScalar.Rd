@@ -42,4 +42,7 @@ my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList = 
 my_sample  
 
 }
+\author{
+Kasia Sawicka, Gerard Heuvelink
+}
 

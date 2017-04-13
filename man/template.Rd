@@ -20,4 +20,7 @@ Class that stores all templates with model inputs. The aim of this class is to: 
 A template is a model input file with: 1. the additional extension `.template`. 
 2. input that needs to be modified is replaced by mustache-style tags.
 }
+\author{
+Dennis Walvoort
+}
 

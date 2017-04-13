@@ -18,11 +18,6 @@ Rendered template file.
 \description{
 Rendering is the process of replacing the tags in moustaches by text.
 }
-\examples{
-
-# examples here
-
-}
 \author{
 Dennis Walvoort
 }

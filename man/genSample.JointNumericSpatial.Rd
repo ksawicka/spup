@@ -53,11 +53,11 @@ set.seed(12345)
 # load data
 data(OC, OC_sd, TN, TN_sd)
 
- # # Test for SpatialGridDataFrames
- # OC <- as(OC, 'SpatialGridDataFrame')
- # TN <- as(TN, 'SpatialGridDataFrame')
- # OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
- # TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
+# Test for SpatialGridDataFrames
+OC <- as(OC, 'SpatialGridDataFrame')
+TN <- as(TN, 'SpatialGridDataFrame')
+OC_sd <- as(OC_sd, 'SpatialGridDataFrame')
+TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
 
 # define marginal UMs
 OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
@@ -65,34 +65,33 @@ OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm =
 TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
 TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 
-# # add some dummy third  variable to test code on more than two variables
-# dummy <- OC
-# dummy@data <- OC@data*TN@data/2
-# names(dummy) <- "dummy"
-# dummy_sd <- dummy
-# dummy_sd@data <- dummy@data * 0.3
-# names(dummy_sd) <- "dummy_sd"
-# dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
-# dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
-#                     crm = dummy_crm, id = "dummy")
+# add some dummy third  variable to test code on more than two variables
+dummy <- OC
+dummy@data <- OC@data*TN@data/2
+names(dummy) <- "dummy"
+dummy_sd <- dummy
+dummy_sd@data <- dummy@data * 0.3
+names(dummy_sd) <- "dummy_sd"
+dummy_crm <- makecrm(acf0 = 0.9, range = 1000, model = "Sph")
+dummy_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(dummy, dummy_sd),
+                    crm = dummy_crm, id = "dummy")
 
 # define joint UM
 soil_prop <- list(OC_UM, TN_UM)
 mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
-# soil_prop <- list(OC_UM, TN_UM, dummy_UM)
-#  mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
+soil_prop <- list(OC_UM, TN_UM, dummy_UM)
+mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow=3, ncol=3))
 class(mySpatialMUM)
 
 # sample - "ugs" method
+# toy example
+my_cross_sample <- genSample(mySpatialMUM, n = 3, "ugs", nmax = 24, asList = TRUE)
+class(my_cross_sample)
 \dontrun{
-my_cross_sample <- genSample(mySpatialMUM, n = 5, "ugs", nmax = 24, asList = TRUE)
+my_cross_sample <- genSample(mySpatialMUM, n = 50, "ugs", nmax = 24, asList = TRUE)
 class(my_cross_sample)
 }
 
-# sample - "randomSampling"
-\dontrun{
-my_cross_sample <- genSample(mySpatialMUM, n = 5, "randomSampling")
-}
 
 
 }
