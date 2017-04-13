@@ -10,9 +10,6 @@
 #' 
 #' @author Kasia Sawicka
 #' 
-#' @examples
-#' 
-#' # Examples here
 #' 
 vgm2crm <- function(vgm, psill, nugget, range, model) {
 
@@ -23,7 +20,7 @@ vgm2crm <- function(vgm, psill, nugget, range, model) {
              range = range,
              model = model)
   
-  class(crm) <- "crm"
+  class(crm) <- "SpatialCorrelogramModel"
   crm
 }
 

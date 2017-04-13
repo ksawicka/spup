@@ -6,7 +6,7 @@
 #' To assure equalfinality the sill parameter for spatially correlated random
 #' residuals is fixed and standardized to 1.
 #'
-#' @param crm Spatial correlogram model, output of makecrm(). 
+#' @param crm object of a class "SpatialCorrelogramModel", output of makecrm(). 
 #' @param ...  Parameters that can be passed to vgm().
 #'
 #' @return An object of a class "variogramModel" extending data.frame.

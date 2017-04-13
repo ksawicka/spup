@@ -7,11 +7,11 @@
 #' 
 #' @author Kasia Sawicka
 #' 
-#' # @examples
-#' #
-#' # varcov(c(1,2,3), matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
+#' @examples
+#' vc <- varcov(c(1,2,3), matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
+#' vc
 #' 
-#' 
+#' @export
 varcov <- function(sd_vector, cormat) {
   sd_matrix <- diag(sd_vector)
   varcov_matrix <- sd_matrix %*% cormat %*% t(sd_matrix)

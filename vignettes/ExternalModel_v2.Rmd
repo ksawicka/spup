@@ -63,6 +63,7 @@ library(spup)
 library(dplyr) # a grammar of data manipulation
 library(readr) # fast I/O
 library(whisker) # rendering methods
+library(purrr)
 
 # set seed
 set.seed(12345)

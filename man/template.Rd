@@ -10,7 +10,7 @@ template(filenames)
 \item{filenames}{a string, a name of the model input file.}
 }
 \value{
-An obeject of a class "template".
+An object of a class "template".
 }
 \description{
 Class that stores all templates with model inputs. The aim of this class is to: 1. organise model input files;

@@ -10,9 +10,6 @@
 #'
 #' @author Dennis Walvoort
 #' 
-#' @examples
-#' 
-#' # examples here
 #' 
 #' @importFrom purrr walk
 #' @importFrom magrittr %>% %T>%

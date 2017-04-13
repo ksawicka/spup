@@ -1,6 +1,6 @@
 #' Defining a spatial correlogram model
 #'
-#' Function that generates a spatial correlogram model, an object of class "crm".
+#' Function that generates a spatial correlogram model, an object of class "SpatialCorrelogramModel".
 #'
 #' For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
 #' gstat manual (\url{http://www.gstat.org/gstat.pdf}). Spatial correlation
@@ -17,7 +17,7 @@
 #' models.
 #' @param ...  Arguments that will be passed to crm2vgm() that vgm() accepts.
 #' 
-#' @return An object of a class "crm". This is a list collating provided arguments.
+#' @return An object of a class "SpatialCorrelogramModel". This is a list collating provided arguments.
 #' 
 #' @author Kasia Sawicka, Gerard Heuvelink
 #' 
@@ -45,7 +45,7 @@ makecrm <- function(acf0, range, model, ...) {
            range = range,
            model = model,
            ...)
-  class(crm) <- c("crm")
+  class(crm) <- c("SpatialCorrelogramModel")
   crm
 
 }

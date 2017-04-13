@@ -11,6 +11,8 @@
 #'
 #' @return Monte Carlo sample of cross-correlated scalar variables.
 #'
+#' @author Kasia Sawicka, Gerard Heuvelink
+#'
 #' @examples
 #' 
 #' set.seed(12345)

@@ -1,6 +1,6 @@
 #' Plots correlogram model
 #'
-#' @param x Object of class "crm" as created by makecrm().
+#' @param x Object of class "SpatialCorrelogramModel" as created by makecrm().
 #' @param distance minimum distance between locations (unit should correspond
 #' with the unit of the range parameter in makecrm()).
 #' @param ylim the y limits of the plot.
@@ -19,7 +19,7 @@
 #' @importFrom graphics plot abline
 #' 
 #' @export
-plot.crm <- function(x, distance = 1, ylim = c(0,1), ...) {
+plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1), ...) {
   
   stopifnot(distance >= 0)
   acf0 <- as.numeric(x[[1]])
@@ -59,19 +59,6 @@ plot.crm <- function(x, distance = 1, ylim = c(0,1), ...) {
   abline(h = 0, lty = 2)
   
 }
-
-# mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Nug") # OK
-# mycormodel <- makecrm(acf0 = 0.8, range = 700, model = "Sph") # OK
-# mycormodel <- makecrm(acf0 = 0.5, range = 500, model = "Exp") # OK
-# mycormodel <- makecrm(acf0 = 0.9, range = 30, model = "Lin") # OK
-# mycormodel <- makecrm(acf0 = 0.7, range = 500, model = "Cir") # OK
-# mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Pen") # OK
-# mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Gau") # OK
-# mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Bes") # OK
-# mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Log") # ?
-# mycormodel <- makecrm(acf0 = 0.8, range = 2, model = "Pow") # ?
-# mycormodel <- makecrm(acf0 = 0.8, range = 2, model = "Per") # ?
-# plot(mycormodel, distance = 1, ylim = c(-1,1))
 
 
 

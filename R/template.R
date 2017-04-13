@@ -8,7 +8,9 @@
 #'
 #' @param filenames a string, a name of the model input file.
 #'
-#' @return An obeject of a class "template".
+#' @return An object of a class "template".
+#' 
+#' @author Dennis Walvoort
 #' 
 #' @importFrom purrr walk
 #' @importFrom magrittr %>%

@@ -23,11 +23,6 @@ Standardised parameters of spatial variogram model.
 \description{
 Convert vgm to crm
 }
-\examples{
-
-# Examples here
-
-}
 \author{
 Kasia Sawicka
 }

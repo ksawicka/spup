@@ -19,10 +19,10 @@ models.}
 \item{...}{Arguments that will be passed to crm2vgm() that vgm() accepts.}
 }
 \value{
-An object of a class "crm". This is a list collating provided arguments.
+An object of a class "SpatialCorrelogramModel". This is a list collating provided arguments.
 }
 \description{
-Function that generates a spatial correlogram model, an object of class "crm".
+Function that generates a spatial correlogram model, an object of class "SpatialCorrelogramModel".
 }
 \details{
 For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
