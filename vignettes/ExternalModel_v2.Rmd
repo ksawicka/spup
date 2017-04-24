@@ -7,11 +7,12 @@ output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
 subtitle: Case study with calling external model.
 vignette: >
-  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteIndexEntry{ Case study with calling external model }
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
+# Case study with calling external model
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(

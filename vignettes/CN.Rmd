@@ -6,10 +6,12 @@ output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
 subtitle: Case study with cross-correlated variables
 vignette: >
-  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteIndexEntry{Case study with cross-correlated variables}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
+
+# Case study with cross-correlated variables
 
 
 ```{r, echo = FALSE}
