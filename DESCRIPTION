@@ -9,7 +9,7 @@ Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@wur.nl", role = c
              person("Stefan", "van Dam", email = "stefan.vandam@wur.nl", role = c("ctb"))
              )
 Description: Uncertainty propagation analysis in spatial environmental  modelling following methodology
-         described in Heuvelink et al. (2017) <doi:10.1080/13658810601063951> 
+         described in Heuvelink et al. (2007) <doi:10.1080/13658810601063951> 
          and Brown and Heuvelink (2007) <doi:10.1016/j.cageo.2006.06.015>. The package provides functions
          for examining the uncertainty propagation starting from input data and model parameters,
          via the environmental model onto model outputs. The functions include uncertainty model specification,
