@@ -54,50 +54,21 @@
 #'                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 #'                    
 #' # toy example
-#' dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "ugs", nmax = 20, asList = FALSE)
-#' str(dem_sample)               
-#' \dontrun{
-#' dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20, asList = FALSE)
+#' dem_sample <- genSample(UMobject = demUM, n = 2, samplemethod = "ugs", nmax = 4, asList = FALSE)
 #' str(dem_sample)
-#' }
-#' 
-#' # "randomSampling" method example
-#' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
-#' # toy example
-#' dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling",asList = FALSE)
-#' str(dem_sample)
+#' # any meaningful Monte Carlo analysis should have normally much larger number of runs               
 #' \dontrun{
-#' dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling",asList = FALSE)
-#' str(dem_sample)
-#' }
-#' 
-#' demUM <- defineUM(uncertain = TRUE, distribution = "beta",
-#'                   distr_param = c(dem30m, dem30m_sd, dem30m))
-#' # toy example
-#' dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling")
-#' str(dem_sample)                
-#' \dontrun{
-#' dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling")
+#' dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE)
 #' str(dem_sample)
 #' }
 #' 
 #' # "startifiedSampling" method example
 #' demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 #' # toy example
-#' dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
-#' str(dem_sample)
+#' dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' # any meaningful Monte Carlo analysis should have normally much larger number of runs
 #' \dontrun{
-#' dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
-#' str(dem_sample)
-#' }
-#' 
-#' demUM <- defineUM(uncertain = TRUE, distribution = "exp",
-#'                   distr_param = c(dem30m), lower.tail = FALSE)
-#' # toy example
-#' dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
-#' str(dem_sample)               
-#' \dontrun{
-#' dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
+#' dem_sample <- genSample(UMobject = demUM, n = 100, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' str(dem_sample)
 #' }
 #' 
@@ -108,22 +79,19 @@
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 #' class(OC_UM)
 #' # toy example
-#' some_sample <- genSample(OC_UM, n = 3, "ugs", nmax=20)
+#' some_sample <- genSample(OC_UM, n = 2, "ugs", nmax = 4)
 #' some_sample
+#' # any meaningful Monte Carlo analysis should have normally much larger number of runs
 #' \dontrun{
-#' some_sample <- genSample(OC_UM, n = 50, "ugs", nmax=20)
+#' some_sample <- genSample(OC_UM, n = 50, "ugs", nmax = 24)
 #' some_sample
 #' }
 #' 
 #' 
 #' ### ----------------------- "MarginalScalar" -----------------------
-#' # Example 1
+#' # example with normal distribution
 #' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(10, 1))
 #' scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "randomSampling")
-#' 
-#' # Example 2
-#' scalarUM <- defineUM(uncertain = TRUE, distribution = "beta", distr_param = c(10, 1, 2))
-#' scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "stratifiedSampling", p = 0:5/5)
 #' 
 #' 
 #' ### ----------------- "MarginalCategoricalSpatial" -----------------
@@ -133,37 +101,6 @@
 #' woon_sample <- genSample(woonUM, 10, asList = FALSE)
 #' class(woon_sample)
 #' str(woon_sample@data)
-#' woon_sample <- genSample(woonUM, 10)
-#' class(woon_sample)
-#' 
-#' # analyse probability of having snow
-#' # load data
-#' data(dem30m, dem30m_sd)
-#' 
-#' # generate dummy probabilities for categories "snow" and "no snow"
-#' dem30m$snow_prob <- NA
-#' dem30m$snow_prob[dem30m$Elevation > 1000] <- 0.75
-#' dem30m$snow_prob[dem30m$Elevation <= 1000] <- 0.25
-#' dem30m$no_snow_prob <- 1 - dem30m$snow_prob
-#' summary(dem30m@data)
-#' snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem30m[2:3])
-#' class(snowUM)
-#' snow_sample <- genSample(snowUM, 10, asList = FALSE)
-#' head(snow_sample@data)
-#' 
-#' # case with raster
-#' # load data
-#' data(dem30m, dem30m_sd)
-#' dem30m$snow_prob <- NA
-#' dem30m$snow_prob[dem30m$Elevation > 1000] <- 0.75
-#' dem30m$snow_prob[dem30m$Elevation <= 1000] <- 0.25
-#' dem30m$no_snow_prob <- 1 - dem30m$snow_prob
-#' summary(dem30m@data)
-#' dem_stack <- raster::stack(dem30m)
-#' snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem_stack[[2:3]])
-#' snow_sample <- genSample(snowUM, 10, asList = FALSE)
-#' require(sp)
-#' spplot(snow_sample)
 #' 
 #' 
 #' ### -------------------- "JointNumericSpatial" ----------------------
@@ -183,19 +120,11 @@
 #' 
 #' # sample - "ugs" method
 #' # toy example
-#' my_cross_sample <- genSample(mySpatialMUM, n = 3, "ugs", nmax = 24, asList = TRUE)
+#' my_cross_sample <- genSample(mySpatialMUM, n = 2, "ugs", nmax = 4, asList = TRUE)
 #' class(my_cross_sample)
+#' # any meaningful Monte Carlo analysis should have normally much larger number of runs
 #' \dontrun{
-#' my_cross_sample <- genSample(mySpatialMUM, n = 50, "ugs", nmax = 24, asList = TRUE)
-#' class(my_cross_sample)
-#' }
-#' 
-#' # sample - "randomSampling"
-#' # toy example
-#' my_cross_sample <- genSample(mySpatialMUM, n = 3, "randomSampling")
-#' class(my_cross_sample)
-#' \dontrun{
-#' my_cross_sample <- genSample(mySpatialMUM, n = 50, "randomSampling")
+#' my_cross_sample <- genSample(mySpatialMUM, n = 100, "ugs", nmax = 24, asList = TRUE)
 #' class(my_cross_sample)
 #' }
 #' 
@@ -209,7 +138,7 @@
 #'                       distr_param = c(10, 2.5), id="Var3")                
 #' myMUM <- defineMUM(UMlist = list(scalarUM, scalarUM2, scalarUM3), 
 #'                matrix(c(1,0.7,0.2,0.7,1,0.5,0.2,0.5,1), nrow = 3, ncol = 3))
-#' my_sample <- genSample(myMUM, n = 10, samplemethod = "randomSampling", asList = FALSE)
+#' my_sample <- genSample(myMUM, n = 5, samplemethod = "randomSampling", asList = FALSE)
 #' my_sample  
 #' 
 #' 

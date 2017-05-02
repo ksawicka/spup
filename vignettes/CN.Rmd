@@ -316,8 +316,8 @@ spplot(CN_q[c(3,4,1,2)], main = list(label = "Quantiles of C/N realizations", ce
 We may also identify all locations where the C/N ratio is smaller than 24, with 90% probability. This information might be used by farmers to identify which plots require action on improving soil quality.
 
 ```{r, fig.width = 7, fig.height = 7}
-CN_q$good4crops <- factor(ifelse(CN_q$prob90perc < 24, 1, 0), labels = c("Good quality","Improvements needed"))
-spplot(CN_q, "good4crops", col.regions = c("darkolivegreen2","firebrick1"), main = "Areas with sufficient C/N")
+CN_q$good4crops <- factor(ifelse(CN_q$prob10perc > 20, 1, 0), labels = c("<90% certain", ">90% certain"))
+spplot(CN_q, "good4crops", col.regions = c("firebrick1", "darkolivegreen2"), main = "Areas with sufficient C/N for cropping")
 ```
 <br>
 

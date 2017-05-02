@@ -63,48 +63,18 @@ demUM <- defineUM(uncertain = TRUE, distribution = "norm",
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
                    
 # toy example
-dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "ugs", nmax = 20, asList = FALSE)
+dem_sample <- genSample(UMobject = demUM, n = 2, samplemethod = "ugs", nmax = 6, asList = FALSE)
 str(dem_sample)               
 \dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "ugs", nmax = 20, asList = FALSE)
 str(dem_sample)
 }
 
-# "randomSampling" method example
-demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
-# toy example
-dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling",asList = FALSE)
-str(dem_sample)
-\dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling",asList = FALSE)
-str(dem_sample)
-}
-
-demUM <- defineUM(uncertain = TRUE, distribution = "beta",
-                  distr_param = c(dem30m, dem30m_sd, dem30m))
-# toy example
-dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "randomSampling")
-str(dem_sample)                
-\dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "randomSampling")
-str(dem_sample)
-}
 
 # "startifiedSampling" method example
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd))
 # toy example
-dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
-str(dem_sample)
-\dontrun{
-dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
-str(dem_sample)
-}
-
-demUM <- defineUM(uncertain = TRUE, distribution = "exp",
-                  distr_param = c(dem30m), lower.tail = FALSE)
-# toy example
-dem_sample <- genSample(UMobject = demUM, n = 3, samplemethod = "stratifiedSampling", p = 0:5/5)
-str(dem_sample)               
+dem_sample <- genSample(UMobject = demUM, n = 5, samplemethod = "stratifiedSampling", p = 0:5/5)
 \dontrun{
 dem_sample <- genSample(UMobject = demUM, n = 50, samplemethod = "stratifiedSampling", p = 0:5/5)
 str(dem_sample)
@@ -117,7 +87,7 @@ OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
 OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 class(OC_UM)
 # toy example
-some_sample <- genSample(OC_UM, n = 3, "ugs", nmax=20)
+some_sample <- genSample(OC_UM, n = 3, "ugs", nmax=6)
 some_sample
 \dontrun{
 some_sample <- genSample(OC_UM, n = 50, "ugs", nmax=20)
