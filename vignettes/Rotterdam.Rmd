@@ -6,11 +6,12 @@ output: rmarkdown::html_vignette
 # output: rmarkdown::word_document
 subtitle: Case study with categorical data - calculating tax depending on a building function.
 vignette: >
-  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteIndexEntry{ Case study with categorical data - calculating tax depending on a building function } 
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
+# Case study with categorical data - calculating tax depending on a building function
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
