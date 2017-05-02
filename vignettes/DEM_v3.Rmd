@@ -8,11 +8,12 @@ output: rmarkdown::html_vignette
 subtitle: Case study with spatially variable standard deviation - slope calculations
   with a digital elevation model (DEM)
 vignette: >
-  %\VignetteIndexEntry{Spatial uncertainty propagation analysis}
+  %\VignetteIndexEntry{ Case study with spatially variable standard deviation - slope calculations }
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
+# Case study with spatially variable standard deviation - slope calculations
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
