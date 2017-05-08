@@ -7,7 +7,6 @@
 #' residuals is fixed and standardized to 1.
 #'
 #' @param crm object of a class "SpatialCorrelogramModel", output of makecrm(). 
-#' @param ...  Parameters that can be passed to vgm().
 #'
 #' @return An object of a class "variogramModel" extending data.frame.
 #' 
@@ -15,16 +14,23 @@
 #' 
 #' @importFrom gstat vgm
 #'
-crm2vgm <- function(crm, ...) {
-  nugget <- 1 - as.numeric(crm[[1]])
-  # psill <- (nugget * crm[[1]])/(1 - crm[[1]]) # This is correct, but just returns value of acf0!
-  psill <- crm[[1]]
-  range <- crm[[2]]
-  model <- crm[[3]]
+crm2vgm <- function(crm) {
+  
+  nugget <- 1 - as.numeric(crm$acf0)
+  psill <- crm$acf0
+  range <- crm$range
+  model <- crm$model
+  anis  <- crm$anis
+  kappa <- crm$kappa
+  Err   <- crm$Err
   vgm <- gstat::vgm(nugget = as.numeric(nugget),
                     psill = as.numeric(psill),
                     range = as.numeric(range),
                     model = model,
-                    ...)
+                    anis = anis,
+                    kappa = kappa,
+                    Err = Err
+                    )
   vgm
+  
 }

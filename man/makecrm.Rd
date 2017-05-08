@@ -4,7 +4,8 @@
 \alias{makecrm}
 \title{Defining a spatial correlogram model}
 \usage{
-makecrm(acf0, range, model, ...)
+makecrm(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable,
+  Err = 0)
 }
 \arguments{
 \item{acf0}{Aurocorrelation function value at distance near 0. Default is 1. Must
@@ -12,11 +13,17 @@ fall in interval [0,1].}
 
 \item{range}{Range parameter of the correlogram model component.}
 
-\item{model}{Model type, e.g. "Exp", "Sph", "Gau", "Mat" that vgm() accepts.
-Calling vgm() without a model argument returns a data.frame with available
-models.}
+\item{model}{Model type, e.g. "Exp", "Sph", "Gau", "Mat" that vgm() accepts. See ?gstat::vgm() for more #' details.}
 
-\item{...}{Arguments that will be passed to crm2vgm() that vgm() accepts.}
+\item{anis}{Anisotropy parameters. See ?gstat::vgm() for more details.}
+
+\item{kappa}{Smoothness parameter for the Matern class of variogram models. See ?gstat::vgm() for more #' details.}
+
+\item{add.to}{See ?gstat::vgm() (currently not in use)}
+
+\item{covtable}{See ?gstat::vgm() (currently not in use)}
+
+\item{Err}{Numeric. See ?gstat::vgm() for more details.}
 }
 \value{
 An object of a class "SpatialCorrelogramModel". This is a list collating provided arguments.
@@ -34,7 +41,7 @@ models are allowed in the current version.
 \examples{
 
 mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
-mycormodel
+str(mycormodel)
 
 }
 \author{

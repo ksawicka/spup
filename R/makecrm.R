@@ -12,10 +12,13 @@
 #' @param acf0 Aurocorrelation function value at distance near 0. Default is 1. Must
 #' fall in interval [0,1].
 #' @param range Range parameter of the correlogram model component.
-#' @param model Model type, e.g. "Exp", "Sph", "Gau", "Mat" that vgm() accepts.
-#' Calling vgm() without a model argument returns a data.frame with available
-#' models.
-#' @param ...  Arguments that will be passed to crm2vgm() that vgm() accepts.
+#' @param model Model type, e.g. "Exp", "Sph", "Gau", "Mat" that vgm() accepts. See ?gstat::vgm() for more #' details.
+#' @param anis Anisotropy parameters. See ?gstat::vgm() for more details.
+#' @param kappa Smoothness parameter for the Matern class of variogram models. See ?gstat::vgm() for more #' details.
+#' @param add.to See ?gstat::vgm() (currently not in use)
+#' @param covtable See ?gstat::vgm() (currently not in use)
+#' @param Err Numeric. See ?gstat::vgm() for more details.
+#'
 #' 
 #' @return An object of a class "SpatialCorrelogramModel". This is a list collating provided arguments.
 #' 
@@ -24,29 +27,59 @@
 #' @examples
 #'
 #' mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
-#' mycormodel
+#' str(mycormodel)
 #'
 #' @importFrom gstat vgm
 #' 
 #' @export
-makecrm <- function(acf0, range, model, ...) {
+makecrm <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
 
+  # acf0 checks
   stopifnot(class(acf0) == "numeric")
-  stopifnot(class(range) == "numeric")
-  # if acf0 is between 0 and 1
+  stopifnot(class(range) == "numeric" | is.na(range))
   if (acf0 < 0 | acf0 > 1)
     warning("For standardized residuals acf0 argument should be between 0 and 1.")
-  # if model is a string from allowed list (see vgm code for example), etc.
+
+  # anis checks
+  if (missing(anis)) 
+    anis <- c(0, 0, 0, 1, 1)
+  if (length(anis) == 2) 
+    anis <- c(anis[1], 0, 0, anis[2], 1)
+  else if (length(anis) != 5) 
+    stop("anis vector should have length 2 (2D) or 5 (3D)")
+    
+  # model checks
   models <- gstat::vgm()$short
   if (model %in% models == FALSE)
     stop("Only models accepted by gstat::vgm are allowed.")
-  
-  crm <- c(acf0 = acf0,
-           range = range,
-           model = model,
-           ...)
+    
+  # range checks
+    if (!is.na(range)) {
+      if (model != "Nug") {
+          if (model != "Lin" && model != "Err" && model != 
+              "Int") 
+              if (range <= 0) 
+                stop("range should be positive")
+              else if (range < 0) 
+                stop("range should be non-negative")
+      }
+      else {
+          if (range != 0) 
+              stop("Nugget should have zero range")
+          if (anis[4] != 1 || anis[5] != 1) 
+              stop("Nugget anisotropy is not meaningful")
+      }
+    }
+
+  crm <- list(acf0 = acf0,
+              range = range,
+              model = model,
+              anis = anis,
+              kappa = kappa,
+              # add.to = add.to,
+              # covtable = covtable,
+              Err = Err)
   class(crm) <- c("SpatialCorrelogramModel")
   crm
-
 }
 
