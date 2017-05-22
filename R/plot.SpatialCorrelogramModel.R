@@ -19,7 +19,7 @@
 #' @importFrom graphics plot abline
 #' 
 #' @export
-plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1), ...) {
+plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1), xlab = "Distance", ylab = "Correlation", ...) {
   
   stopifnot(distance >= 0)
   acf0 <- as.numeric(x[[1]])
@@ -55,7 +55,7 @@ plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1), ...) {
                                               covariance = TRUE)
 
   plot(crm_line, type="l", ylim = ylim, 
-       xlab = "Distance", ylab = "Correlation", ...)
+       xlab = xlab, ylab = ylab, ...)
   abline(h = 0, lty = 2)
   
 }
