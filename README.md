@@ -15,3 +15,9 @@ R package _spup_ is available on CRAN and can be installed in R as:
 install.packages("spup")
 ```
 
+The development version from GitHub can be install via:
+
+``` r
+library(devtools)
+install_github("ksawicka/spup")
+```
