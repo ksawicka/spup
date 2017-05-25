@@ -4,6 +4,8 @@
 #' @param distance minimum distance between locations (unit should correspond
 #' with the unit of the range parameter in makecrm()).
 #' @param ylim the y limits of the plot.
+#' @param xlab a title for the x axis.  
+#' @param ylab a title for the y axis.
 #' @param ... additional parameters.
 #'
 #' @return plot of correlogram model
@@ -19,7 +21,8 @@
 #' @importFrom graphics plot abline
 #' 
 #' @export
-plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1), xlab = "Distance", ylab = "Correlation", ...) {
+plot.SpatialCorrelogramModel <- function(x, distance = 1, ylim = c(0,1),
+                                         xlab = "Distance", ylab = "Correlation", ...) {
   
   stopifnot(distance >= 0)
   acf0 <- as.numeric(x[[1]])
