@@ -1,8 +1,8 @@
 Package: spup
 Type: Package
 Title: Uncertainty Propagation Analysis
-Version: 0.1-0
-Date: 2017-04-06
+Version: 0.1-1
+Date: 2017-06-06
 Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@wur.nl", role = c("aut", "cre")),
              person("Gerard", "Heuvelink", email = "gerard.heuvelink@wur.nl", role = c("aut")),
              person("Dennis", "Walvoort", email = "dennis.walvoort@wur.nl", role = c("ctb")),
