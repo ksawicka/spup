@@ -112,4 +112,3 @@ class(TN_UM)
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
-

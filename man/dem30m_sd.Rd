@@ -20,4 +20,3 @@ A dataset containing the sd of an example Digital Elevation Model.
 It was calculated from dem30m using terrain funtion from raster package (opt = 'roughness').
 }
 \keyword{datasets}
-

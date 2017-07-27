@@ -2,8 +2,8 @@
 % Please edit documentation in R/spup.R
 \docType{package}
 \name{spup--pkg}
-\alias{_PACKAGE}
 \alias{spup--pkg}
+\alias{_PACKAGE}
 \alias{spup--pkg-package}
 \title{spup - Package for spatial uncertainty propagation}
 \description{
@@ -14,4 +14,3 @@ that allow to do uncertainty analysis with spatial variables/models.
 \author{
 Kasia Sawicka
 }
-

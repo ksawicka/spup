@@ -160,4 +160,3 @@ my_sample
 \author{
 Kasia Sawicka, Stefan van Dam, Gerard Heuvelink
 }
-

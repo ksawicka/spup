@@ -45,4 +45,3 @@ my_sample
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
-

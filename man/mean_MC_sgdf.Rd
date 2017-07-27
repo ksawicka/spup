@@ -33,4 +33,3 @@ dem_mean <- mean_MC_sgdf(dem_sample)
 \author{
 Kasia Sawicka
 }
-

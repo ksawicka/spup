@@ -25,4 +25,3 @@ vc
 \author{
 Kasia Sawicka
 }
-

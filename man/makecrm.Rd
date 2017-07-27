@@ -47,4 +47,3 @@ str(mycormodel)
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
-

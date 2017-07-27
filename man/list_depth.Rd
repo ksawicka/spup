@@ -27,4 +27,3 @@ list_depth(a)
 \author{
 Kasia Sawicka
 }
-

@@ -116,4 +116,3 @@ CN_sample
 \author{
 Kasia Sawicka
 }
-

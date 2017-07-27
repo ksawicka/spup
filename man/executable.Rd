@@ -18,4 +18,3 @@ Wrapper function for calling executables in R
 \author{
 Dennis Walvoort
 }
-

@@ -45,4 +45,3 @@ cat
 \author{
 Dennis Walvoort
 }
-

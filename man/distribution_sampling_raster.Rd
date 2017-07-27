@@ -22,4 +22,3 @@ Only used in samplemethod "randomSampling" for MarginalNumericSpatial.
 \author{
 Kasia Sawicka
 }
-

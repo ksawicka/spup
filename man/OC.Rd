@@ -21,4 +21,3 @@ data(OC)
 A dataset containing the mean of soil OC content from 0-30 cm layer.
 }
 \keyword{datasets}
-

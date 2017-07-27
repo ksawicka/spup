@@ -34,4 +34,3 @@ dem_quantile <- quantile_MC_sgdf(dem_sample, probs = c(0.1, 0.9))
 \author{
 Kasia Sawicka
 }
-

@@ -23,4 +23,3 @@ residuals is fixed and standardized to 1.
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
-

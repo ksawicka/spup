@@ -21,4 +21,3 @@ to a list of supported distributions.
 \author{
 Kasia Sawicka
 }
-

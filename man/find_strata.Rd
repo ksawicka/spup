@@ -26,4 +26,3 @@ Sampling from a given distribution
 \author{
 Kasia Sawicka, Stefan van Dam
 }
-

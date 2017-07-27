@@ -74,4 +74,3 @@ spplot(snow_sample)
 \author{
 Kasia Sawicka
 }
-

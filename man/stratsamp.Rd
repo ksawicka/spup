@@ -24,4 +24,3 @@ Stratified sampling for spatial variables
 \author{
 Stefan van Dam, Kasia Sawicka
 }
-

@@ -23,4 +23,3 @@ A template is a model input file with: 1. the additional extension `.template`.
 \author{
 Dennis Walvoort
 }
-

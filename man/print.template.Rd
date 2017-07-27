@@ -20,4 +20,3 @@ Print method for class "template."
 \author{
 Dennis Walvoort
 }
-

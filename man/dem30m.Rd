@@ -19,4 +19,3 @@ data(dem30m)
 A dataset containing the mean an example Digital Elevation Model.
 }
 \keyword{datasets}
-

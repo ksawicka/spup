@@ -49,4 +49,3 @@ scalar_sample <- genSample(scalarUM, n = 10, samplemethod = "stratifiedSampling"
 \author{
 Kasia Sawicka
 }
-

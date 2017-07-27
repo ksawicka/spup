@@ -15,6 +15,10 @@ with the unit of the range parameter in makecrm()).}
 
 \item{ylim}{the y limits of the plot.}
 
+\item{xlab}{a title for the x axis.}
+
+\item{ylab}{a title for the y axis.}
+
 \item{...}{additional parameters.}
 }
 \value{
@@ -32,4 +36,3 @@ plot(mycormodel, distance = 1)
 \author{
 Kasia Sawicka, Gerard Heuvelink
 }
-

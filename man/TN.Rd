@@ -21,4 +21,3 @@ data(TN)
 A dataset containing the mean of soil TN content from 0-30 cm layer.
 }
 \keyword{datasets}
-

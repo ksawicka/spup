@@ -34,4 +34,3 @@ dem_sample_sd <- sd_MC_sgdf(dem_sample)
 \author{
 Kasia Sawicka
 }
-
