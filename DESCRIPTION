@@ -1,12 +1,13 @@
 Package: spup
 Type: Package
-Title: Uncertainty Propagation Analysis
+Title: Spatial Uncertainty Propagation Analysis
 Version: 0.1-1
-Date: 2017-07-12
-Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@wur.nl", role = c("aut", "cre")),
+Date: 2017-07-24
+Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@ed.ac.uk", role = c("aut", "cre")),
              person("Gerard", "Heuvelink", email = "gerard.heuvelink@wur.nl", role = c("aut")),
-             person("Dennis", "Walvoort", email = "dennis.walvoort@wur.nl", role = c("ctb")),
-             person("Stefan", "van Dam", email = "stefan.vandam@wur.nl", role = c("ctb"))
+             person("Dennis", "Walvoort", email = "dennis.walvoort@wur.nl", role = c("aut")),
+             person("Stefan", "van Dam", email = "stefan.vandam@wur.nl", role = c("ctb")),
+             person("Damiano", "Luzzi", email = "damiano.luzzi@wur.nl", role = c("ctb"))
              )
 Description: Uncertainty propagation analysis in spatial environmental  modelling following methodology
          described in Heuvelink et al. (2007) <doi:10.1080/13658810601063951> 
