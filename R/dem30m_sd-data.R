@@ -15,4 +15,5 @@
 #' @source The Zlatibor dataset was kindly provided by Prof. Branislav Bajat
 #'  from the University of Belgrade, Serbia.
 #'  
-"dem30m_sd"
+#' @name dem30m_sd
+NULL

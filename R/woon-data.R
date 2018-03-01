@@ -20,4 +20,5 @@
 #' 
 #' @source Kadaster, NL.
 #'  
-"woon"
+#' @name woon
+NULL
