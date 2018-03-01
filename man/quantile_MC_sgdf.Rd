@@ -21,7 +21,7 @@ Calculates mean from MC realizations for each location in a map.
 
 set.seed(12345)
 data(dem30m, dem30m_sd)
-dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+dem_crm <- makeCRM(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
 \dontrun{

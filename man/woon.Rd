@@ -24,4 +24,3 @@ data(woon)
 \description{
 The 'woon' object is a SpatialPolygonDataFrame where each building is represented by one polygon.
 }
-\keyword{datasets}

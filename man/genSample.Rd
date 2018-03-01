@@ -62,7 +62,7 @@ set.seed(12345)
 data(dem30m, dem30m_sd)
 
 # "ugs" method example
-dem_crm <- makecrm(acf0 = 0.78, range = 321, model = "Exp")
+dem_crm <- makeCRM(acf0 = 0.78, range = 321, model = "Exp")
 demUM <- defineUM(uncertain = TRUE, distribution = "norm", 
                    distr_param = c(dem30m, dem30m_sd), crm = dem_crm)
                    
@@ -88,7 +88,7 @@ str(dem_sample)
 # Examples with rasters
 # (raster with auto-correlation)
 data(OC, OC_sd)
-OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
+OC_crm <- makeCRM(acf0 = 0.6, range = 1000, model = "Sph")
 OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
 class(OC_UM)
 # toy example
@@ -121,9 +121,9 @@ str(woon_sample@data)
 data(OC, OC_sd, TN, TN_sd)
 
 # define marginal UMs
-OC_crm <- makecrm(acf0 = 0.6, range = 1000, model = "Sph")
+OC_crm <- makeCRM(acf0 = 0.6, range = 1000, model = "Sph")
 OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
-TN_crm <- makecrm(acf0 = 0.4, range = 1000, model = "Sph")
+TN_crm <- makeCRM(acf0 = 0.4, range = 1000, model = "Sph")
 TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 
 # define joint UM
