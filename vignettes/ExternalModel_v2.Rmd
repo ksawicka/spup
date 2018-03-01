@@ -162,7 +162,47 @@ my_template %>%
 
 An external model can be called from R by means of the `system` or `system2` function. To facilitate this, _spup_ includes the wrapper function `executable()`.
 
-_spup_ includes an example external model written in the C language: `dummy_model.C` that calculates a value of a simple simple linear regression model. To compile this code to a MS-Windows executable you can use a free C compiler GCC running command `gcc dummy_model.c -o dummy_model`. This will create a file `dummy_model.exe`. 
+Below is an example of an external model written in the C language:
+
+```{c, eval = FALSE}
+#include <stdio.h>
+
+int main() {
+
+  FILE *fp;
+  double x[9] = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0};
+  double y;
+  double b0;
+  double b1;
+  int i;
+
+  fp = fopen("input.txt", "r");
+  if (fp == NULL) {
+    printf("Can't read input.txt\n");
+    return 1;
+  }
+  fscanf(fp, "%lf %lf\n", &b0, &b1);
+  fclose(fp);
+
+  fp = fopen("output.txt", "w");
+  if (fp == NULL) {
+    printf("Can't create output.txt\n");
+    return 1;
+  }
+  else {
+    for (i=0; i<9; i++) {
+      y = b0 + b1 * x[i];
+      fprintf(fp, "%10.2f\n", y);
+    }
+    fclose(fp);
+  }
+
+  return 0;
+}
+```
+
+
+You can copy this code into a text file and save with the extension ".C". For example, `dummy_model.C`. This model calculates a value of a simple simple linear regression model. To compile this code to a MS-Windows executable you can use a free C compiler GCC running command `gcc dummy_model.c -o dummy_model`. This will create a file `dummy_model.exe`. 
 
 We can now wrap this model in R as follows:
 
