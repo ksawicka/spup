@@ -1,8 +1,8 @@
 #' Plots correlogram model
 #'
-#' @param x Object of class "SpatialCorrelogramModel" as created by makecrm().
+#' @param x Object of class "SpatialCorrelogramModel" as created by makeCRM().
 #' @param distance minimum distance between locations (unit should correspond
-#' with the unit of the range parameter in makecrm()).
+#' with the unit of the range parameter in makeCRM()).
 #' @param ylim the y limits of the plot.
 #' @param xlab a title for the x axis.  
 #' @param ylab a title for the y axis.
@@ -14,7 +14,7 @@
 #' 
 #' @examples
 #' 
-#' mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
+#' mycormodel <- makeCRM(acf0 = 0.8, range = 300, model = "Exp")
 #' plot(mycormodel, distance = 1)
 #' 
 #' @importFrom gstat variogramLine

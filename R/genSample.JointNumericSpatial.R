@@ -45,9 +45,9 @@
 #' TN_sd <- as(TN_sd, 'SpatialGridDataFrame')
 #' 
 #' # define marginal UMs
-#' OC_crm <- makecrm(acf0 = 0.6, range = 5000, model = "Sph")
+#' OC_crm <- makeCRM(acf0 = 0.6, range = 5000, model = "Sph")
 #' OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd), crm = OC_crm, id = "OC")
-#' TN_crm <- makecrm(acf0 = 0.4, range = 5000, model = "Sph")
+#' TN_crm <- makeCRM(acf0 = 0.4, range = 5000, model = "Sph")
 #' TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm = TN_crm, id = "TN")
 #' 
 #' # define joint UM

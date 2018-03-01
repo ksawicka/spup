@@ -9,6 +9,7 @@
 #' models are allowed in the current version.
 #'
 #' 
+#' @aliases makecrm
 #' @param acf0 Aurocorrelation function value at distance near 0. Default is 1. Must
 #' fall in interval [0,1].
 #' @param range Range parameter of the correlogram model component.
@@ -26,13 +27,13 @@
 #' 
 #' @examples
 #'
-#' mycormodel <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
+#' mycormodel <- makeCRM(acf0 = 0.8, range = 300, model = "Exp")
 #' str(mycormodel)
 #'
 #' @importFrom gstat vgm
 #' 
 #' @export
-makecrm <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
+makeCRM <- makeCRM <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
 
   # acf0 checks
   stopifnot(class(acf0) == "numeric")
@@ -82,4 +83,20 @@ makecrm <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covt
   class(crm) <- c("SpatialCorrelogramModel")
   crm
 }
+
+
+# deprecation of makecrm
+makecrm <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
+  .Deprecated(new = "makeCRM")
+  makeCRM(acf0, range, model, anis, kappa, add.to, covtable, Err)
+}
+
+
+
+
+
+
+
+
+
 
