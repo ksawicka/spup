@@ -16,4 +16,5 @@
 #'     RIBEIRO, E., WHEELER, I., MANTEL, S. & KEMPEN, B. 2017. SoilGrids250m:
 #'      Global gridded soil information based on machine learning. PLOS ONE, 12, e0169748.
 #'  
-"OC"
+#' @name OC
+NULL
