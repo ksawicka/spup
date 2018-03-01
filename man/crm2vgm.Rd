@@ -7,7 +7,7 @@
 crm2vgm(crm)
 }
 \arguments{
-\item{crm}{object of a class "SpatialCorrelogramModel", output of makecrm().}
+\item{crm}{object of a class "SpatialCorrelogramModel", output of makeCRM().}
 }
 \value{
 An object of a class "variogramModel" extending data.frame.

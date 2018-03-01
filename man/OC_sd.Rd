@@ -20,4 +20,3 @@ data(OC_sd)
 \description{
 A dataset containing the standard deviation of soil OC content from 0-30 cm layer.
 }
-\keyword{datasets}

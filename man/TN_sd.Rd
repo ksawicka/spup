@@ -20,4 +20,3 @@ data(TN_sd)
 \description{
 A dataset containing the standard deviation of soil TN content from 0-30 cm layer.
 }
-\keyword{datasets}
