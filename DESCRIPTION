@@ -1,7 +1,7 @@
 Package: spup
 Type: Package
 Title: Spatial Uncertainty Propagation Analysis
-Version: 0.1-1
+Version: 0.2-1
 Date: 2017-07-24
 Authors@R: c(person("Kasia", "Sawicka", email = "kasia.sawicka@ed.ac.uk", role = c("aut", "cre")),
              person("Gerard", "Heuvelink", email = "gerard.heuvelink@wur.nl", role = c("aut")),
@@ -32,8 +32,10 @@ Suggests:
         GGally,
         gridExtra,
         knitr,
+		png,
         readr,
-        sp
+        sp,
+		testthat
 License: GPL (>= 3)
 LazyData: true
 VignetteBuilder: knitr
