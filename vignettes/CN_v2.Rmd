@@ -105,7 +105,7 @@ The first step in uncertainty propagation analysis is to define an uncertainty m
 
 First, the marginal uncertainty model is defined for each variable separately, and next the joint uncertainty model is defined for the variables together.
 
-In case of OC and TN, the ε are spatially correlated and in order to include this in the analysis, we need to describe it by spatial correlograms. For each of the variables, the `makecrm()` function collates all necessary information into a list.
+In case of OC and TN, the ε are spatially correlated and in order to include this in the analysis, we need to describe it by spatial correlograms. For each of the variables, the `makeCRM()` function collates all necessary information into a list.
 
 Let us assume that the spatial autocorrelation of the OC and TN errors is an are described by spherical correlation function with a short-distance correlation of 0.6 for OC and 0.4 for TN, and a range parameter of 1000m. It is important at this step to ensure that the correlation function types as well as the ranges are the same for each variable. It is a requirement for further analysis, becasue _spup_ employs the model of co-regionalization (Wackernagel,  H.  2003).
 
@@ -113,8 +113,8 @@ Let us assume that the spatial autocorrelation of the OC and TN errors is an are
 
 ```{r} 
 # define spatial correlogram models
-OC_crm <- makecrm(acf0 = 0.6, range = 5000, model = "Sph")
-TN_crm <- makecrm(acf0 = 0.4, range = 5000, model = "Sph")
+OC_crm <- makeCRM(acf0 = 0.6, range = 5000, model = "Sph")
+TN_crm <- makeCRM(acf0 = 0.4, range = 5000, model = "Sph")
 ```
 
 We can view the correlograms by plotting them.

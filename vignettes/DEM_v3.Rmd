@@ -106,7 +106,7 @@ grid.arrange(spplot(dem30m, main = list(label = "Mean DEM [m]", cex = 1)),
 
 The first step in uncertainty propagation analysis is to define an uncertainty model for the uncertain input variable, here elevation, that will be used in the Monte Carlo uncertainty propagation analysis. 
 
-In case of elevation, the ε(x) are spatially correlated and in order to include this in the analysis, we need to describe it by spatial correlogram parameters. The `makecrm()` function collates all necessary information into a list.
+In case of elevation, the ε(x) are spatially correlated and in order to include this in the analysis, we need to describe it by spatial correlogram parameters. The `makeCRM()` function collates all necessary information into a list.
 
 Let us assume that the spatial autocorrelation of the DEM errors is an exponentially decreasing function with a short-distance correlation of 0.8 and a range parameter of 300m.
 
@@ -114,7 +114,7 @@ Let us assume that the spatial autocorrelation of the DEM errors is an exponenti
 
 ```{r} 
 # define spatial correlogram model
-dem_crm <- makecrm(acf0 = 0.8, range = 300, model = "Exp")
+dem_crm <- makeCRM(acf0 = 0.8, range = 300, model = "Exp")
 ```
 
 We can view the correlogram by plotting it.
@@ -123,17 +123,17 @@ We can view the correlogram by plotting it.
 plot(dem_crm, main = "DEM correlogram")
 ```
 
-Spatial correlograms summarise patterns of spatial autocorrelation in data and model residuals. They show the degree of correlation between values at two locations as a function of the separation distance between the locations. In the case above the correlation declines with distance, as is usually the case. The correlation becomes negligibly small for distances greater than 800 m. Notice also that the correlation is not perfect at distances close to zero. This signifies the so-called ‘nugget’ effect. The nugget effect, shape of the correlation function and maximum range can be modified by changing the parameters of the `makecrm()` function. Try, for example, these combinations and see how they look like:
+Spatial correlograms summarise patterns of spatial autocorrelation in data and model residuals. They show the degree of correlation between values at two locations as a function of the separation distance between the locations. In the case above the correlation declines with distance, as is usually the case. The correlation becomes negligibly small for distances greater than 800 m. Notice also that the correlation is not perfect at distances close to zero. This signifies the so-called ‘nugget’ effect. The nugget effect, shape of the correlation function and maximum range can be modified by changing the parameters of the `makeCRM()` function. Try, for example, these combinations and see how they look like:
 
 ```{r, fig.width = 7, fig.height = 5} 
 par(mfrow = c(2, 2))
-crm <- makecrm(acf0 = 0.8, range = 700, model = "Sph") 
+crm <- makeCRM(acf0 = 0.8, range = 700, model = "Sph") 
 plot(crm, main = "'Spherical', acf0 = 0.8, range = 700")
-crm <- makecrm(acf0 = 0.2, range = 700, model = "Sph") 
+crm <- makeCRM(acf0 = 0.2, range = 700, model = "Sph") 
 plot(crm, main = "'Spherical', acf0 = 0.2, range = 700")
-crm <- makecrm(acf0 = 0.8, range = 700, model = "Lin") 
+crm <- makeCRM(acf0 = 0.8, range = 700, model = "Lin") 
 plot(crm, main = "'Linear', acf0 = 1.0, range = 700")
-crm <- makecrm(acf0 = 0.8, range = 200, model = "Gau") 
+crm <- makeCRM(acf0 = 0.8, range = 200, model = "Gau") 
 plot(crm, main = "'Gaussian', acf0 = 0.8, range = 200")
 ```
 
@@ -191,7 +191,7 @@ grid.arrange(spplot(dem_sample_mean, main = list(label = "Mean of the DEM realiz
 The spatial pattern of the generated realizations depends on the degree of spatial autocorrelation. For instance, notice that the realizations become more ‘noisy’ if we assume less spatial autocorrelation:
 
 ```{r, fig.width = 5, fig.height = 6} 
-dem_crm2 <- makecrm(acf0 = 0.2, range = 300, model = "Exp")
+dem_crm2 <- makeCRM(acf0 = 0.2, range = 300, model = "Exp")
 demUM2 <- defineUM(uncertain = TRUE, distribution = "norm", distr_param = c(dem30m, dem30m_sd), crm = dem_crm2)
 dem_sample2 <- genSample(UMobject = demUM2, n = 100, samplemethod = "ugs", nmax = 20, asList = FALSE,
                          debug.level = -1)
