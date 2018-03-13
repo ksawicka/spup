@@ -4,7 +4,7 @@
 \alias{plot.SpatialCorrelogramModel}
 \title{Plots correlogram model}
 \usage{
-\method{plot}{SpatialCorrelogramModel}(x, distance = 1, ylim = c(0, 1),
+plot.SpatialCorrelogramModel(x, distance = 1, ylim = c(0, 1),
   xlab = "Distance", ylab = "Correlation", ...)
 }
 \arguments{
