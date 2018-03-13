@@ -4,7 +4,7 @@
 #' for uncertain cross-correlated variables.
 #' 
 #' The cormatrix is a square matrix of correlations,
-#' dimentionally equal to the number of objects, symetric 
+#' dimensionally equal to the number of objects, symmetrical 
 #' (transposed must be the same as original), diagonal must all be 1
 #' all values must be <-1, +1>) and all eigenvalues must be > 0.
 #' The marginal Um objects must have provided id.
@@ -75,19 +75,20 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   # all variables must have ids and all must be different
   ids <- c()
   for (i in 1:length(UMlist)) ids[i] <- UMlist[[i]]$id
-  stopifnot(length(ids) == length(unique(ids)))
+  if (length(ids) != length(unique(ids)))
+	stop("Each UM must contain unique id")
   
   # satisfy conditions for the correlation matrix
   t <- 1E-7
   stopifnot(class(cormatrix) == "matrix")
-  stopifnot(dim(cormatrix)[1] == length(UMlist))
-  stopifnot(dim(cormatrix)[1] == dim(cormatrix)[2])
-  stopifnot(min(diag(cormatrix)) > (1-t))
-  stopifnot(max(diag(cormatrix)) < (1+t))
-  stopifnot(min(cormatrix) > (-1-t))
-  stopifnot(max(cormatrix) < (1+t))               
-  stopifnot(cormatrix == t(cormatrix))
-  stopifnot(min(eigen(cormatrix)$values) > 0)
+  if (dim(cormatrix)[1] != length(UMlist)) 		stop("matrix of correlations is not dimensionally equal to the number of objects")
+  if (dim(cormatrix)[1] != dim(cormatrix)[2])   stop("matrix of correlations is not symmetrical")
+  if (min(diag(cormatrix)) <= (1-t))			stop("matrix of correlations has not all diagonal numbers equal 1")
+  if (max(diag(cormatrix)) >= (1+t))			stop("matrix of correlations has not all diagonal numbers equal 1")
+  if (min(cormatrix) <= (-1-t))					stop("all values in correlation matrix are not must be <-1, +1>")
+  if (max(cormatrix) >= (1+t))               	stop("all values in correlation matrix are not must be <-1, +1>")
+  if (cormatrix != t(cormatrix))				stop("matrix of correlation is not symmetrical")
+  if (min(eigen(cormatrix)$values) <= 0)		stop("all eigenvalues are not > 0")
   
   # output is UMlist with added to it the correlation matrix  
   mum <- list(UMlist = UMlist,
