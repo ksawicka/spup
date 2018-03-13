@@ -7,6 +7,7 @@
 #' dimentionally equal to the number of objects, symetric 
 #' (transposed must be the same as original), diagonal must all be 1
 #' all values must be <-1, +1>) and all eigenvalues must be > 0.
+#' The marginal Um objects must have provided id.
 #'
 #' @param UMlist a list of uncertain objects creaded in defineUM().
 #' @param cormatrix matrix of cross-correlations.
