@@ -3,7 +3,7 @@
 #' @param n number of sampling runs
 #' @param distribution A string describing selected distribution. The same as a part of
 #' the string following the "r" in each random variate generation function in ?distributions.
-#' @param parameters parameters to pass to the random variate generation function after
+#' @param parameters vector of parameters to pass to the random variate generation function after
 #' number of observations.
 #'
 #' @return Sample of random deviates.
