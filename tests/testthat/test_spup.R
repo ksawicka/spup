@@ -25,19 +25,14 @@ test_that("distribution sampling works", {
   expect_output(str(a), " num [1:5] 0.686 0.977 0.934 0.828 0.867", fixed = TRUE)
 })
 
-test_that("", {
-  set.seed(1234567)
-  a <- distribution_sampling_raster()
-  a <- raster::overlay(parameters_stack, 
-                       fun = function(shape1, shape2, ncp) Vectorize(rbeta(shape1, shape2, ncp)))
-})
+
+
 
 
 # # template
 # test_that("", {
 #   
 # })
-
 
 
 # # this should pass but R has problem with double quotation marks?

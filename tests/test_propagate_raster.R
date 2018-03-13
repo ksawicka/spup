@@ -35,24 +35,25 @@ coordinates(sdf) <- ~ x + y
 gridded(sdf) <- TRUE
 rasterDFsd2 <- raster(sdf)
 
-# define UM
+# define UM and run sampling
 crm1 <- makeCRM(0.8, 200, "Sph")
 UM1 <- defineUM(TRUE, distribution = "norm", crm = crm1,
                 distr_param = c(rasterDF1, rasterDFsd2))
 UM2 <- defineUM(TRUE, "norm", c(rasterDF2, rasterDFsd2)) 
-                
 var1 <- genSample(UM1, 10, "ugs")
 var2 <- genSample(UM2, 10, "randomSampling")
 
+# run propagation
 some_model <- function(A, B) {
   C <- A*B
   C
 }
-
 out <- propagate(list(var1, var2), some_model, 10)
 summary(out)
 
-
+some_model <- function(A) A*2
+out <- propagate(var1, some_model, 10)
+summary(out)
 
 
 
