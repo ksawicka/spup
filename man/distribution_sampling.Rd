@@ -12,7 +12,7 @@ distribution_sampling(n, distribution, parameters)
 \item{distribution}{A string describing selected distribution. The same as a part of
 the string following the "r" in each random variate generation function in ?distributions.}
 
-\item{parameters}{parameters to pass to the random variate generation function after
+\item{parameters}{vector of parameters to pass to the random variate generation function after
 number of observations.}
 }
 \value{
