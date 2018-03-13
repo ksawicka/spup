@@ -33,7 +33,7 @@
 #' @importFrom gstat vgm
 #' 
 #' @export
-makeCRM <- makeCRM <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
+makeCRM <-function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
 
   # acf0 checks
   stopifnot(class(acf0) == "numeric")
@@ -84,6 +84,58 @@ makeCRM <- makeCRM <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, a
   crm
 }
 
+# ---------------------------------------------------------------------------------------------
+# old makecrm() to be depracated below
+makecrm <-function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
+
+  # acf0 checks
+  stopifnot(class(acf0) == "numeric")
+  stopifnot(class(range) == "numeric" | is.na(range))
+  if (acf0 < 0 | acf0 > 1)
+    warning("For standardized residuals acf0 argument should be between 0 and 1.")
+
+  # anis checks
+  if (missing(anis)) 
+    anis <- c(0, 0, 0, 1, 1)
+  if (length(anis) == 2) 
+    anis <- c(anis[1], 0, 0, anis[2], 1)
+  else if (length(anis) != 5) 
+    stop("anis vector should have length 2 (2D) or 5 (3D)")
+    
+  # model checks
+  models <- gstat::vgm()$short
+  if (model %in% models == FALSE)
+    stop("Only models accepted by gstat::vgm are allowed.")
+    
+  # range checks
+    if (!is.na(range)) {
+      if (model != "Nug") {
+          if (model != "Lin" && model != "Err" && model != 
+              "Int") 
+              if (range <= 0) 
+                stop("range should be positive")
+              else if (range < 0) 
+                stop("range should be non-negative")
+      }
+      else {
+          if (range != 0) 
+              stop("Nugget should have zero range")
+          if (anis[4] != 1 || anis[5] != 1) 
+              stop("Nugget anisotropy is not meaningful")
+      }
+    }
+
+  crm <- list(acf0 = acf0,
+              range = range,
+              model = model,
+              anis = anis,
+              kappa = kappa,
+              # add.to = add.to,
+              # covtable = covtable,
+              Err = Err)
+  class(crm) <- c("SpatialCorrelogramModel")
+  crm
+}
 
 # deprecation of makecrm
 makecrm <- function(acf0 = 1, range = NA, model, anis, kappa = 0.5, add.to, covtable, Err = 0) {
