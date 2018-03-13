@@ -81,14 +81,14 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   # satisfy conditions for the correlation matrix
   t <- 1E-7
   stopifnot(class(cormatrix) == "matrix")
-  if (dim(cormatrix)[1] != length(UMlist)) 		stop("matrix of correlations is not dimensionally equal to the number of objects")
-  if (dim(cormatrix)[1] != dim(cormatrix)[2])   stop("matrix of correlations is not symmetrical")
-  if (min(diag(cormatrix)) <= (1-t))			stop("matrix of correlations has not all diagonal numbers equal 1")
-  if (max(diag(cormatrix)) >= (1+t))			stop("matrix of correlations has not all diagonal numbers equal 1")
-  if (min(cormatrix) <= (-1-t))					stop("all values in correlation matrix are not must be <-1, +1>")
-  if (max(cormatrix) >= (1+t))               	stop("all values in correlation matrix are not must be <-1, +1>")
-  if (cormatrix != t(cormatrix))				stop("matrix of correlation is not symmetrical")
-  if (min(eigen(cormatrix)$values) <= 0)		stop("all eigenvalues are not > 0")
+  if (dim(cormatrix)[1] != length(UMlist)) stop("matrix of correlations is not dimensionally equal to the number of objects")
+  if (dim(cormatrix)[1] != dim(cormatrix)[2]) stop("matrix of correlations is not symmetrical")
+  if (min(diag(cormatrix)) <= (1-t)) stop("matrix of correlations has not all diagonal numbers equal 1")
+  if (max(diag(cormatrix)) >= (1+t)) stop("matrix of correlations has not all diagonal numbers equal 1")
+  if (min(cormatrix) <= (-1-t))	stop("all values in correlation matrix are not <-1, +1>")
+  if (max(cormatrix) >= (1+t)) stop("all values in correlation matrix are not <-1, +1>")
+  if (cormatrix != t(cormatrix)) stop("matrix of correlation is not symmetrical")
+  if (min(eigen(cormatrix)$values) <= 0) stop("all eigenvalues are not > 0")
   
   # output is UMlist with added to it the correlation matrix  
   mum <- list(UMlist = UMlist,
