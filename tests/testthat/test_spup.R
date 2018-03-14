@@ -26,6 +26,34 @@ test_that("distribution sampling works", {
   expect_output(str(a), " num [1:5] 0.686 0.977 0.934 0.828 0.867", fixed = TRUE)
 })
 # ----------------------------------------------------------------------------------
+test_that("in joint genSample() translating multiple correlograms to variograms works", {
+  # load data
+  data(OC, OC_sd, TN, TN_sd)
+  # define marginal UMs
+  OC_crm <- makeCRM(acf0 = 0.6, range = 1000, model = "Sph")
+  OC_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(OC, OC_sd),
+                    crm = OC_crm, id = "OC")
+  TN_crm <- makeCRM(acf0 = 0.4, range = 1000, model = "Sph")
+  TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd),
+                    crm = TN_crm, id = "TN")
+  UMobject <- defineMUM(list(OC_UM,TN_UM), matrix(c(1,0.7,0.7,1),2,2))
+  n_vars <- length(UMobject[[1]])
+  vgms <- list()
+  ids <- c()
+  nuggets <- c()
+  psills  <- c()
+  for (i in 1:n_vars) {
+    vgms[[i]]    <- crm2vgm(UMobject[[1]][[i]]$crm)
+    ids[i] <- UMobject[[1]][[i]]$id
+    nuggets[i]   <- vgms[[i]]$psill[1]
+    psills[i]    <- vgms[[i]]$psill[2]  
+  }
+  expect_is(vgms[[1]], "variogramModel")
+  expect_output(print(ids), '[1] "OC" "TN"', fixed = TRUE)
+  expect_equal(nuggets, c(0.4, 0.6))
+  expect_equal(psills, c(0.6, 0.4))
+})
+# ----------------------------------------------------------------------------------
 test_that("propagate returns a list of all model runs", {
   # load data
   data(OC, OC_sd, TN, TN_sd)
@@ -45,7 +73,14 @@ test_that("propagate returns a list of all model runs", {
   expect_is(out, "list")
 })
 # -----------------------------------------------------------------------------------
-
+test_that("rendering works", {
+  # render character string
+  my_template <- "Hello {{name}}!"
+  a <- my_template %>%
+        render(name = "World")
+  expect_match(a, "Hello World!")
+})
+# -----------------------------------------------------------------------------------
 
 # # this should pass but R has problem with double quotation marks?
 # test_that("makecrm() is deprecated", {
