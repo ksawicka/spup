@@ -11,7 +11,7 @@ coordinates(meuse) = ~x+y
 # make separate spatial grid data frames for mean and sd
 m1 <- meuse["zinc"]
 m1.sd <- m1
-m1.sd[[1]] <- m.sd[[1]] * rnorm(n = 155, mean = 1, sd = 0.5)
+m1.sd[[1]] <- m1.sd[[1]] * rnorm(n = 155, mean = 1, sd = 0.5)
 m2 <- meuse["lead"]
 m2.sd <- m2
 m2.sd[[1]] <- m2.sd[[1]] * rnorm(n = 155, mean = 1, sd = 0.5)
