@@ -27,6 +27,7 @@ test_that("distribution sampling works", {
 })
 # ----------------------------------------------------------------------------------
 test_that("in joint genSample() translating multiple correlograms to variograms works", {
+  skip_on_cran()
   # load data
   data(OC, OC_sd, TN, TN_sd)
   # define marginal UMs
@@ -55,6 +56,7 @@ test_that("in joint genSample() translating multiple correlograms to variograms 
 })
 # ----------------------------------------------------------------------------------
 test_that("propagate returns a list of all model runs", {
+  skip_on_cran()
   # load data
   data(OC, OC_sd, TN, TN_sd)
   model <- function(OC, TN) OC/TN
