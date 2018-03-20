@@ -30,10 +30,8 @@
 #' class(TN_UM)
 #' 
 #' soil_prop <- list(OC_UM,TN_UM)
-#' str(soil_prop)
 #' mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
 #' class(mySpatialMUM)
-#' str(mySpatialMUM)
 #' 
 #' # scalar
 #' scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", 
@@ -87,8 +85,8 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   if (max(diag(cormatrix)) >= (1+t)) stop("matrix of correlations has not all diagonal numbers equal 1")
   if (min(cormatrix) <= (-1-t))	stop("all values in correlation matrix are not <-1, +1>")
   if (max(cormatrix) >= (1+t)) stop("all values in correlation matrix are not <-1, +1>")
-  if (cormatrix != t(cormatrix)) stop("matrix of correlation is not symmetrical")
   if (min(eigen(cormatrix)$values) <= 0) stop("all eigenvalues are not > 0")
+  stopifnot(cormatrix == t(cormatrix))
   
   # output is UMlist with added to it the correlation matrix  
   mum <- list(UMlist = UMlist,
