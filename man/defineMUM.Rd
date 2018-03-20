@@ -40,10 +40,8 @@ TN_UM <- defineUM(TRUE, distribution = "norm", distr_param = c(TN, TN_sd), crm =
 class(TN_UM)
 
 soil_prop <- list(OC_UM,TN_UM)
-str(soil_prop)
 mySpatialMUM <- defineMUM(soil_prop, matrix(c(1,0.7,0.7,1), nrow=2, ncol=2))
 class(mySpatialMUM)
-str(mySpatialMUM)
 
 # scalar
 scalarUM <- defineUM(uncertain = TRUE, distribution = "norm", 

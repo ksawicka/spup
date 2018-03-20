@@ -4,7 +4,7 @@
 \alias{print.template}
 \title{Print method for class "template."}
 \usage{
-print.template(x, ...)
+\method{print}{template}(x, ...)
 }
 \arguments{
 \item{x}{Object of class "template".}
