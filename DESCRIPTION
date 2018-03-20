@@ -18,7 +18,7 @@ Description: Uncertainty propagation analysis in spatial environmental  modellin
          Uncertain variables are described by probability distributions. Both numerical and categorical data types are handled.
          Spatial auto-correlation within an attribute and cross-correlation between attributes is accommodated for.
          The MC realizations may be used as input to the environmental models called from R, or externally.
-Depends: R (>= 3.3.3)
+Depends: R (>= 3.3.0)
 Imports: graphics,
          gstat,
          magrittr,
