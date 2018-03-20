@@ -1,6 +1,11 @@
 /*
    Simple model in C for testing error propagation in R
    Dennis Walvoort, July 2016
+ 
+   To compile to a MS-Windows executable use a free C compiler GCC 
+   running command "gcc dummy_model.c -o dummy_model". 
+   This will create a file dummy_model.exe.
+
 */
 
 
