@@ -1,7 +1,7 @@
 Package: spup
 Type: Package
 Title: Spatial Uncertainty Propagation Analysis
-Version: 1.2-2
+Version: 1.3-1
 Date: 2018-06-14
 Authors@R: c(person("Kasia", "Sawicka", email = "katwic55@ceh.ac.uk", role = c("aut", "cre")),
              person("Gerard", "Heuvelink", email = "gerard.heuvelink@wur.nl", role = c("aut")),

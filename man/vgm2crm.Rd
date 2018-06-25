@@ -4,7 +4,7 @@
 \alias{vgm2crm}
 \title{Convert vgm to crm}
 \usage{
-vgm2crm(vgm, psill, nugget, range, model)
+vgm2crm(vgm, psill, nugget, range, model, kappa = 0.5, anis, Err = 0)
 }
 \arguments{
 \item{vgm}{See ?vgm}
@@ -16,9 +16,15 @@ vgm2crm(vgm, psill, nugget, range, model)
 \item{range}{See ?vgm}
 
 \item{model}{See ?vgm}
+
+\item{kappa}{See ?vgm}
+
+\item{anis}{See ?vgm}
+
+\item{Err}{See ?vgm}
 }
 \value{
-Standardised parameters of spatial variogram model.
+Spatial correlogram model - standardised parameters of spatial variogram model
 }
 \description{
 Convert vgm to crm

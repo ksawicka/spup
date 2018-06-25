@@ -13,6 +13,8 @@
 #' uncertain.object is then a list of two or more. It uses startified sampling
 #' method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 #' must be dividable by the number of quantiles to assure each quantile is evenly represented.
+#' 
+#' NOTE. Version 1.3-1 includes bug fixing on 
 #'
 #' @param UMobject object of a class JointNumericSpatial. Output of defineMUM().
 #' @param n Integer. Number of Monte Carlo realizations.
@@ -146,7 +148,7 @@ genSample.JointNumericSpatial <- function(UMobject, n, samplemethod, p = 0, asLi
                           model = gstat::vgm(psill = cormatrix[i, j] * sqrt(psills[i]*psills[j]),
                                              model = shapes[1],
                                              range = ranges[1], 
-                                             nugget = cormatrix[i, j] * sqrt(nuggets[i]*nuggets[j])), ...)
+                                             nugget = cormatrix[i, j] * (1 - sqrt(psills[i]*psills[j]))), ...)
       }
     }
     
