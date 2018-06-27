@@ -4,7 +4,7 @@
 \alias{vgm2crm}
 \title{Convert vgm to crm}
 \usage{
-vgm2crm(vgm, psill, nugget, range, model, kappa = 0.5, anis, Err = 0)
+vgm2crm(vgm, psill, nugget, range, model, kappa = 0.5, Err = 0)
 }
 \arguments{
 \item{vgm}{See ?vgm}
@@ -18,8 +18,6 @@ vgm2crm(vgm, psill, nugget, range, model, kappa = 0.5, anis, Err = 0)
 \item{model}{See ?vgm}
 
 \item{kappa}{See ?vgm}
-
-\item{anis}{See ?vgm}
 
 \item{Err}{See ?vgm}
 }
