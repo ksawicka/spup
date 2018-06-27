@@ -14,7 +14,8 @@
 #' method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 #' must be dividable by the number of quantiles to assure each quantile is evenly represented.
 #' 
-#' NOTE. Version 1.3-1 includes bug fixing on 
+#' NOTE. Version 1.3-1 includes bug fixing related to derivation of
+#' cross-correlation matrix for multivariate uncertainty propagation analysis.
 #'
 #' @param UMobject object of a class JointNumericSpatial. Output of defineMUM().
 #' @param n Integer. Number of Monte Carlo realizations.
