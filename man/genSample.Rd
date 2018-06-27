@@ -52,6 +52,9 @@ number of quantiles to assure that each quantile is evenly represented.
 \strong{"lhs"} Not implemented yet. Sampling method for at least two uncertain inputs. The
 uncertain.object is then a list of two or more. It uses a stratified sampling
 method to generate inputs for the latin hypercube algorithm.
+
+NOTE. Version 1.3-1 includes bug fixing related to derivation of
+cross-correlation matrix for multivariate uncertainty propagation analysis.
 }
 \examples{
 
