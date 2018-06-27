@@ -45,6 +45,9 @@ cross-correlated errors.
 uncertain.object is then a list of two or more. It uses startified sampling
 method to generate the inputs for the latin hypercude algorithm, hence number of samples (n)
 must be dividable by the number of quantiles to assure each quantile is evenly represented.
+
+NOTE. Version 1.3-1 includes bug fixing related to derivation of
+cross-correlation matrix for multivariate uncertainty propagation analysis.
 }
 \examples{
 
