@@ -13,6 +13,16 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+is_check <- ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_",
+             "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+knitr::opts_chunk$set(eval = !is_check)
+```
+
+```{r}
+Sys.sleep(100)
+```
+
 # Case study with categorical data - calculating tax depending on a building function
 
 ```{r, echo = FALSE}
