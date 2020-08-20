@@ -78,7 +78,7 @@ defineMUM <- function(UMlist, cormatrix, ...) {
   
   # satisfy conditions for the correlation matrix
   t <- 1E-7
-  stopifnot(class(cormatrix) == "matrix")
+  stopifnot(class(cormatrix)[1] == c("matrix"))
   if (dim(cormatrix)[1] != length(UMlist)) stop("matrix of correlations is not dimensionally equal to the number of objects")
   if (dim(cormatrix)[1] != dim(cormatrix)[2]) stop("matrix of correlations is not symmetrical")
   if (min(diag(cormatrix)) <= (1-t)) stop("matrix of correlations has not all diagonal numbers equal 1")
