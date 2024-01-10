@@ -4,7 +4,6 @@
 \name{spup--pkg}
 \alias{spup--pkg}
 \alias{_PACKAGE}
-\alias{spup--pkg-package}
 \title{spup - Package for spatial uncertainty propagation}
 \description{
 Facilitates uncertainty propagation analysis

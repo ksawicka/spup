@@ -14,7 +14,8 @@ check_if_Spatial <- function(object) {
                        "SpatialGridDataFrame",
                        "SpatialLinesDataFrame",
                        "SpatialPolygonsDataFrame",
-                       "RasterLayer")
+                       "RasterLayer",
+					   "sf")
   class(object) %in% Spatial_classes
 }
 

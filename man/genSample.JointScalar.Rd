@@ -4,8 +4,7 @@
 \alias{genSample.JointScalar}
 \title{Generating sample from cross-correlated variables described by a scalar.}
 \usage{
-\method{genSample}{JointScalar}(UMobject, n, samplemethod, p = 0,
-  asList = TRUE, ...)
+\method{genSample}{JointScalar}(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{object of a class JointScalar created using defineMUM.R}

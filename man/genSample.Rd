@@ -4,8 +4,15 @@
 \alias{genSample}
 \title{Methods for generating Monte Carlo realizations from uncertain inputs.}
 \usage{
-genSample(UMobject, n, samplemethod, p = 0, asList = TRUE,
-  debug.level = 1, ...)
+genSample(
+  UMobject,
+  n,
+  samplemethod,
+  p = 0,
+  asList = TRUE,
+  debug.level = 1,
+  ...
+)
 }
 \arguments{
 \item{UMobject}{an uncertain object to sample from, output of defineUM() or defineMUM().}

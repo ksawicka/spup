@@ -155,7 +155,7 @@ genSample.MarginalNumericSpatial <- function(UMobject, n, samplemethod, p = 0, a
   if (samplemethod == "randomSampling") {
     
     # sampling from class spatial data frame 
-    if (class(distr_param[[1]]) != "RasterLayer") { # so all other spatial classes
+    if (!is(distr_param[[1]], "RasterLayer")) { # so all other spatial classes
       
       # function that calls distribution_sampling.R in apply()
       ds <- function(x) {

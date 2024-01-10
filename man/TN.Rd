@@ -4,8 +4,10 @@
 \name{TN}
 \alias{TN}
 \title{Soil total nitrogen content in a south area (33 x 33km) of lake Alaotra in Madagascar.}
-\format{a RasterLayer with dimensions  : 134, 135, 18090  (nrow, ncol, ncell), 
-resolution  : 250, 250  (x, y).}
+\format{
+a RasterLayer with dimensions  : 134, 135, 18090  (nrow, ncol, ncell), 
+resolution  : 250, 250  (x, y).
+}
 \source{
 ISRIC soilgrid information. HENGL, T., MENDES DE JESUS,
  J., HEUVELINK, G. B. M., RUIPEREZ GONZALEZ, M., KILIBARDA, M.,

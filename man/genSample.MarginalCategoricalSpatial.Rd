@@ -5,8 +5,7 @@
 \title{Generating Monte Carlo sample from an uncertain object of a class 
 'MarginalCategoricalSpatial'}
 \usage{
-\method{genSample}{MarginalCategoricalSpatial}(UMobject, n, samplemethod,
-  p = 0, asList = TRUE, ...)
+\method{genSample}{MarginalCategoricalSpatial}(UMobject, n, samplemethod, p = 0, asList = TRUE, ...)
 }
 \arguments{
 \item{UMobject}{uncertain object defined using defineUM().}
@@ -55,20 +54,6 @@ snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob
 class(snowUM)
 snow_sample <- genSample(snowUM, 10, asList = FALSE)
 head(snow_sample@data)
-
-# case with raster
-# load data
-data(dem30m, dem30m_sd)
-dem30m$snow_prob <- NA
-dem30m$snow_prob[dem30m$Elevation > 1000] <- 0.75
-dem30m$snow_prob[dem30m$Elevation <= 1000] <- 0.25
-dem30m$no_snow_prob <- 1 - dem30m$snow_prob
-summary(dem30m@data)
-dem_stack <- raster::stack(dem30m)
-snowUM <- defineUM(uncertain = TRUE, categories = c("snow", "no snow"), cat_prob = dem_stack[[2:3]])
-snow_sample <- genSample(snowUM, 10, asList = FALSE)
-require(sp)
-spplot(snow_sample)
 
 }
 \author{

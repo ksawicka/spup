@@ -3,9 +3,8 @@
 #' Function that generates a spatial correlogram model, an object of class "SpatialCorrelogramModel".
 #'
 #' For the spatial variables allowed autocorrelation functions are listed in Table 4.1 of the
-#' gstat manual (\url{http://www.gstat.org/gstat.pdf}). Spatial correlation
-#' assumes stationarity, i.e. correlation depends only on the separation
-#' distance between points in space. Anisotropy is allowed (\url{http://www.gstat.org/gstat.pdf}). No nested
+#' gstat manual. Spatial correlation assumes stationarity, i.e. correlation depends only on the separation
+#' distance between points in space. Anisotropy is allowed. No nested
 #' models are allowed in the current version.
 #'
 #' 

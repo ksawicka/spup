@@ -4,7 +4,8 @@
 \name{woon}
 \alias{woon}
 \title{Neighbourhood in Rotterdam.}
-\format{a SpatialPolygonDataFrame with 723 polygons and 7 variables:
+\format{
+a SpatialPolygonDataFrame with 723 polygons and 7 variables:
 \describe{
 \item{vbos}{number of addresses present in the building}
 \item{woonareash}{residential area, in percent}
@@ -14,7 +15,8 @@
 \item{office}{probability that the building is an office}
 \item{other}{probability that the building has other function}
 \item{check}{check if probabilities sum to 1}
-}}
+}
+}
 \source{
 Kadaster, NL.
 }

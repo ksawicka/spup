@@ -4,10 +4,12 @@
 \name{dem30m_sd}
 \alias{dem30m_sd}
 \title{Standard deviation of Digital Elevation Model of Zlatibor region in Serbia.}
-\format{a SpatialGridDataFrame with 15000 rows and 1 variable:
+\format{
+a SpatialGridDataFrame with 15000 rows and 1 variable:
 \describe{
 \item{Elevation_sd}{Standard deviation of Digital Elevation Model, in meters}
-}}
+}
+}
 \source{
 The Zlatibor dataset was kindly provided by Prof. Branislav Bajat
  from the University of Belgrade, Serbia.

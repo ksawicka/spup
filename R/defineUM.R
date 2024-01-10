@@ -99,7 +99,7 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
                       crm = NULL, categories = NULL, cat_prob = NULL,
                       id = NULL, ...) {
   
-  if (class(uncertain) != "logical")
+  if (!is(uncertain, "logical"))
     stop("uncertain must be logical")
   
   # must be explicit if want to work with continuous or categorical data
@@ -123,7 +123,7 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
     # if distribution is not null, a string, and belongs to the list of supported distributions
     if (is.null(distribution))
       stop("Distribution type is missing.")
-    if (class(distribution) != "character")
+	if (!is(distribution, "character"))
       stop("Distribution type must be 'string'.")
     
     # if all above OK, collate all information into a list
@@ -137,7 +137,7 @@ defineUM <- function(uncertain = TRUE, distribution = NULL, distr_param = NULL,
     # assign class
     if (check_if_Spatial(distr_param[[1]])) 
       class(um) <- "MarginalNumericSpatial" 
-    else if (class(distr_param[[1]]) == "numeric") 
+    else if (is(distr_param[[1]], "numeric")) 
       class(um) <- "MarginalScalar"
     else 
       stop("Class of distribution parameters is not supported.")

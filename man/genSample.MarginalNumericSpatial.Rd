@@ -5,8 +5,15 @@
 \title{Generating Monte Carlo sample from an uncertain object of a class 
 'MarginalNumericSpatial'}
 \usage{
-\method{genSample}{MarginalNumericSpatial}(UMobject, n, samplemethod, p = 0,
-  asList = TRUE, debug.level = 1, ...)
+\method{genSample}{MarginalNumericSpatial}(
+  UMobject,
+  n,
+  samplemethod,
+  p = 0,
+  asList = TRUE,
+  debug.level = 1,
+  ...
+)
 }
 \arguments{
 \item{UMobject}{uncertain object defined using defineUM().}

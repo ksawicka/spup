@@ -4,8 +4,15 @@
 \alias{genSample.JointNumericSpatial}
 \title{Generating Monte Carlo sample from a list of uncertain objects that are cross-correlated.}
 \usage{
-\method{genSample}{JointNumericSpatial}(UMobject, n, samplemethod, p = 0,
-  asList = TRUE, debug.level = 1, ...)
+\method{genSample}{JointNumericSpatial}(
+  UMobject,
+  n,
+  samplemethod,
+  p = 0,
+  asList = TRUE,
+  debug.level = 1,
+  ...
+)
 }
 \arguments{
 \item{UMobject}{object of a class JointNumericSpatial. Output of defineMUM().}

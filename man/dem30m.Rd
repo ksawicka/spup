@@ -4,10 +4,12 @@
 \name{dem30m}
 \alias{dem30m}
 \title{Digital Elevation Model of Zlatibor region in Serbia.}
-\format{a SpatialGridDataFrame with 15000 rows and 1 variable:
+\format{
+a SpatialGridDataFrame with 15000 rows and 1 variable:
 \describe{
 \item{Elevation}{Digital Elevation Model, in meters}
-}}
+}
+}
 \source{
 The Zlatibor dataset was kindly provided by Prof. Branislav Bajat
  from the University of Belgrade, Serbia.
