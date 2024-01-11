@@ -32,11 +32,11 @@ Suggests:
         GGally,
         gridExtra,
         knitr,
-	png,
+        png,
         readr,
         sp,
-	testthat,
-	sf
+        testthat,
+        sf
 License: GPL (>= 3)
 LazyData: true
 VignetteBuilder: knitr
