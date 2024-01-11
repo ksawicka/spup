@@ -32,12 +32,14 @@ Suggests:
         GGally,
         gridExtra,
         knitr,
-		png,
+	png,
         readr,
         sp,
-		testthat,
-		sf
+	testthat,
+	sf
 License: GPL (>= 3)
 LazyData: true
 VignetteBuilder: knitr
+URL: https://github.com/ksawicka/spup
+BugReports: https://github.com/ksawicka/spup/issues
 RoxygenNote: 7.2.3
